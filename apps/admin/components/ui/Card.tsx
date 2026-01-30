@@ -6,8 +6,6 @@ interface CardProps {
   onClick?: () => void;
 }
 
-export { function };
-
 export default function Card({
   children,
   className = '',
@@ -35,3 +33,5 @@ export default function Card({
     </div>
   );
 }
+
+export { Card };
