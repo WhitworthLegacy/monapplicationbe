@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase/client";
-import { Sidebar } from "@/components/admin/Sidebar";
+import BottomNav from "@/components/layout/BottomNav";
 
 export default function AdminLayout({
   children,
@@ -35,8 +35,8 @@ export default function AdminLayout({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
       </div>
     );
   }
@@ -46,9 +46,9 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
-      <main className="flex-1 p-8">{children}</main>
+    <div className="min-h-screen bg-background pb-24">
+      <main className="p-4 lg:p-8 max-w-7xl mx-auto">{children}</main>
+      <BottomNav />
     </div>
   );
 }
