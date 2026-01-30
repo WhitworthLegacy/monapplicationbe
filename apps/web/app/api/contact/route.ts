@@ -20,16 +20,13 @@ export async function POST(request: NextRequest) {
     // 1. Save to Supabase
     const supabase = await createServerClient();
     const { data: contactData, error: dbError } = await supabase
-      .from("contacts")
+      .from("contact_submissions")
       .insert([
         {
-          full_name: name,
+          name,
           email,
           phone: phone || null,
-          company: company || null,
           message,
-          source: "website_contact_form",
-          status: "new",
         },
       ])
       .select()
