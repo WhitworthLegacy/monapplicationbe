@@ -20,12 +20,26 @@ export default function ContactPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    // TODO: Replace with actual form submission (e.g., to an API route)
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+      if (!response.ok) {
+        throw new Error("Failed to send message");
+      }
+
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Une erreur est survenue. Veuillez réessayer.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
