@@ -5,7 +5,7 @@ interface BadgeProps {
   className?: string;
 }
 
-export default function Badge({
+export function Badge({
   children,
   variant = 'default',
   size = 'md',
