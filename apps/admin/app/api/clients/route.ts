@@ -3,8 +3,10 @@ import { requireStaff } from "@/lib/auth/adminAuth";
 import { createServerClient } from "@/lib/supabase/server";
 
 export async function GET(request: NextRequest) {
-  const { error, supabase } = await requireStaff(request);
-  if (error) return error;
+  // TODO: Re-enable auth when login is ready
+  // const { error, supabase } = await requireStaff(request);
+  // if (error) return error;
+  const supabase = await createServerClient();
 
   const { searchParams } = new URL(request.url);
   const stage = searchParams.get("stage");
@@ -41,8 +43,10 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const { error, supabase } = await requireStaff(request);
-  if (error) return error;
+  // TODO: Re-enable auth when login is ready
+  // const { error, supabase } = await requireStaff(request);
+  // if (error) return error;
+  const supabase = await createServerClient();
 
   try {
     const body = await request.json();
