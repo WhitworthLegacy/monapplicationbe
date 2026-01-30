@@ -3,8 +3,6 @@ import { Resend } from 'resend';
 import { createAndSendQuote } from '@/lib/falco';
 import type { FalcoInvoiceItem } from '@/lib/falco';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 interface QuickQuoteRequest {
   client_id: string;
   client_name: string;
@@ -18,6 +16,7 @@ interface QuickQuoteRequest {
 export async function POST(request: NextRequest) {
   try {
     const body: QuickQuoteRequest = await request.json();
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Validation
     if (!body.client_email || !body.client_name) {
