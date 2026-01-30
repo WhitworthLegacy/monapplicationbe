@@ -4,12 +4,13 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUserRole } from "@/hooks/useUserRole";
+import type { RolePermissions } from "@/lib/auth/roles";
 
 interface NavItem {
   label: string;
   href: string;
   icon: string;
-  permission: keyof typeof permissions;
+  permission: keyof RolePermissions;
 }
 
 const navItems: NavItem[] = [
