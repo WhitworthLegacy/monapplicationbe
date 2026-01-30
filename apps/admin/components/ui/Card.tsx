@@ -6,6 +6,8 @@ interface CardProps {
   onClick?: () => void;
 }
 
+export { function };
+
 export default function Card({
   children,
   className = '',

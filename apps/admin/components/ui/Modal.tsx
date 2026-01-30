@@ -12,6 +12,8 @@ interface ModalProps {
   showCloseButton?: boolean;
 }
 
+export { function };
+
 export default function Modal({
   isOpen,
   onClose,
