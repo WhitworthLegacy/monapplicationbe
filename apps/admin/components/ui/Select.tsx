@@ -6,11 +6,11 @@ export interface SelectOption {
   label: string;
 }
 
-export interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'children'> {
+export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   error?: string;
   hint?: string;
-  options: SelectOption[];
+  options?: SelectOption[]; // Made optional to support children
   placeholder?: string;
 }
 
@@ -22,6 +22,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(({
   placeholder,
   className = '',
   id,
+  children,
   ...props
 }, ref) => {
   const selectId = id || label?.toLowerCase().replace(/\s+/g, '-');
@@ -55,12 +56,12 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(({
           `}
           {...props}
         >
-          {placeholder && (
+          {placeholder && !children && (
             <option value="" disabled>
               {placeholder}
             </option>
           )}
-          {options.map((option) => (
+          {children || options?.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
