@@ -11,6 +11,7 @@ import { Select } from '@/components/ui/Select';
 import { useToast } from '@/components/ui/Toast';
 import { CRM_STAGES, DEFAULT_CRM_COLUMNS, LEAD_SOURCES, LEAD_SOURCE_LABELS } from '@/lib/constants';
 import { CrmColumn, CrmClient, QuickCreateForm } from './types';
+import CrmClientModal from './CrmClientModal';
 
 export default function CrmBoard() {
   const [columns] = useState<CrmColumn[]>(DEFAULT_CRM_COLUMNS);
@@ -473,23 +474,22 @@ export default function CrmBoard() {
         </div>
       </Modal>
 
-      {/* Client Detail Modal - TODO: Create CrmClientModal component */}
+      {/* Client Detail Modal */}
       {selectedClient && (
-        <Modal
+        <CrmClientModal
+          client={selectedClient}
           isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-          title={selectedClient.full_name}
-          size="xl"
-        >
-          <div className="space-y-4">
-            <p className="text-[#64748b]">
-              Détails complets du client à implémenter dans CrmClientModal.tsx
-            </p>
-            <pre className="text-xs bg-[#f1f5f9] p-4 rounded-lg overflow-auto">
-              {JSON.stringify(selectedClient, null, 2)}
-            </pre>
-          </div>
-        </Modal>
+          onClose={() => {
+            setModalOpen(false);
+            setSelectedClient(null);
+          }}
+          onUpdate={(updatedClient) => {
+            setClients((prev) =>
+              prev.map((c) => (c.id === updatedClient.id ? updatedClient : c))
+            );
+            setSelectedClient(updatedClient);
+          }}
+        />
       )}
     </>
   );
