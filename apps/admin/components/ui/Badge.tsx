@@ -1,6 +1,6 @@
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'default' | 'primary' | 'accent' | 'success' | 'warning' | 'danger';
+  variant?: 'default' | 'primary' | 'accent' | 'success' | 'warning' | 'danger' | 'info';
   size?: 'sm' | 'md';
   className?: string;
 }
@@ -18,6 +18,7 @@ export function Badge({
     success: 'bg-green-50 text-green-700',
     warning: 'bg-amber-50 text-amber-700',
     danger: 'bg-red-50 text-red-700',
+    info: 'bg-blue-50 text-blue-700',
   };
 
   const sizes = {
