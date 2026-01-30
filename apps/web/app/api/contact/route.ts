@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { createServerClient } from "@/lib/supabase/server";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -16,8 +17,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send email via Resend
-    const { data, error } = await resend.emails.send({
+    // 1. Save to Supabase
+    const supabase = await createServerClient();
+    const { data: contactData, error: dbError } = await supabase
+      .from("contacts")
+      .insert([
+        {
+          full_name: name,
+          email,
+          phone: phone || null,
+          company: company || null,
+          message,
+          source: "website_contact_form",
+          status: "new",
+        },
+      ])
+      .select()
+      .single();
+
+    if (dbError) {
+      console.error("Supabase error:", dbError);
+      // Continue même si DB fail - au moins envoyer l'email
+    }
+
+    // 2. Send email via Resend
+    const { data: emailData, error: emailError } = await resend.emails.send({
       from: process.env.FROM_EMAIL || "contact@monapplication.be",
       to: process.env.TO_EMAIL || "contact@monapplication.be",
       subject: `Nouveau contact: ${name}`,
@@ -29,18 +53,31 @@ export async function POST(request: NextRequest) {
         ${company ? `<p><strong>Entreprise:</strong> ${company}</p>` : ""}
         <p><strong>Message:</strong></p>
         <p>${message}</p>
+        <hr />
+        <p style="color: #666; font-size: 12px;">
+          ${contactData ? `ID: ${contactData.id}` : "Non sauvegardé en DB"}
+        </p>
       `,
     });
 
-    if (error) {
-      console.error("Resend error:", error);
+    if (emailError) {
+      console.error("Resend error:", emailError);
       return NextResponse.json(
         { error: "Failed to send email" },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ success: true, data }, { status: 200 });
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          email: emailData,
+          contact: contactData,
+        },
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Contact API error:", error);
     return NextResponse.json(
