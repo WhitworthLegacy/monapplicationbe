@@ -3,16 +3,18 @@ import { requireStaff, requireAdmin } from "@/lib/auth/adminAuth";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { error, supabase } = await requireStaff(request);
   if (error) return error;
+
+  const { id } = await params;
 
   try {
     const { data, error: queryError } = await supabase
       .from("clients")
       .select("*")
-      .eq("id", params.id)
+      .eq("id", id)
       .single();
 
     if (queryError) throw queryError;
@@ -29,10 +31,12 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { error, supabase } = await requireStaff(request);
   if (error) return error;
+
+  const { id } = await params;
 
   try {
     const body = await request.json();
@@ -40,7 +44,7 @@ export async function PATCH(
     const { data, error: updateError } = await supabase
       .from("clients")
       .update(body)
-      .eq("id", params.id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -58,16 +62,18 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { error } = await requireAdmin(request);
   if (error) return error;
+
+  const { id } = await params;
 
   try {
     const { error: deleteError } = await (await requireAdmin(request))
       .supabase!.from("clients")
       .delete()
-      .eq("id", params.id);
+      .eq("id", id);
 
     if (deleteError) throw deleteError;
 

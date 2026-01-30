@@ -3,16 +3,18 @@ import { requireStaff } from "@/lib/auth/adminAuth";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { error, supabase } = await requireStaff(request);
   if (error) return error;
+
+  const { id } = await params;
 
   try {
     const { data: quote, error: quoteError } = await supabase
       .from("quotes")
       .select("*, client:clients(*), items:quote_items(*)")
-      .eq("id", params.id)
+      .eq("id", id)
       .single();
 
     if (quoteError) throw quoteError;
@@ -74,7 +76,7 @@ export async function POST(
         sent_at: new Date().toISOString(),
         falco_id: falcoData.id,
       })
-      .eq("id", params.id);
+      .eq("id", id);
 
     return NextResponse.json({
       success: true,

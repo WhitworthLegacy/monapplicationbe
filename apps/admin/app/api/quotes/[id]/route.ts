@@ -3,16 +3,18 @@ import { requireStaff, requireAdmin } from "@/lib/auth/adminAuth";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { error, supabase } = await requireStaff(request);
   if (error) return error;
+
+  const { id } = await params;
 
   try {
     const { data: quote, error: quoteError } = await supabase
       .from("quotes")
       .select("*, client:clients(full_name, email), items:quote_items(*)")
-      .eq("id", params.id)
+      .eq("id", id)
       .single();
 
     if (quoteError) throw quoteError;
@@ -29,10 +31,12 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { error, supabase } = await requireStaff(request);
   if (error) return error;
+
+  const { id } = await params;
 
   try {
     const body = await request.json();
@@ -50,11 +54,11 @@ export async function PATCH(
       body.tax_amount = taxAmount;
       body.discount_amount = discountAmount;
 
-      await supabase.from("quote_items").delete().eq("quote_id", params.id);
+      await supabase.from("quote_items").delete().eq("quote_id", id);
 
       const itemsWithQuoteId = items.map((item: any) => ({
         ...item,
-        quote_id: params.id,
+        quote_id: id,
       }));
 
       await supabase.from("quote_items").insert(itemsWithQuoteId);
@@ -65,7 +69,7 @@ export async function PATCH(
     const { data, error: updateError } = await supabase
       .from("quotes")
       .update(body)
-      .eq("id", params.id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -83,18 +87,20 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { error, supabase } = await requireAdmin(request);
   if (error) return error;
 
+  const { id } = await params;
+
   try {
-    await supabase!.from("quote_items").delete().eq("quote_id", params.id);
+    await supabase!.from("quote_items").delete().eq("quote_id", id);
 
     const { error: deleteError } = await supabase!
       .from("quotes")
       .delete()
-      .eq("id", params.id);
+      .eq("id", id);
 
     if (deleteError) throw deleteError;
 
