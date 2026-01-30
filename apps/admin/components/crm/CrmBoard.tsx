@@ -48,7 +48,7 @@ export default function CrmBoard() {
         throw new Error(data.error || 'Erreur lors du chargement');
       }
 
-      const clientList = Array.isArray(data.data) ? data.data : [];
+      const clientList: CrmClient[] = Array.isArray(data.data) ? data.data : [];
       setClients(clientList.sort((a, b) =>
         (new Date(b.created_at || 0).getTime()) - (new Date(a.created_at || 0).getTime())
       ));
