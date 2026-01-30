@@ -1,87 +1,93 @@
-import React, { useEffect } from "react";
+'use client';
 
-export interface ModalProps {
+import { useEffect, useCallback } from 'react';
+import { X } from 'lucide-react';
+
+interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | 'full';
+  showCloseButton?: boolean;
 }
 
-export const Modal: React.FC<ModalProps> = ({
+export default function Modal({
   isOpen,
   onClose,
   title,
   children,
-  size = "md",
-}) => {
+  size = 'md',
+  showCloseButton = true,
+}: ModalProps) {
+  const sizes = {
+    sm: 'max-w-sm',
+    md: 'max-w-md',
+    lg: 'max-w-lg',
+    xl: 'max-w-xl',
+    '2xl': 'max-w-2xl',
+    '3xl': 'max-w-3xl',
+    '4xl': 'max-w-4xl',
+    '5xl': 'max-w-5xl',
+    full: 'max-w-[95vw]',
+  };
+
+  const handleEscape = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') onClose();
+  }, [onClose]);
+
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
-
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
     }
-
     return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, handleEscape]);
 
   if (!isOpen) return null;
 
-  const sizeStyles = {
-    sm: "max-w-md",
-    md: "max-w-lg",
-    lg: "max-w-2xl",
-    xl: "max-w-4xl",
-  };
-
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-screen items-center justify-center p-4">
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
-          onClick={onClose}
-        />
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-[#0f172a]/50 transition-opacity"
+        onClick={onClose}
+      />
 
+      {/* Modal */}
+      <div className="flex min-h-full items-center justify-center p-4">
         <div
-          className={`relative bg-white rounded-lg shadow-xl ${sizeStyles[size]} w-full`}
+          className={`
+            relative w-full ${sizes[size]}
+            bg-white rounded-2xl shadow-lg
+            transform transition-all
+          `}
+          onClick={(e) => e.stopPropagation()}
         >
-          {title && (
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-              <button
-                onClick={onClose}
-                className="text-gray-400 hover:text-gray-500 focus:outline-none"
-              >
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+          {/* Header */}
+          {(title || showCloseButton) && (
+            <div className="flex items-center justify-between p-6 border-b border-[#e2e8f0]">
+              {title && (
+                <h3 className="text-lg font-semibold text-[#0f172a]">{title}</h3>
+              )}
+              {showCloseButton && (
+                <button
+                  onClick={onClose}
+                  className="p-1 rounded-lg text-[#64748b] hover:text-[#0f172a] hover:bg-[#f1f5f9] transition-colors"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
+                  <X className="w-5 h-5" />
+                </button>
+              )}
             </div>
           )}
 
-          <div className="px-6 py-4">{children}</div>
+          {/* Content */}
+          <div className="p-6">{children}</div>
         </div>
       </div>
     </div>
   );
-};
-
-Modal.displayName = "Modal";
+}

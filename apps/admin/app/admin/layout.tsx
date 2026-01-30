@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase/client";
 import BottomNav from "@/components/layout/BottomNav";
+import { ToastProvider } from "@/components/ui/Toast";
 
 export default function AdminLayout({
   children,
@@ -46,9 +47,11 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <main className="p-4 lg:p-8 max-w-7xl mx-auto">{children}</main>
-      <BottomNav />
-    </div>
+    <ToastProvider>
+      <div className="min-h-screen bg-background pb-24">
+        <main className="p-4 lg:p-8 max-w-7xl mx-auto">{children}</main>
+        <BottomNav />
+      </div>
+    </ToastProvider>
   );
 }
