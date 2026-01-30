@@ -79,7 +79,7 @@ export default function AppointmentsAgenda() {
     setLoading(true);
     try {
       const response = await fetch('/api/appointments');
-      const data = await response.json();
+      const data: { data?: Appointment[]; error?: string } = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to fetch appointments');
@@ -157,7 +157,7 @@ export default function AppointmentsAgenda() {
         }),
       });
 
-      const data = await response.json();
+      const data: { data?: Appointment; error?: string } = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to create appointment');

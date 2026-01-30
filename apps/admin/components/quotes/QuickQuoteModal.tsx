@@ -99,14 +99,14 @@ export function QuickQuoteModal({
         }),
       });
 
-      const data = await response.json();
+      const data: { data?: { invoiceId: string; pdfUrl?: string }; error?: string } = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || 'Erreur lors de l\'envoi');
       }
 
       toast.addToast('Devis envoyé avec succès !', 'success');
-      if (onSuccess) onSuccess(data.data.invoiceId);
+      if (onSuccess && data.data?.invoiceId) onSuccess(data.data.invoiceId);
       onClose();
 
       // Reset form

@@ -68,10 +68,10 @@ export default function CrmClientModal({
         throw new Error('Failed to update client');
       }
 
-      const data = await response.json();
+      const data: { data?: CrmClient; error?: string } = await response.json();
       toast.addToast('Client mis à jour', 'success');
       setEditMode(false);
-      if (onUpdate) onUpdate(data.data);
+      if (onUpdate && data.data) onUpdate(data.data);
     } catch (error) {
       console.error('Error updating client:', error);
       toast.addToast('Erreur lors de la mise à jour', 'error');
