@@ -1,13 +1,10 @@
 /**
  * CRM Stages pour MonApplication.be
- * Flux B2B: Prospect → Contact → Qualified → Proposal → Negotiation → Closed Won/Lost
+ * Flux B2B: Prospect → Devis → Gagné/Perdu
  */
 export const CRM_STAGES = {
   PROSPECT: 'prospect',
-  CONTACT: 'contact',
-  QUALIFIED: 'qualified',
   PROPOSAL: 'proposal',
-  NEGOTIATION: 'negotiation',
   CLOSED_WON: 'closed_won',
   CLOSED_LOST: 'closed_lost',
 } as const;
@@ -28,49 +25,25 @@ export const DEFAULT_CRM_COLUMNS = [
   },
   {
     id: '2',
-    slug: CRM_STAGES.CONTACT,
-    label: 'Contact',
-    position: 2,
-    color: 'blue',
-    description: 'Premier contact établi',
-  },
-  {
-    id: '3',
-    slug: CRM_STAGES.QUALIFIED,
-    label: 'Qualifié',
-    position: 3,
-    color: 'purple',
-    description: 'Lead qualifié et intéressé',
-  },
-  {
-    id: '4',
     slug: CRM_STAGES.PROPOSAL,
     label: 'Devis',
-    position: 4,
+    position: 2,
     color: 'yellow',
     description: 'Devis envoyé',
   },
   {
-    id: '5',
-    slug: CRM_STAGES.NEGOTIATION,
-    label: 'Négociation',
-    position: 5,
-    color: 'orange',
-    description: 'En cours de négociation',
-  },
-  {
-    id: '6',
+    id: '3',
     slug: CRM_STAGES.CLOSED_WON,
     label: 'Gagné',
-    position: 6,
+    position: 3,
     color: 'teal',
     description: 'Deal conclu',
   },
   {
-    id: '7',
+    id: '4',
     slug: CRM_STAGES.CLOSED_LOST,
     label: 'Perdu',
-    position: 7,
+    position: 4,
     color: 'red',
     description: 'Deal perdu',
   },

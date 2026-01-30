@@ -54,6 +54,11 @@ export interface CrmClient {
   next_callback_date?: string;
   call_notes?: string;
 
+  // Relances
+  relance_1?: string;
+  relance_2?: string;
+  relance_3?: string;
+
   // Données
   notes?: string;
   tags?: string[];

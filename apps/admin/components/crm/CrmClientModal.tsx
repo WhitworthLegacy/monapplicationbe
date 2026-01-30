@@ -428,6 +428,56 @@ export default function CrmClientModal({
           </div>
         </div>
 
+        {/* Relances Section */}
+        {editMode && (
+          <div className="grid md:grid-cols-3 gap-4">
+            <Input
+              label="Relance 1"
+              value={formData.relance_1 || ''}
+              onChange={(e) => setFormData({ ...formData, relance_1: e.target.value })}
+              placeholder="Date ou note de relance 1"
+            />
+            <Input
+              label="Relance 2"
+              value={formData.relance_2 || ''}
+              onChange={(e) => setFormData({ ...formData, relance_2: e.target.value })}
+              placeholder="Date ou note de relance 2"
+            />
+            <Input
+              label="Relance 3"
+              value={formData.relance_3 || ''}
+              onChange={(e) => setFormData({ ...formData, relance_3: e.target.value })}
+              placeholder="Date ou note de relance 3"
+            />
+          </div>
+        )}
+
+        {!editMode && (client.relance_1 || client.relance_2 || client.relance_3) && (
+          <div>
+            <h3 className="text-sm font-medium text-[#0f172a] mb-2">Relances</h3>
+            <div className="grid md:grid-cols-3 gap-4">
+              {client.relance_1 && (
+                <div className="p-3 bg-[#f1f5f9] rounded-lg">
+                  <div className="text-xs text-[#64748b] mb-1">Relance 1</div>
+                  <div className="text-sm text-[#0f172a]">{client.relance_1}</div>
+                </div>
+              )}
+              {client.relance_2 && (
+                <div className="p-3 bg-[#f1f5f9] rounded-lg">
+                  <div className="text-xs text-[#64748b] mb-1">Relance 2</div>
+                  <div className="text-sm text-[#0f172a]">{client.relance_2}</div>
+                </div>
+              )}
+              {client.relance_3 && (
+                <div className="p-3 bg-[#f1f5f9] rounded-lg">
+                  <div className="text-xs text-[#64748b] mb-1">Relance 3</div>
+                  <div className="text-sm text-[#0f172a]">{client.relance_3}</div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Notes Section */}
         <div>
           <label className="block text-sm font-medium text-[#0f172a] mb-2">
