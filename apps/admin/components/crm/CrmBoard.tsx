@@ -14,7 +14,7 @@ import { CrmColumn, CrmClient, QuickCreateForm } from './types';
 import CrmClientModal from './CrmClientModal';
 
 export default function CrmBoard() {
-  const [columns] = useState<CrmColumn[]>(DEFAULT_CRM_COLUMNS);
+  const [columns] = useState<readonly CrmColumn[]>(DEFAULT_CRM_COLUMNS);
   const [clients, setClients] = useState<CrmClient[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
