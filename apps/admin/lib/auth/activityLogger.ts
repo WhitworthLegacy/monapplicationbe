@@ -22,7 +22,7 @@ interface LogActivityParams {
 
 export async function logActivity(params: LogActivityParams) {
   try {
-    const supabase = createServerClient();
+    const supabase = await createServerClient();
 
     await supabase.from("activities").insert([
       {

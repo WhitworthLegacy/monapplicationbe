@@ -22,7 +22,7 @@ async function requireRole(
     };
   }
 
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const {
     data: { user },
     error,
@@ -72,7 +72,7 @@ export async function getAuthUser(request: NextRequest): Promise<AuthResult> {
     };
   }
 
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const {
     data: { user },
     error,
