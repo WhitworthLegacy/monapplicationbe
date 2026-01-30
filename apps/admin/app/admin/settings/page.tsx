@@ -50,14 +50,14 @@ export default function SettingsPage() {
               <Input
                 label="Email de contact"
                 type="email"
-                defaultValue="contact@monapplication.fr"
+                defaultValue="contact@monapplication.be"
                 placeholder="contact@example.com"
               />
               <Input
                 label="Téléphone"
                 type="tel"
-                defaultValue="+33 1 23 45 67 89"
-                placeholder="+33 X XX XX XX XX"
+                defaultValue="+32 460 24 24 27"
+                placeholder="+32 X XX XX XX XX"
               />
             </div>
           </CardContent>

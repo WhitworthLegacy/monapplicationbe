@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { Card, CardContent } from "@/components/ui/Card";
 import {
@@ -116,6 +117,7 @@ export default function DashboardPage() {
       gradient: "from-blue-50 to-indigo-50",
       iconColor: "text-blue-600",
       iconBg: "bg-blue-100",
+      href: "/admin/clients",
     },
     {
       title: "Rendez-vous Aujourd'hui",
@@ -126,6 +128,7 @@ export default function DashboardPage() {
       gradient: "from-green-50 to-emerald-50",
       iconColor: "text-green-600",
       iconBg: "bg-green-100",
+      href: "/admin/appointments",
     },
     {
       title: "Devis en Attente",
@@ -136,6 +139,7 @@ export default function DashboardPage() {
       gradient: "from-amber-50 to-orange-50",
       iconColor: "text-amber-600",
       iconBg: "bg-amber-100",
+      href: "/admin/quotes",
     },
     {
       title: "Taux de Conversion",
@@ -146,6 +150,7 @@ export default function DashboardPage() {
       gradient: "from-purple-50 to-violet-50",
       iconColor: "text-purple-600",
       iconBg: "bg-purple-100",
+      href: "/admin/crm",
     },
     {
       title: "Revenu Total",
@@ -156,6 +161,7 @@ export default function DashboardPage() {
       gradient: "from-accent/10 to-accent/20",
       iconColor: "text-accent",
       iconBg: "bg-accent/20",
+      href: "/admin/quotes",
     },
   ];
 
@@ -174,40 +180,41 @@ export default function DashboardPage() {
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
         {kpiCards.map((kpi, index) => (
-          <Card
-            key={index}
-            className={`overflow-hidden border-2 bg-linear-to-br ${kpi.gradient} hover:shadow-lg transition-all duration-300 group`}
-          >
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div
-                  className={`p-3 rounded-xl ${kpi.iconBg} group-hover:scale-110 transition-transform duration-300`}
-                >
-                  <kpi.icon className={`w-6 h-6 ${kpi.iconColor}`} />
+          <Link key={index} href={kpi.href}>
+            <Card
+              className={`overflow-hidden border-2 bg-linear-to-br ${kpi.gradient} hover:shadow-lg transition-all duration-300 group cursor-pointer`}
+            >
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div
+                    className={`p-3 rounded-xl ${kpi.iconBg} group-hover:scale-110 transition-transform duration-300`}
+                  >
+                    <kpi.icon className={`w-6 h-6 ${kpi.iconColor}`} />
+                  </div>
+                  <div
+                    className={`flex items-center gap-1 text-sm font-medium ${
+                      kpi.isPositive ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {kpi.isPositive ? (
+                      <ArrowUpRight className="w-4 h-4" />
+                    ) : (
+                      <ArrowDownRight className="w-4 h-4" />
+                    )}
+                    {kpi.change}
+                  </div>
                 </div>
-                <div
-                  className={`flex items-center gap-1 text-sm font-medium ${
-                    kpi.isPositive ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {kpi.isPositive ? (
-                    <ArrowUpRight className="w-4 h-4" />
-                  ) : (
-                    <ArrowDownRight className="w-4 h-4" />
-                  )}
-                  {kpi.change}
+                <div>
+                  <p className="text-sm font-medium text-text-muted mb-1">
+                    {kpi.title}
+                  </p>
+                  <p className="text-3xl font-bold text-text">
+                    {kpi.value}
+                  </p>
                 </div>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-text-muted mb-1">
-                  {kpi.title}
-                </p>
-                <p className="text-3xl font-bold text-text">
-                  {kpi.value}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
 

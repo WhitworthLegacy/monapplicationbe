@@ -67,7 +67,7 @@ export default function BottomNav() {
         </defs>
       </svg>
 
-      <div className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2.5 md:py-3 rounded-2xl bg-[#0f172a]/95 backdrop-blur-xl shadow-2xl shadow-[#0f172a]/25 border border-white/10">
+      <div className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2.5 md:py-3 rounded-2xl bg-white/95 backdrop-blur-xl shadow-2xl shadow-[#0f172a]/10 border border-[#e2e8f0]">
         {filteredItems.map((item) => {
           // Home is active only when exactly on /dashboard
           const isActive = item.href === '/dashboard'
@@ -85,7 +85,7 @@ export default function BottomNav() {
                 transition-all duration-300 ease-out min-w-[50px] md:min-w-[60px]
                 ${isActive
                   ? 'bg-gradient-to-br from-[#1e3a8a] to-[#b8860b] text-white shadow-lg shadow-[#1e3a8a]/30 scale-105'
-                  : 'bg-white/10 hover:bg-white/20 active:scale-95'
+                  : 'bg-[#f1f5f9] hover:bg-[#e2e8f0] active:scale-95'
                 }
               `}
             >
