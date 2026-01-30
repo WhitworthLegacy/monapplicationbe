@@ -65,10 +65,25 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-primary via-primary to-secondary px-4">
+      {/* Logo en haut */}
+      <div className="absolute top-8 left-8">
+        <div className="grid grid-cols-3 gap-1.5">
+          <div className="w-3 h-3 rounded-sm bg-primary border border-white/20" />
+          <div className="w-3 h-3 rounded-sm bg-secondary border border-white/20" />
+          <div className="w-3 h-3 rounded-sm bg-accent" />
+          <div className="w-3 h-3 rounded-sm bg-secondary border border-white/20" />
+          <div className="w-3 h-3 rounded-sm bg-accent" />
+          <div className="w-3 h-3 rounded-sm bg-primary border border-white/20" />
+          <div className="w-3 h-3 rounded-sm bg-accent" />
+          <div className="w-3 h-3 rounded-sm bg-primary border border-white/20" />
+          <div className="w-3 h-3 rounded-sm bg-secondary border border-white/20" />
+        </div>
+      </div>
+
+      <Card className="w-full max-w-md shadow-2xl">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">
+          <CardTitle className="text-2xl text-center text-primary">
             Connexion Admin
           </CardTitle>
         </CardHeader>
@@ -99,7 +114,7 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-accent hover:bg-accent-light text-white"
               isLoading={isLoading}
               disabled={!email || !password}
             >
@@ -110,7 +125,7 @@ export default function LoginPage() {
           <div className="mt-6 text-center">
             <a
               href="/forgot-password"
-              className="text-sm text-blue-600 hover:text-blue-700"
+              className="text-sm text-accent hover:text-accent-light font-medium"
             >
               Mot de passe oublié?
             </a>

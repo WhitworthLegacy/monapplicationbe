@@ -59,14 +59,14 @@ export const Sidebar: React.FC = () => {
 
   if (isLoading) {
     return (
-      <aside className="w-64 bg-gray-900 text-white min-h-screen">
+      <aside className="w-64 bg-primary text-white min-h-screen">
         <div className="p-4">
-          <div className="h-8 bg-gray-700 rounded animate-pulse mb-6"></div>
+          <div className="h-8 bg-secondary rounded animate-pulse mb-6"></div>
           <div className="space-y-2">
             {[...Array(7)].map((_, i) => (
               <div
                 key={i}
-                className="h-10 bg-gray-700 rounded animate-pulse"
+                className="h-10 bg-secondary rounded animate-pulse"
               ></div>
             ))}
           </div>
@@ -80,12 +80,26 @@ export const Sidebar: React.FC = () => {
   );
 
   return (
-    <aside className="w-64 bg-gray-900 text-white min-h-screen flex flex-col">
+    <aside className="w-64 bg-linear-to-b from-primary via-primary to-secondary text-white min-h-screen flex flex-col">
       <div className="p-4">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold">Admin Panel</h1>
+          {/* Logo 9 dots - même que web */}
+          <Link href="/admin" className="flex items-center gap-3 group mb-4">
+            <div className="grid grid-cols-3 gap-1.5">
+              <div className="w-3 h-3 rounded-sm bg-primary group-hover:bg-primary/80 transition-colors border border-white/20" />
+              <div className="w-3 h-3 rounded-sm bg-secondary group-hover:bg-secondary/80 transition-colors border border-white/20" />
+              <div className="w-3 h-3 rounded-sm bg-accent group-hover:bg-accent-light transition-colors" />
+              <div className="w-3 h-3 rounded-sm bg-secondary group-hover:bg-secondary/80 transition-colors border border-white/20" />
+              <div className="w-3 h-3 rounded-sm bg-accent group-hover:bg-accent-light transition-colors" />
+              <div className="w-3 h-3 rounded-sm bg-primary group-hover:bg-primary/80 transition-colors border border-white/20" />
+              <div className="w-3 h-3 rounded-sm bg-accent group-hover:bg-accent-light transition-colors" />
+              <div className="w-3 h-3 rounded-sm bg-primary group-hover:bg-primary/80 transition-colors border border-white/20" />
+              <div className="w-3 h-3 rounded-sm bg-secondary group-hover:bg-secondary/80 transition-colors border border-white/20" />
+            </div>
+            <span className="font-semibold text-lg">Admin</span>
+          </Link>
           {profile && (
-            <p className="text-sm text-gray-400 mt-1">
+            <p className="text-sm text-gray-300 mt-1">
               {profile.full_name || profile.email}
             </p>
           )}
@@ -103,8 +117,8 @@ export const Sidebar: React.FC = () => {
                 href={item.href}
                 className={`flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                   isActive
-                    ? "bg-gray-800 text-white"
-                    : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                    ? "bg-accent text-white shadow-lg shadow-accent/20"
+                    : "text-gray-200 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 <span className="mr-3 text-lg">{item.icon}</span>
@@ -115,7 +129,7 @@ export const Sidebar: React.FC = () => {
         </nav>
       </div>
 
-      <div className="mt-auto p-4 border-t border-gray-800">
+      <div className="mt-auto p-4 border-t border-white/10">
         <button
           onClick={async () => {
             const { createBrowserClient } =
@@ -124,7 +138,7 @@ export const Sidebar: React.FC = () => {
             await supabase.auth.signOut();
             window.location.href = "/login";
           }}
-          className="w-full flex items-center px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
+          className="w-full flex items-center px-4 py-2 text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-white rounded-lg transition-colors"
         >
           <span className="mr-3 text-lg">🚪</span>
           Déconnexion
