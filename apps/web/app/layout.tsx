@@ -13,7 +13,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "monapplication.be | Votre Secrétaire Digitale",
   description:
-    "Une secrétaire coûte 30 000€/an. Notre système fait le même travail pour 8 000€. Une seule fois. Booking, devis, CRM, notifications — tout automatisé.",
+    "Une secrétaire coûte minimum 24 000€/an. Notre système fait le même travail à partir de 5 000€. Une seule fois. Booking, devis, CRM, notifications — tout automatisé.",
   keywords: [
     "secrétaire digitale",
     "ERP",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "monapplication.be | Votre Secrétaire Digitale",
     description:
-      "Une secrétaire coûte 30 000€/an. Notre système fait le même travail pour 8 000€.",
+      "Une secrétaire coûte minimum 24 000€/an. Notre système fait le même travail à partir de 5 000€.",
     type: "website",
     locale: "fr_BE",
   },
