@@ -24,6 +24,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { useToast } from '@/components/ui/Toast';
+import { QuickQuoteModal } from '@/components/quotes/QuickQuoteModal';
 import { CrmClient } from './types';
 import {
   CRM_STAGES,
@@ -51,6 +52,7 @@ export default function CrmClientModal({
   const [editMode, setEditMode] = useState(false);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState(client);
+  const [showQuoteModal, setShowQuoteModal] = useState(false);
   const toast = useToast();
 
   const handleSave = async () => {
@@ -105,8 +107,11 @@ export default function CrmClientModal({
   };
 
   const handleCreateQuote = () => {
-    // TODO: Open quote creation flow
-    toast.addToast('Création de devis bientôt disponible', 'info');
+    if (!client.email) {
+      toast.addToast('Le client doit avoir un email pour créer un devis', 'warning');
+      return;
+    }
+    setShowQuoteModal(true);
   };
 
   const formatDate = (dateString?: string) => {
@@ -132,6 +137,7 @@ export default function CrmClientModal({
   };
 
   return (
+    <>
     <Modal
       isOpen={isOpen}
       onClose={onClose}
@@ -480,5 +486,17 @@ export default function CrmClientModal({
         )}
       </div>
     </Modal>
+
+    {/* Quote Creation Modal */}
+    <QuickQuoteModal
+      client={client}
+      isOpen={showQuoteModal}
+      onClose={() => setShowQuoteModal(false)}
+      onSuccess={(quoteId) => {
+        setShowQuoteModal(false);
+        toast.addToast('Devis créé et envoyé !', 'success');
+      }}
+    />
+  </>
   );
 }
