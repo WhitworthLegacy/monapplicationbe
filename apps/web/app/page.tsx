@@ -1,92 +1,147 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0A1929] text-white">
+      {/* Header Navigation */}
+      <header className="absolute top-0 left-0 right-0 z-50">
+        <nav className="container mx-auto px-6 py-6 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
+              <span className="text-[#0A1929] font-bold text-xl">M</span>
+            </div>
+            <span className="font-semibold text-lg">MonApplication</span>
+          </div>
+
+          <div className="hidden md:flex items-center space-x-8">
+            <Link
+              href="#fonctionnalites"
+              className="text-gray-300 hover:text-white transition"
+            >
+              Fonctionnalités
+            </Link>
+            <Link
+              href="#comment"
+              className="text-gray-300 hover:text-white transition"
+            >
+              Comment ça marche
+            </Link>
+            <Link
+              href="#tarifs"
+              className="text-gray-300 hover:text-white transition"
+            >
+              Tarifs
+            </Link>
+            <Link
+              href="#contact"
+              className="text-gray-300 hover:text-white transition"
+            >
+              Contact
+            </Link>
+            <button className="bg-yellow-500 hover:bg-yellow-600 text-[#0A1929] font-semibold px-6 py-2 rounded-lg transition">
+              Essayer gratuitement
+            </button>
+          </div>
+        </nav>
+      </header>
+
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-blue-50 to-white py-20 sm:py-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              Automatisez votre secrétariat
+      <section className="relative min-h-screen flex items-center pb-32">
+        <div className="container mx-auto px-6 pt-32">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-block px-4 py-2 bg-white/10 rounded-full text-sm mb-8">
+              ⚡ Nouvelle génération
+            </div>
+
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              Votre secrétaire digitale.
+              <br />
+              <span className="text-yellow-500">Disponible 24h/24.</span>
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Une secrétaire coûte 2 400€ brut/mois. Notre système fait le même
-              travail à partir de 5 000€ une seule fois. Opérationnel en 30
-              jours.
+
+            <p className="text-xl text-gray-300 mb-10 leading-relaxed">
+              Une secrétaire coûte <strong>2 400€/mois</strong>. Notre système
+              fait le travail{" "}
+              <strong className="text-yellow-500">5 fois moins cher</strong>.
+              Opérationnel en 30 jours.
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a
-                href="/contact"
-                className="rounded-md bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-              >
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+              <button className="bg-yellow-500 hover:bg-yellow-600 text-[#0A1929] font-semibold px-8 py-4 rounded-lg text-lg transition shadow-lg shadow-yellow-500/20">
                 Demander une démo
-              </a>
-              <a
-                href="/tarifs"
-                className="text-sm font-semibold leading-6 text-gray-900"
-              >
-                Voir les tarifs <span aria-hidden="true">→</span>
-              </a>
+              </button>
+              <button className="border-2 border-white/20 hover:border-white/40 text-white font-semibold px-8 py-4 rounded-lg text-lg transition">
+                Consulter nos dévis
+              </button>
+            </div>
+
+            {/* Feature Points */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-sm text-gray-400">
+              <div className="flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <span>Seulement en service client</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <span>72h de paramétrage</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <span>Serveurs hébergés en UE</span>
+              </div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Features Section */}
-      <section className="py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-blue-600">
-              Plus rapide
-            </h2>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Tout ce dont vous avez besoin pour gérer votre activité
-            </p>
-          </div>
-          <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-            <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
-              <div className="flex flex-col">
-                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-                  <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-blue-600 text-white text-xl">
-                    📅
-                  </div>
-                  Gestion des rendez-vous
-                </dt>
-                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
-                  <p className="flex-auto">
-                    Planning automatisé, rappels SMS et email, confirmation
-                    instantanée.
-                  </p>
-                </dd>
-              </div>
-              <div className="flex flex-col">
-                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-                  <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-blue-600 text-white text-xl">
-                    👥
-                  </div>
-                  CRM intégré
-                </dt>
-                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
-                  <p className="flex-auto">
-                    Gestion complète de vos clients, historique, notes et suivi
-                    personnalisé.
-                  </p>
-                </dd>
-              </div>
-              <div className="flex flex-col">
-                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-                  <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-blue-600 text-white text-xl">
-                    📄
-                  </div>
-                  Devis automatiques
-                </dt>
-                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
-                  <p className="flex-auto">
-                    Création et envoi de devis professionnels en quelques clics.
-                  </p>
-                </dd>
-              </div>
-            </dl>
-          </div>
+        {/* Wave Shape at Bottom */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg
+            viewBox="0 0 1440 120"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full h-auto"
+          >
+            <path
+              d="M0 0L60 8C120 16 240 32 360 42.7C480 53 600 59 720 58.7C840 59 960 53 1080 48C1200 43 1320 37 1380 34.7L1440 32V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V0Z"
+              fill="white"
+            />
+          </svg>
         </div>
       </section>
     </div>
