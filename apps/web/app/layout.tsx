@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MonApplication - Automatisez votre secrétariat",
+  title: "MonApplication - Votre secrétaire digitale 24h/24",
   description:
-    "Une secrétaire coûte 2 400€ brut/mois. Notre système fait le même travail à partir de 5 000€ une seule fois. Opérationnel en 30 jours.",
+    "Une secrétaire coûte 2 400€/mois. Notre système fait le travail 5 fois moins cher. Opérationnel en 30 jours.",
 };
 
 export default function RootLayout({
