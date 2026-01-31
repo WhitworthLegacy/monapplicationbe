@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -10,19 +10,29 @@ import {
   PiggyBank,
   Kanban,
   Plus,
-  TrendingUp,
   Calendar,
   Mail,
   Clock,
   CheckCircle,
-  Send,
   Euro,
   ChevronRight,
   Zap,
   MousePointerClick,
+  Wrench,
+  Package,
+  Bike,
+  AlertCircle,
+  CheckCircle2,
+  Timer,
 } from "lucide-react";
 
-type TabType = "dashboard" | "crm" | "clients" | "devis" | "finances";
+type TabType = "dashboard" | "crm" | "clients" | "devis" | "finances" | "atelier" | "stock" | "rdv";
+
+interface TabConfig {
+  id: TabType;
+  label: string;
+  icon: any;
+}
 
 interface DemoModalProps {
   isOpen: boolean;
@@ -31,16 +41,37 @@ interface DemoModalProps {
   projectColor: string;
 }
 
-const tabs = [
-  { id: "dashboard" as TabType, label: "Dashboard", icon: LayoutDashboard },
-  { id: "crm" as TabType, label: "CRM", icon: Kanban },
-  { id: "clients" as TabType, label: "Clients", icon: Users },
-  { id: "devis" as TabType, label: "Devis", icon: FileText },
-  { id: "finances" as TabType, label: "Finances", icon: PiggyBank },
+const veloDocterTabs: TabConfig[] = [
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { id: "crm", label: "CRM", icon: Kanban },
+  { id: "clients", label: "Clients", icon: Users },
+  { id: "atelier", label: "Atelier", icon: Wrench },
+  { id: "stock", label: "Stock", icon: Package },
+  { id: "devis", label: "Devis", icon: FileText },
+  { id: "finances", label: "Finances", icon: PiggyBank },
+];
+
+const airCoolingTabs: TabConfig[] = [
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { id: "crm", label: "CRM", icon: Kanban },
+  { id: "clients", label: "Clients", icon: Users },
+  { id: "rdv", label: "RDV", icon: Calendar },
+  { id: "devis", label: "Devis", icon: FileText },
+  { id: "finances", label: "Finances", icon: PiggyBank },
 ];
 
 export function DemoModal({ isOpen, onClose, projectName, projectColor }: DemoModalProps) {
   const [activeTab, setActiveTab] = useState<TabType>("dashboard");
+
+  const isVeloDoctor = projectName === "VeloDoctor";
+  const tabs = isVeloDoctor ? veloDocterTabs : airCoolingTabs;
+
+  // Reset to dashboard when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setActiveTab("dashboard");
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -97,11 +128,14 @@ export function DemoModal({ isOpen, onClose, projectName, projectColor }: DemoMo
 
           {/* Content Area */}
           <div className="p-6 bg-gray-100 min-h-[400px] max-h-[60vh] overflow-y-auto">
-            {activeTab === "dashboard" && <DashboardPreview />}
-            {activeTab === "crm" && <CrmPreview />}
-            {activeTab === "clients" && <ClientsPreview />}
-            {activeTab === "devis" && <DevisPreview />}
-            {activeTab === "finances" && <FinancesPreview />}
+            {activeTab === "dashboard" && <DashboardPreview isVeloDoctor={isVeloDoctor} />}
+            {activeTab === "crm" && <CrmPreview isVeloDoctor={isVeloDoctor} />}
+            {activeTab === "clients" && <ClientsPreview isVeloDoctor={isVeloDoctor} />}
+            {activeTab === "devis" && <DevisPreview isVeloDoctor={isVeloDoctor} />}
+            {activeTab === "finances" && <FinancesPreview isVeloDoctor={isVeloDoctor} />}
+            {activeTab === "atelier" && <AtelierPreview />}
+            {activeTab === "stock" && <StockPreview />}
+            {activeTab === "rdv" && <RdvPreview />}
           </div>
 
           {/* Footer with benefits */}
@@ -117,7 +151,7 @@ export function DemoModal({ isOpen, onClose, projectName, projectColor }: DemoMo
               </div>
               <div className="flex items-center gap-2 text-purple-600">
                 <Clock className="w-4 h-4" />
-                <span>10h gagnées/semaine</span>
+                <span>{isVeloDoctor ? "12h" : "8h"} gagnées/semaine</span>
               </div>
             </div>
           </div>
@@ -127,15 +161,26 @@ export function DemoModal({ isOpen, onClose, projectName, projectColor }: DemoMo
   );
 }
 
-function DashboardPreview() {
+function DashboardPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
   return (
     <div className="space-y-4">
-      {/* KPI Cards */}
+      {/* KPI Cards - Different values per project */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <KpiCard icon={Calendar} label="RDV aujourd'hui" value="8" color="blue" />
-        <KpiCard icon={Users} label="Nouveaux clients" value="12" color="green" />
-        <KpiCard icon={FileText} label="Devis en attente" value="5" color="orange" />
-        <KpiCard icon={Euro} label="CA ce mois" value="4.2K€" color="purple" />
+        {isVeloDoctor ? (
+          <>
+            <KpiCard icon={Calendar} label="RDV aujourd'hui" value="6" color="blue" />
+            <KpiCard icon={Users} label="Nouveaux clients" value="9" color="green" />
+            <KpiCard icon={Wrench} label="En atelier" value="4" color="orange" />
+            <KpiCard icon={Euro} label="CA ce mois" value="3.8K€" color="purple" />
+          </>
+        ) : (
+          <>
+            <KpiCard icon={Calendar} label="RDV aujourd'hui" value="5" color="blue" />
+            <KpiCard icon={Users} label="Nouveaux clients" value="7" color="green" />
+            <KpiCard icon={FileText} label="Devis en attente" value="8" color="orange" />
+            <KpiCard icon={Euro} label="CA ce mois" value="6.2K€" color="purple" />
+          </>
+        )}
       </div>
 
       {/* Quick Actions */}
@@ -153,16 +198,26 @@ function DashboardPreview() {
       <div className="bg-white rounded-xl p-4 shadow-sm">
         <h4 className="text-sm font-semibold text-gray-700 mb-3">Prochains RDV</h4>
         <div className="space-y-2">
-          <AppointmentRow time="09:00" client="Martin D." service="Intervention" />
-          <AppointmentRow time="11:30" client="Sophie L." service="Devis sur place" />
-          <AppointmentRow time="14:00" client="Jean P." service="Installation" />
+          {isVeloDoctor ? (
+            <>
+              <AppointmentRow time="09:30" client="Thomas B." service="Réparation vélo" />
+              <AppointmentRow time="11:00" client="Marie L." service="Révision complète" />
+              <AppointmentRow time="14:30" client="Paul D." service="Changement pneus" />
+            </>
+          ) : (
+            <>
+              <AppointmentRow time="08:30" client="Entreprise ABC" service="Installation clim" />
+              <AppointmentRow time="13:00" client="Restaurant Le Soleil" service="Maintenance" />
+              <AppointmentRow time="16:00" client="Cabinet Dr. Martin" service="Dépannage" />
+            </>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-function CrmPreview() {
+function CrmPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-2">
@@ -172,26 +227,47 @@ function CrmPreview() {
 
       {/* Kanban Board Preview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <KanbanColumn title="Nouveaux" count={4} color="blue">
-          <KanbanCard name="Marie B." info="Demande de devis" />
-          <KanbanCard name="Pierre M." info="Premier contact" />
-        </KanbanColumn>
-        <KanbanColumn title="À contacter" count={3} color="yellow">
-          <KanbanCard name="Lucas T." info="Rappeler demain" />
-        </KanbanColumn>
-        <KanbanColumn title="Devis envoyé" count={5} color="purple">
-          <KanbanCard name="Emma R." info="850€ - En attente" />
-          <KanbanCard name="Hugo D." info="1200€ - Relancé" />
-        </KanbanColumn>
-        <KanbanColumn title="Gagné" count={8} color="green">
-          <KanbanCard name="Julie K." info="Intervention planifiée" />
-        </KanbanColumn>
+        {isVeloDoctor ? (
+          <>
+            <KanbanColumn title="Nouveaux" count={3} color="blue">
+              <KanbanCard name="Claire M." info="Vélo électrique" />
+              <KanbanCard name="Antoine R." info="Trottinette" />
+            </KanbanColumn>
+            <KanbanColumn title="À rappeler" count={2} color="yellow">
+              <KanbanCard name="Julie P." info="Devis envoyé" />
+            </KanbanColumn>
+            <KanbanColumn title="En cours" count={4} color="purple">
+              <KanbanCard name="Marc D." info="En atelier" />
+              <KanbanCard name="Sophie B." info="Pièce commandée" />
+            </KanbanColumn>
+            <KanbanColumn title="Terminé" count={12} color="green">
+              <KanbanCard name="Luc T." info="Livré ✓" />
+            </KanbanColumn>
+          </>
+        ) : (
+          <>
+            <KanbanColumn title="Prospects" count={5} color="blue">
+              <KanbanCard name="Hôtel Bellevue" info="Demande devis" />
+              <KanbanCard name="Boulangerie Martin" info="Premier contact" />
+            </KanbanColumn>
+            <KanbanColumn title="Visite planifiée" count={3} color="yellow">
+              <KanbanCard name="Bureau Dupont SA" info="Jeudi 14h" />
+            </KanbanColumn>
+            <KanbanColumn title="Devis envoyé" count={6} color="purple">
+              <KanbanCard name="Pharmacie Centrale" info="2,400€" />
+              <KanbanCard name="Cabinet Avocat" info="1,850€" />
+            </KanbanColumn>
+            <KanbanColumn title="Signé" count={9} color="green">
+              <KanbanCard name="Resto La Terrasse" info="Installation lundi" />
+            </KanbanColumn>
+          </>
+        )}
       </div>
     </div>
   );
 }
 
-function ClientsPreview() {
+function ClientsPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
   return (
     <div className="space-y-4">
       {/* Search bar */}
@@ -207,44 +283,177 @@ function ClientsPreview() {
 
       {/* Client cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <ClientCard
-          name="Martin Dupont"
-          email="martin.d@email.com"
-          phone="0470 12 34 56"
-          lastVisit="Il y a 3 jours"
-        />
-        <ClientCard
-          name="Sophie Lambert"
-          email="sophie.l@email.com"
-          phone="0486 78 90 12"
-          lastVisit="Il y a 1 semaine"
-        />
-        <ClientCard
-          name="Jean-Pierre Roux"
-          email="jp.roux@email.com"
-          phone="0495 34 56 78"
-          lastVisit="Il y a 2 semaines"
-        />
-        <ClientCard
-          name="Emma Leroy"
-          email="emma.l@email.com"
-          phone="0477 90 12 34"
-          lastVisit="Aujourd'hui"
-        />
+        {isVeloDoctor ? (
+          <>
+            <ClientCard name="Thomas Berger" email="thomas.b@email.com" phone="0470 12 34 56" lastVisit="Hier" extra="VTT électrique" />
+            <ClientCard name="Marie Lambert" email="marie.l@email.com" phone="0486 78 90 12" lastVisit="Il y a 3 jours" extra="Vélo de ville" />
+            <ClientCard name="Paul Dubois" email="paul.d@email.com" phone="0495 34 56 78" lastVisit="Il y a 1 semaine" extra="Trottinette" />
+            <ClientCard name="Emma Martin" email="emma.m@email.com" phone="0477 90 12 34" lastVisit="Aujourd'hui" extra="Vélo cargo" />
+          </>
+        ) : (
+          <>
+            <ClientCard name="Hôtel Bellevue" email="contact@bellevue.be" phone="02 123 45 67" lastVisit="Il y a 2 jours" extra="Multi-split" />
+            <ClientCard name="Restaurant Le Soleil" email="info@lesoleil.be" phone="02 234 56 78" lastVisit="Hier" extra="Gainable" />
+            <ClientCard name="Cabinet Dr. Martin" email="cabinet@martin.be" phone="02 345 67 89" lastVisit="Aujourd'hui" extra="Split mural" />
+            <ClientCard name="Pharmacie Centrale" email="pharma@centrale.be" phone="02 456 78 90" lastVisit="Il y a 5 jours" extra="Cassette" />
+          </>
+        )}
       </div>
     </div>
   );
 }
 
-function DevisPreview() {
+function AtelierPreview() {
   return (
     <div className="space-y-4">
       {/* Stats */}
       <div className="grid grid-cols-4 gap-3">
-        <StatusBadge label="Tous" count={24} active />
-        <StatusBadge label="Brouillon" count={3} />
-        <StatusBadge label="Envoyé" count={8} />
-        <StatusBadge label="Accepté" count={13} />
+        <div className="bg-white rounded-xl p-4 shadow-sm text-center">
+          <Bike className="w-6 h-6 text-blue-500 mx-auto mb-2" />
+          <p className="text-2xl font-bold text-gray-900">4</p>
+          <p className="text-xs text-gray-500">En réparation</p>
+        </div>
+        <div className="bg-white rounded-xl p-4 shadow-sm text-center">
+          <Timer className="w-6 h-6 text-orange-500 mx-auto mb-2" />
+          <p className="text-2xl font-bold text-gray-900">2</p>
+          <p className="text-xs text-gray-500">En attente pièce</p>
+        </div>
+        <div className="bg-white rounded-xl p-4 shadow-sm text-center">
+          <CheckCircle2 className="w-6 h-6 text-green-500 mx-auto mb-2" />
+          <p className="text-2xl font-bold text-gray-900">3</p>
+          <p className="text-xs text-gray-500">Prêts à livrer</p>
+        </div>
+        <div className="bg-white rounded-xl p-4 shadow-sm text-center">
+          <AlertCircle className="w-6 h-6 text-red-500 mx-auto mb-2" />
+          <p className="text-2xl font-bold text-gray-900">1</p>
+          <p className="text-xs text-gray-500">Urgent</p>
+        </div>
+      </div>
+
+      {/* Atelier list */}
+      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+          <h4 className="font-semibold text-gray-700">Vélos en atelier</h4>
+          <button className="text-sm text-primary font-medium">+ Ajouter</button>
+        </div>
+        <AtelierRow client="Thomas B." bike="VTT Rockrider" status="repair" task="Changement freins" />
+        <AtelierRow client="Marie L." bike="Vélo électrique Decathlon" status="waiting" task="Attente batterie" />
+        <AtelierRow client="Paul D." bike="Trottinette Xiaomi" status="ready" task="Réparation terminée" />
+        <AtelierRow client="Sophie K." bike="Vélo de course Giant" status="repair" task="Révision complète" />
+        <AtelierRow client="Marc R." bike="Vélo cargo Urban Arrow" status="urgent" task="Panne moteur" />
+      </div>
+    </div>
+  );
+}
+
+function StockPreview() {
+  return (
+    <div className="space-y-4">
+      {/* Search and filter */}
+      <div className="bg-white rounded-xl p-3 shadow-sm flex items-center gap-3">
+        <div className="flex-1 bg-gray-100 rounded-lg px-4 py-2 text-sm text-gray-400">
+          Rechercher une pièce...
+        </div>
+        <select className="bg-gray-100 rounded-lg px-3 py-2 text-sm text-gray-600 border-0">
+          <option>Toutes catégories</option>
+          <option>Freins</option>
+          <option>Pneus</option>
+          <option>Transmission</option>
+          <option>Électrique</option>
+        </select>
+      </div>
+
+      {/* Low stock alert */}
+      <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 flex items-center gap-3">
+        <AlertCircle className="w-5 h-5 text-orange-500" />
+        <div>
+          <p className="text-sm font-medium text-orange-800">3 articles en stock faible</p>
+          <p className="text-xs text-orange-600">Pneus 26", Chambre à air 700c, Patins de frein V-Brake</p>
+        </div>
+      </div>
+
+      {/* Stock list */}
+      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+          <h4 className="font-semibold text-gray-700">Inventaire</h4>
+          <button className="text-sm text-primary font-medium">+ Nouvelle pièce</button>
+        </div>
+        <StockRow name="Pneu VTT 27.5&quot;" category="Pneus" stock={12} minStock={5} price="24.90€" />
+        <StockRow name="Chambre à air 700c" category="Pneus" stock={3} minStock={10} price="8.50€" lowStock />
+        <StockRow name="Chaîne Shimano 8v" category="Transmission" stock={8} minStock={4} price="18.00€" />
+        <StockRow name="Patins frein V-Brake" category="Freins" stock={2} minStock={6} price="12.00€" lowStock />
+        <StockRow name="Batterie Bosch 500Wh" category="Électrique" stock={2} minStock={2} price="549.00€" />
+      </div>
+    </div>
+  );
+}
+
+function RdvPreview() {
+  return (
+    <div className="space-y-4">
+      {/* Week navigation */}
+      <div className="bg-white rounded-xl p-3 shadow-sm flex items-center justify-between">
+        <button className="text-gray-400 hover:text-gray-600">← Semaine préc.</button>
+        <span className="font-semibold text-gray-700">27 Jan - 2 Fév 2024</span>
+        <button className="text-gray-400 hover:text-gray-600">Semaine suiv. →</button>
+      </div>
+
+      {/* Calendar view */}
+      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className="grid grid-cols-5 border-b border-gray-100">
+          {["Lun 27", "Mar 28", "Mer 29", "Jeu 30", "Ven 31"].map((day, i) => (
+            <div key={day} className={`p-3 text-center text-sm font-medium ${i === 1 ? "bg-primary/10 text-primary" : "text-gray-600"}`}>
+              {day}
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-5 min-h-[250px]">
+          {/* Lundi */}
+          <div className="border-r border-gray-100 p-2 space-y-2">
+            <RdvCard time="09:00" client="Hôtel Bellevue" type="Installation" />
+            <RdvCard time="14:00" client="Bureau ABC" type="Maintenance" />
+          </div>
+          {/* Mardi - aujourd'hui */}
+          <div className="border-r border-gray-100 p-2 space-y-2 bg-primary/5">
+            <RdvCard time="08:30" client="Entreprise XYZ" type="Dépannage" urgent />
+            <RdvCard time="11:00" client="Resto Le Midi" type="Visite" />
+            <RdvCard time="15:30" client="Pharmacie Plus" type="Installation" />
+          </div>
+          {/* Mercredi */}
+          <div className="border-r border-gray-100 p-2 space-y-2">
+            <RdvCard time="10:00" client="Cabinet Med" type="Maintenance" />
+          </div>
+          {/* Jeudi */}
+          <div className="border-r border-gray-100 p-2 space-y-2">
+            <RdvCard time="09:00" client="Boulangerie" type="Installation" />
+            <RdvCard time="13:00" client="Salon Coiffure" type="Visite" />
+          </div>
+          {/* Vendredi */}
+          <div className="p-2 space-y-2">
+            <RdvCard time="08:00" client="Supermarché" type="Maintenance" />
+            <RdvCard time="14:00" client="Crèche Les Petits" type="Installation" />
+          </div>
+        </div>
+      </div>
+
+      {/* Add RDV button */}
+      <button className="w-full bg-accent hover:bg-accent-light text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors">
+        <Plus className="w-5 h-5" />
+        Planifier un nouveau RDV
+      </button>
+    </div>
+  );
+}
+
+function DevisPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
+  return (
+    <div className="space-y-4">
+      {/* Stats */}
+      <div className="grid grid-cols-4 gap-3">
+        <StatusBadge label="Tous" count={isVeloDoctor ? 18 : 31} active />
+        <StatusBadge label="Brouillon" count={isVeloDoctor ? 2 : 4} />
+        <StatusBadge label="Envoyé" count={isVeloDoctor ? 5 : 12} />
+        <StatusBadge label="Accepté" count={isVeloDoctor ? 11 : 15} />
       </div>
 
       {/* Create quote CTA */}
@@ -261,10 +470,21 @@ function DevisPreview() {
 
       {/* Quote list */}
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <QuoteRow number="DEV-2024-042" client="Martin D." amount="1,250€" status="accepted" />
-        <QuoteRow number="DEV-2024-041" client="Sophie L." amount="890€" status="sent" />
-        <QuoteRow number="DEV-2024-040" client="Jean P." amount="2,100€" status="sent" />
-        <QuoteRow number="DEV-2024-039" client="Emma L." amount="650€" status="draft" />
+        {isVeloDoctor ? (
+          <>
+            <QuoteRow number="VD-2024-056" client="Thomas B." amount="185€" status="accepted" />
+            <QuoteRow number="VD-2024-055" client="Marie L." amount="420€" status="sent" />
+            <QuoteRow number="VD-2024-054" client="Paul D." amount="95€" status="accepted" />
+            <QuoteRow number="VD-2024-053" client="Emma M." amount="310€" status="draft" />
+          </>
+        ) : (
+          <>
+            <QuoteRow number="AC-2024-089" client="Hôtel Bellevue" amount="4,200€" status="accepted" />
+            <QuoteRow number="AC-2024-088" client="Restaurant Le Soleil" amount="2,850€" status="sent" />
+            <QuoteRow number="AC-2024-087" client="Cabinet Dr. Martin" amount="1,650€" status="sent" />
+            <QuoteRow number="AC-2024-086" client="Pharmacie Centrale" amount="3,100€" status="draft" />
+          </>
+        )}
       </div>
 
       {/* Auto features */}
@@ -286,7 +506,7 @@ function DevisPreview() {
   );
 }
 
-function FinancesPreview() {
+function FinancesPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
   return (
     <div className="space-y-4">
       {/* Month selector */}
@@ -298,17 +518,31 @@ function FinancesPreview() {
 
       {/* Financial KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <FinanceCard label="CA Accepté" value="12,450€" trend="+18%" positive />
-        <FinanceCard label="Taux conversion" value="72%" trend="+5%" positive />
-        <FinanceCard label="Devis créés" value="18" trend="+3" positive />
-        <FinanceCard label="Panier moyen" value="691€" trend="-2%" positive={false} />
+        {isVeloDoctor ? (
+          <>
+            <FinanceCard label="CA Accepté" value="3,840€" trend="+12%" positive />
+            <FinanceCard label="Taux conversion" value="68%" trend="+3%" positive />
+            <FinanceCard label="Devis créés" value="16" trend="+2" positive />
+            <FinanceCard label="Panier moyen" value="142€" trend="+8%" positive />
+          </>
+        ) : (
+          <>
+            <FinanceCard label="CA Accepté" value="18,650€" trend="+22%" positive />
+            <FinanceCard label="Taux conversion" value="74%" trend="+6%" positive />
+            <FinanceCard label="Devis créés" value="24" trend="+5" positive />
+            <FinanceCard label="Panier moyen" value="2,180€" trend="-3%" positive={false} />
+          </>
+        )}
       </div>
 
       {/* Chart placeholder */}
       <div className="bg-white rounded-xl p-4 shadow-sm">
         <h4 className="text-sm font-semibold text-gray-700 mb-4">Évolution du CA</h4>
         <div className="h-32 flex items-end gap-2">
-          {[40, 65, 45, 80, 55, 90, 75, 95, 60, 85, 70, 100].map((h, i) => (
+          {(isVeloDoctor
+            ? [30, 45, 35, 60, 40, 70, 55, 75, 50, 65, 55, 80]
+            : [50, 75, 55, 90, 65, 100, 85, 110, 70, 95, 80, 120]
+          ).map((h, i) => (
             <div
               key={i}
               className="flex-1 bg-gradient-to-t from-primary to-secondary rounded-t"
@@ -414,7 +648,7 @@ function KanbanCard({ name, info }: { name: string; info: string }) {
   );
 }
 
-function ClientCard({ name, email, phone, lastVisit }: { name: string; email: string; phone: string; lastVisit: string }) {
+function ClientCard({ name, email, phone, lastVisit, extra }: { name: string; email: string; phone: string; lastVisit: string; extra?: string }) {
   return (
     <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
       <div className="flex items-start justify-between">
@@ -422,6 +656,7 @@ function ClientCard({ name, email, phone, lastVisit }: { name: string; email: st
           <h4 className="font-semibold text-gray-900">{name}</h4>
           <p className="text-sm text-gray-500">{email}</p>
           <p className="text-sm text-gray-500">{phone}</p>
+          {extra && <p className="text-xs text-primary mt-1">{extra}</p>}
         </div>
         <span className="text-xs text-gray-400">{lastVisit}</span>
       </div>
@@ -475,6 +710,58 @@ function FinanceCard({ label, value, trend, positive }: { label: string; value: 
       <p className={`text-xs font-medium ${positive ? "text-green-600" : "text-red-500"}`}>
         {trend}
       </p>
+    </div>
+  );
+}
+
+function AtelierRow({ client, bike, status, task }: { client: string; bike: string; status: string; task: string }) {
+  const statusStyles = {
+    repair: { bg: "bg-blue-100", text: "text-blue-700", label: "En cours" },
+    waiting: { bg: "bg-orange-100", text: "text-orange-700", label: "En attente" },
+    ready: { bg: "bg-green-100", text: "text-green-700", label: "Prêt" },
+    urgent: { bg: "bg-red-100", text: "text-red-700", label: "Urgent" },
+  };
+  const style = statusStyles[status as keyof typeof statusStyles];
+  return (
+    <div className="flex items-center justify-between p-4 border-b border-gray-100 last:border-0 hover:bg-gray-50">
+      <div className="flex-1">
+        <p className="text-sm font-semibold text-gray-900">{client}</p>
+        <p className="text-xs text-gray-500">{bike}</p>
+      </div>
+      <div className="text-right">
+        <p className="text-xs text-gray-600 mb-1">{task}</p>
+        <span className={`text-xs px-2 py-0.5 rounded-full ${style.bg} ${style.text}`}>
+          {style.label}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function StockRow({ name, category, stock, minStock, price, lowStock }: { name: string; category: string; stock: number; minStock: number; price: string; lowStock?: boolean }) {
+  return (
+    <div className={`flex items-center justify-between p-4 border-b border-gray-100 last:border-0 ${lowStock ? "bg-orange-50" : "hover:bg-gray-50"}`}>
+      <div className="flex-1">
+        <p className="text-sm font-semibold text-gray-900">{name}</p>
+        <p className="text-xs text-gray-500">{category}</p>
+      </div>
+      <div className="text-center px-4">
+        <p className={`text-lg font-bold ${lowStock ? "text-orange-600" : "text-gray-900"}`}>{stock}</p>
+        <p className="text-xs text-gray-400">min: {minStock}</p>
+      </div>
+      <div className="text-right">
+        <p className="text-sm font-semibold text-gray-900">{price}</p>
+      </div>
+    </div>
+  );
+}
+
+function RdvCard({ time, client, type, urgent }: { time: string; client: string; type: string; urgent?: boolean }) {
+  return (
+    <div className={`rounded-lg p-2 text-xs ${urgent ? "bg-red-100 border border-red-200" : "bg-blue-50 border border-blue-100"}`}>
+      <p className={`font-semibold ${urgent ? "text-red-700" : "text-blue-700"}`}>{time}</p>
+      <p className="text-gray-700 font-medium truncate">{client}</p>
+      <p className="text-gray-500">{type}</p>
     </div>
   );
 }
