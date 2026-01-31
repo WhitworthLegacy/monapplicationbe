@@ -49,9 +49,9 @@ export async function POST(request: NextRequest) {
       return sum + item.quantity * item.unit_price;
     }, 0);
 
-    const taxAmount = (subtotal * (body.tax_rate || 0)) / 100;
-    const discountAmount = (subtotal * (body.discount_rate || 0)) / 100;
-    const amount = subtotal + taxAmount - discountAmount;
+    const taxRate = body.tax_rate || 21;
+    const taxAmount = Math.round(subtotal * (taxRate / 100));
+    const total = subtotal + taxAmount;
 
     const { data: quote, error: insertError } = await supabase
       .from("quotes")
@@ -60,13 +60,12 @@ export async function POST(request: NextRequest) {
         title: body.title,
         description: body.description,
         subtotal,
-        tax_rate: body.tax_rate || 0,
+        tax_rate: taxRate,
         tax_amount: taxAmount,
-        discount_rate: body.discount_rate || 0,
-        discount_amount: discountAmount,
-        amount,
+        total,
         status: body.status || "draft",
-        valid_until: body.valid_until,
+        expires_at: body.valid_until || body.expires_at,
+        notes: body.notes,
       })
       .select()
       .single();
