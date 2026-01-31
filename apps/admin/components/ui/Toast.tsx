@@ -230,21 +230,3 @@ function ToastItem({
     </div>
   );
 }
-
-// Add keyframes to global CSS or Tailwind config
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes toast-slide-in {
-    from {
-      opacity: 0;
-      transform: translateX(2rem) scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0) scale(1);
-    }
-  }
-`;
-if (typeof document !== 'undefined') {
-  document.head.appendChild(style);
-}
