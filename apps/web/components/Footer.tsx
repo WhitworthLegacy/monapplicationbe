@@ -46,10 +46,18 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/#comment-ca-marche"
+                  href="/#realisations"
                   className="text-gray-400 hover:text-accent transition-colors text-sm"
                 >
-                  Comment ça marche
+                  Réalisations
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="text-gray-400 hover:text-accent transition-colors text-sm"
+                >
+                  Qui sommes-nous
                 </Link>
               </li>
               <li>
