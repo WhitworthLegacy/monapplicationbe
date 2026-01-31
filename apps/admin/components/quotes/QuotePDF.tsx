@@ -304,6 +304,20 @@ export interface QuotePDFData {
   validDays?: number;
 }
 
+/**
+ * Strip markdown formatting from text for clean PDF rendering
+ */
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/###\s+/g, '') // Remove ### headers
+    .replace(/##\s+/g, '') // Remove ## headers
+    .replace(/#\s+/g, '') // Remove # headers
+    .replace(/\*\*(.+?)\*\*/g, '$1') // Remove **bold**
+    .replace(/\*(.+?)\*/g, '$1') // Remove *italic*
+    .replace(/_(.+?)_/g, '$1') // Remove _italic_
+    .replace(/`(.+?)`/g, '$1'); // Remove `code`
+}
+
 export function QuotePDF({ data }: { data: QuotePDFData }) {
   const today = new Date();
   const validUntil = new Date(today);
@@ -315,6 +329,9 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
   );
   const taxAmount = Math.round((subtotal * data.taxRate) / 100);
   const total = subtotal + taxAmount;
+
+  // Strip markdown from description for clean PDF rendering
+  const cleanDescription = data.description ? stripMarkdown(data.description) : undefined;
 
   return (
     <Document>
@@ -384,7 +401,7 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
               <Text style={styles.sectionTitle}>{data.title}</Text>
             </View>
             <View style={styles.sectionDivider} />
-            {data.description && (
+            {cleanDescription && (
               <Text style={[styles.description, { fontSize: 9, marginTop: 8 }]}>
                 ℹ️ Voir détails en annexe (page 2)
               </Text>
@@ -493,7 +510,7 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
       </Page>
 
       {/* PAGE 2 - Annexe Description détaillée */}
-      {data.description && (
+      {cleanDescription && (
         <Page size="A4" style={styles.page}>
           {/* Header Bands */}
           <View style={styles.headerBand} />
@@ -526,7 +543,7 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
               </View>
               <View style={styles.sectionDivider} />
               <Text style={[styles.description, { marginTop: 15 }]}>
-                {data.description}
+                {cleanDescription}
               </Text>
             </View>
           </View>

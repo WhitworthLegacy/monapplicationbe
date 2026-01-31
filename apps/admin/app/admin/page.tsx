@@ -195,15 +195,17 @@ export default function DashboardPage() {
             color: colors[i] || '#64748b',
           }));
 
-        // Conversion funnel
+        // Conversion funnel - Including lost deals for complete view
         const prospectCount = clients?.filter(c => c.crm_stage === 'prospect').length || 0;
         const proposalCount = clients?.filter(c => c.crm_stage === 'proposal').length || 0;
         const wonCount = clients?.filter(c => c.crm_stage === 'closed_won').length || 0;
+        const lostCount = clients?.filter(c => c.crm_stage === 'closed_lost').length || 0;
 
         const conversionFunnel = [
           { label: 'Prospects', value: prospectCount, color: '#64748b' },
           { label: 'Devis', value: proposalCount, color: '#f59e0b' },
           { label: 'Gagnés', value: wonCount, color: '#10b981' },
+          { label: 'Perdus', value: lostCount, color: '#ef4444' },
         ];
 
         // Recent activity (mock for now - would come from activities table)

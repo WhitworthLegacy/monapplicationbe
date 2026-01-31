@@ -151,11 +151,26 @@ export function getPackFeatures(packId: string): PackageFeature[] {
 }
 
 /**
+ * Strip markdown formatting from text for PDF rendering
+ */
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/###\s+/g, '') // Remove ### headers
+    .replace(/##\s+/g, '') // Remove ## headers
+    .replace(/#\s+/g, '') // Remove # headers
+    .replace(/\*\*(.+?)\*\*/g, '$1') // Remove **bold**
+    .replace(/\*(.+?)\*/g, '$1') // Remove *italic*
+    .replace(/_(.+?)_/g, '$1') // Remove _italic_
+    .replace(/`(.+?)`/g, '$1'); // Remove `code`
+}
+
+/**
  * Generate quote description from pack/package
  */
 export function generateQuoteDescription(
   packId?: string,
-  packageIds?: string[]
+  packageIds?: string[],
+  stripMarkdownForPdf: boolean = false
 ): string {
   if (packId) {
     const pack = getPackById(packId);
@@ -177,7 +192,7 @@ export function generateQuoteDescription(
       description += `\n`;
     });
 
-    return description.trim();
+    return stripMarkdownForPdf ? stripMarkdown(description.trim()) : description.trim();
   }
 
   if (packageIds && packageIds.length > 0) {
@@ -196,7 +211,7 @@ export function generateQuoteDescription(
       });
     });
 
-    return description.trim();
+    return stripMarkdownForPdf ? stripMarkdown(description.trim()) : description.trim();
   }
 
   return '';
