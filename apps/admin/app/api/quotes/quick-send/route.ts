@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { createServerClient } from '@/lib/supabase/server';
 
 interface QuoteItem {
   description: string;
@@ -8,6 +9,8 @@ interface QuoteItem {
 }
 
 interface QuickQuoteRequest {
+  quote_id: string; // ID of the draft quote in database
+  quote_number: string; // Quote number from database
   client_id: string;
   client_name: string;
   client_email: string;
@@ -26,6 +29,13 @@ export async function POST(request: NextRequest) {
     const body: QuickQuoteRequest = await request.json();
 
     // Validation
+    if (!body.quote_id || !body.quote_number) {
+      return NextResponse.json(
+        { error: 'Quote ID and number required' },
+        { status: 400 }
+      );
+    }
+
     if (!body.client_email || !body.client_name) {
       return NextResponse.json(
         { error: 'Client email and name required' },
@@ -47,6 +57,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Initialize Supabase client
+    const supabase = await createServerClient();
+
+    // Update quote status to 'sent' and set sent_at
+    const { error: updateError } = await supabase
+      .from('quotes')
+      .update({
+        status: 'sent',
+        sent_at: new Date().toISOString(),
+      })
+      .eq('id', body.quote_id);
+
+    if (updateError) {
+      console.error('Error updating quote status:', updateError);
+      return NextResponse.json(
+        { error: 'Failed to update quote status' },
+        { status: 500 }
+      );
+    }
+
     // Initialize Resend (lazy loading to avoid build errors)
     const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -65,16 +95,14 @@ export async function POST(request: NextRequest) {
     // Get first name for personalized greeting
     const firstName = body.client_name.split(' ')[0];
 
-    // Generate PDF filename
-    const today = new Date().toISOString().split('T')[0];
-    const clientSlug = body.client_name.replace(/\s+/g, '-').toLowerCase();
-    const pdfFilename = `devis-monapplication-${clientSlug}-${today}.pdf`;
+    // Generate PDF filename with quote number
+    const pdfFilename = `${body.quote_number}.pdf`;
 
     // Send quote email via Resend with PDF attachment
     const emailResult = await resend.emails.send({
         from: 'MonApplication <contact@monapplication.be>',
         to: [body.client_email],
-        subject: `Votre devis MonApplication - ${body.title || 'Secrétaire digitale'}`,
+        subject: `${body.quote_number} - ${body.title || 'Votre devis MonApplication'}`,
         attachments: [
           {
             filename: pdfFilename,
@@ -107,7 +135,7 @@ export async function POST(request: NextRequest) {
         </svg>
       </div>
       <h1 style="margin: 0; color: white; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">
-        Votre Devis
+        ${body.quote_number}
       </h1>
       <p style="margin: 8px 0 0 0; color: rgba(255, 255, 255, 0.9); font-size: 16px;">
         MonApplication
@@ -131,7 +159,7 @@ export async function POST(request: NextRequest) {
       <!-- Summary Box -->
       <div style="background: linear-gradient(135deg, #fff9ed 0%, #fef3c7 100%); border: 2px solid #b8860b; border-radius: 12px; padding: 24px; margin: 32px 0;">
         <div style="text-align: center; margin-bottom: 16px;">
-          <span style="font-size: 14px; color: #92400e; text-transform: uppercase; letter-spacing: 1px;">Montant total TTC</span>
+          <span style="font-size: 14px; color: #92400e; text-transform: uppercase; letter-spacing: 1px;">Montant total TVAC</span>
           <div style="font-size: 32px; font-weight: 700; color: #b8860b; margin-top: 4px;">
             ${(total / 100).toFixed(2)} €
           </div>
@@ -187,6 +215,11 @@ export async function POST(request: NextRequest) {
 
     if (emailResult.error) {
       console.error('Email sending failed:', emailResult.error);
+      // Revert quote status to draft if email fails
+      await supabase
+        .from('quotes')
+        .update({ status: 'draft', sent_at: null })
+        .eq('id', body.quote_id);
       return NextResponse.json(
         { error: 'Failed to send email' },
         { status: 500 }
@@ -196,6 +229,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
+        quoteId: body.quote_id,
+        quoteNumber: body.quote_number,
         emailId: emailResult.data?.id,
         message: 'Devis envoyé avec succès par email',
       },
@@ -205,7 +240,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error:
-          error instanceof Error ? error.message : 'Failed to create quote',
+          error instanceof Error ? error.message : 'Failed to send quote',
       },
       { status: 500 }
     );

@@ -42,6 +42,11 @@ interface UnifiedQuoteModalProps {
   mode?: 'create' | 'quick-send'; // create = save to DB, quick-send = send via email directly
 }
 
+interface SavedQuote {
+  id: string;
+  quote_number: string;
+}
+
 export default function UnifiedQuoteModal({
   isOpen,
   onClose,
@@ -62,6 +67,7 @@ export default function UnifiedQuoteModal({
   const [taxRate, setTaxRate] = useState(21);
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [savedQuote, setSavedQuote] = useState<SavedQuote | null>(null);
   const toast = useToast();
 
   // Fetch clients if not in quick-send mode
@@ -208,7 +214,7 @@ export default function UnifiedQuoteModal({
     return { subtotal, taxAmount, total };
   };
 
-  const handleGeneratePreview = () => {
+  const handleGeneratePreview = async () => {
     // Validation
     const client = preSelectedClient || selectedClient;
     if (!client) {
@@ -227,14 +233,61 @@ export default function UnifiedQuoteModal({
       return;
     }
 
-    // Open preview modal
-    setShowPreview(true);
+    setLoading(true);
+
+    try {
+      // First, create draft quote in database to get quote_number
+      const response = await fetch('/api/quotes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_id: client.id,
+          title,
+          description,
+          items: items.map((item, index) => ({
+            description: item.description,
+            quantity: item.quantity,
+            unit_price: item.unit_price,
+            line_total: item.quantity * item.unit_price,
+            position: index,
+          })),
+          tax_rate: taxRate,
+          status: 'draft',
+          valid_until: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.data) {
+        throw new Error(data.error || 'Erreur lors de la création du devis');
+      }
+
+      // Store the saved quote info (id and quote_number)
+      setSavedQuote({
+        id: data.data.id,
+        quote_number: data.data.quote_number,
+      });
+
+      // Open preview modal
+      setShowPreview(true);
+    } catch (error) {
+      console.error('Error creating draft quote:', error);
+      toast.addToast('❌ Erreur lors de la création du devis', 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSendEmail = async (pdfBlob: Blob) => {
     const client = preSelectedClient || selectedClient;
     if (!client || !client.email) {
       toast.addToast('Le client n\'a pas d\'email', 'error');
+      return;
+    }
+
+    if (!savedQuote) {
+      toast.addToast('Erreur: devis non sauvegardé', 'error');
       return;
     }
 
@@ -257,6 +310,8 @@ export default function UnifiedQuoteModal({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          quote_id: savedQuote.id,
+          quote_number: savedQuote.quote_number,
           client_id: client.id,
           client_name: client.full_name,
           client_email: client.email,
@@ -285,7 +340,7 @@ export default function UnifiedQuoteModal({
       setShowPreview(false);
       resetForm();
       onClose();
-      if (onSuccess) onSuccess();
+      if (onSuccess) onSuccess(savedQuote.id);
     } catch (error) {
       console.error('Error sending quote:', error);
       toast.addToast('❌ Erreur lors de l\'envoi du devis', 'error');
@@ -303,6 +358,7 @@ export default function UnifiedQuoteModal({
     setItems([{ description: '', quantity: 1, unit_price: 0 }]);
     setNotes('');
     setTaxRate(21);
+    setSavedQuote(null);
   };
 
   const { subtotal, taxAmount, total } = calculateTotal();
@@ -550,12 +606,15 @@ export default function UnifiedQuoteModal({
       </div>
 
       {/* Quote Preview Modal */}
-      {showPreview && selectedClient && (
+      {showPreview && (preSelectedClient || selectedClient) && (
         <QuotePreviewModal
           open={showPreview}
-          onClose={() => setShowPreview(false)}
+          onClose={() => {
+            setShowPreview(false);
+            // If closing without sending, the draft quote remains in DB
+          }}
           data={{
-            quoteNumber: undefined,
+            quoteNumber: savedQuote?.quote_number,
             clientName: (preSelectedClient || selectedClient)?.full_name || '',
             clientEmail: (preSelectedClient || selectedClient)?.email,
             clientPhone: (preSelectedClient || selectedClient)?.phone,
