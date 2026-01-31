@@ -8,6 +8,8 @@ import { Select } from "@/components/ui/Select";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import AddClientModal from "@/components/clients/AddClientModal";
+import CrmClientModal from "@/components/crm/CrmClientModal";
+import type { CrmClient } from "@/components/crm/types";
 
 interface Client {
   id: string;
@@ -51,6 +53,8 @@ export default function ClientsPage() {
   const [stageFilter, setStageFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<CrmClient | null>(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
   const fetchClients = async () => {
     const supabase = createBrowserClient();
@@ -155,7 +159,14 @@ export default function ClientsPage() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredClients.map((client) => (
-                  <tr key={client.id} className="hover:bg-gray-50">
+                  <tr
+                    key={client.id}
+                    className="hover:bg-gray-50 cursor-pointer"
+                    onClick={() => {
+                      setSelectedClient(client as any);
+                      setShowDetailModal(true);
+                    }}
+                  >
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {client.tracking_id}
                     </td>
@@ -196,6 +207,22 @@ export default function ClientsPage() {
           fetchClients(); // Refresh the list
         }}
       />
+
+      {selectedClient && (
+        <CrmClientModal
+          client={selectedClient}
+          isOpen={showDetailModal}
+          onClose={() => {
+            setShowDetailModal(false);
+            setSelectedClient(null);
+          }}
+          onUpdate={() => {
+            fetchClients(); // Refresh the list
+            setShowDetailModal(false);
+            setSelectedClient(null);
+          }}
+        />
+      )}
     </div>
   );
 }
