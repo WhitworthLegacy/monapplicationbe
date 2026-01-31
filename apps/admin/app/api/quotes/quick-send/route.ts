@@ -121,19 +121,36 @@ export async function POST(request: NextRequest) {
 
     <!-- Header with gradient and logo -->
     <div style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); padding: 40px 30px; text-align: center;">
-      <div style="width: 60px; height: 60px; margin: 0 auto 20px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
-          <circle cx="6" cy="6" r="2" fill="#b8860b"/>
-          <circle cx="12" cy="6" r="2" fill="#b8860b"/>
-          <circle cx="18" cy="6" r="2" fill="#b8860b"/>
-          <circle cx="6" cy="12" r="2" fill="#1e3a8a"/>
-          <circle cx="12" cy="12" r="2" fill="#1e3a8a"/>
-          <circle cx="18" cy="12" r="2" fill="#1e3a8a"/>
-          <circle cx="6" cy="18" r="2" fill="#0f172a"/>
-          <circle cx="12" cy="18" r="2" fill="#0f172a"/>
-          <circle cx="18" cy="18" r="2" fill="#0f172a"/>
-        </svg>
-      </div>
+      <!--[if mso]>
+      <table cellpadding="0" cellspacing="0" border="0" align="center" style="background: white; border-radius: 12px;">
+      <tr><td style="padding: 12px;">
+      <![endif]-->
+      <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 0 auto 20px; background: white; border-radius: 12px; border-collapse: separate;">
+        <tr>
+          <td style="padding: 10px;">
+            <table cellpadding="0" cellspacing="3" border="0">
+              <tr>
+                <td style="width: 12px; height: 12px; background-color: #0f172a; border-radius: 2px;"></td>
+                <td style="width: 12px; height: 12px; background-color: #1e3a8a; border-radius: 2px;"></td>
+                <td style="width: 12px; height: 12px; background-color: #b8860b; border-radius: 2px;"></td>
+              </tr>
+              <tr>
+                <td style="width: 12px; height: 12px; background-color: #1e3a8a; border-radius: 2px;"></td>
+                <td style="width: 12px; height: 12px; background-color: #b8860b; border-radius: 2px;"></td>
+                <td style="width: 12px; height: 12px; background-color: #0f172a; border-radius: 2px;"></td>
+              </tr>
+              <tr>
+                <td style="width: 12px; height: 12px; background-color: #b8860b; border-radius: 2px;"></td>
+                <td style="width: 12px; height: 12px; background-color: #0f172a; border-radius: 2px;"></td>
+                <td style="width: 12px; height: 12px; background-color: #1e3a8a; border-radius: 2px;"></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      <!--[if mso]>
+      </td></tr></table>
+      <![endif]-->
       <h1 style="margin: 0; color: white; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">
         ${body.quote_number}
       </h1>

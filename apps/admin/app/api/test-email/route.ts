@@ -28,19 +28,29 @@ export async function POST(request: NextRequest) {
               <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
                 <!-- Header -->
                 <div style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); padding: 40px 30px; border-radius: 16px 16px 0 0;">
-                  <div style="display: inline-block; margin-bottom: 20px;">
-                    <div style="display: grid; grid-template-columns: repeat(3, 12px); gap: 6px;">
-                      <div style="width: 12px; height: 12px; background: #0f172a; border-radius: 3px; border: 1px solid rgba(255,255,255,0.2);"></div>
-                      <div style="width: 12px; height: 12px; background: #1e3a8a; border-radius: 3px; border: 1px solid rgba(255,255,255,0.2);"></div>
-                      <div style="width: 12px; height: 12px; background: #b8860b; border-radius: 3px;"></div>
-                      <div style="width: 12px; height: 12px; background: #1e3a8a; border-radius: 3px; border: 1px solid rgba(255,255,255,0.2);"></div>
-                      <div style="width: 12px; height: 12px; background: #b8860b; border-radius: 3px;"></div>
-                      <div style="width: 12px; height: 12px; background: #0f172a; border-radius: 3px; border: 1px solid rgba(255,255,255,0.2);"></div>
-                      <div style="width: 12px; height: 12px; background: #b8860b; border-radius: 3px;"></div>
-                      <div style="width: 12px; height: 12px; background: #0f172a; border-radius: 3px; border: 1px solid rgba(255,255,255,0.2);"></div>
-                      <div style="width: 12px; height: 12px; background: #1e3a8a; border-radius: 3px; border: 1px solid rgba(255,255,255,0.2);"></div>
-                    </div>
-                  </div>
+                  <table cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+                    <tr>
+                      <td style="padding: 8px; background: white; border-radius: 8px;">
+                        <table cellpadding="0" cellspacing="3" border="0">
+                          <tr>
+                            <td style="width: 12px; height: 12px; background-color: #0f172a; border-radius: 2px;"></td>
+                            <td style="width: 12px; height: 12px; background-color: #1e3a8a; border-radius: 2px;"></td>
+                            <td style="width: 12px; height: 12px; background-color: #b8860b; border-radius: 2px;"></td>
+                          </tr>
+                          <tr>
+                            <td style="width: 12px; height: 12px; background-color: #1e3a8a; border-radius: 2px;"></td>
+                            <td style="width: 12px; height: 12px; background-color: #b8860b; border-radius: 2px;"></td>
+                            <td style="width: 12px; height: 12px; background-color: #0f172a; border-radius: 2px;"></td>
+                          </tr>
+                          <tr>
+                            <td style="width: 12px; height: 12px; background-color: #b8860b; border-radius: 2px;"></td>
+                            <td style="width: 12px; height: 12px; background-color: #0f172a; border-radius: 2px;"></td>
+                            <td style="width: 12px; height: 12px; background-color: #1e3a8a; border-radius: 2px;"></td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
                   <h1 style="color: white; margin: 0; font-size: 28px; font-weight: 700;">Nouveau contact</h1>
                   <p style="color: rgba(255,255,255,0.8); margin: 10px 0 0 0; font-size: 16px;">Message reçu depuis monapplication.be</p>
                 </div>
