@@ -77,9 +77,20 @@ export default function UnifiedQuoteModal({
     }
   }, [preSelectedClient, isOpen]);
 
+  // Helper to get auth headers
+  const getAuthHeaders = async () => {
+    const supabase = createBrowserClient();
+    const { data: { session } } = await supabase.auth.getSession();
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${session?.access_token || ''}`,
+    };
+  };
+
   const fetchClients = async () => {
     try {
-      const response = await fetch('/api/clients');
+      const headers = await getAuthHeaders();
+      const response = await fetch('/api/clients', { headers });
       const data: { data?: Client[]; error?: string } = await response.json();
       if (data.data) {
         setClients(data.data);
@@ -237,9 +248,10 @@ export default function UnifiedQuoteModal({
 
     try {
       // First, create draft quote in database to get quote_number
+      const headers = await getAuthHeaders();
       const response = await fetch('/api/quotes', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           client_id: client.id,
           title,

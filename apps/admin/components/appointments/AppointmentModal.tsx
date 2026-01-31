@@ -10,12 +10,15 @@ import { AppointmentType, AppointmentFormData } from './types';
 import { generateVideoLink, formatDuration } from '@/lib/videoLinks';
 
 const APPOINTMENT_TYPES: { value: AppointmentType; label: string; icon: string }[] = [
-  { value: 'consultation', label: 'Consultation', icon: '💬' },
   { value: 'demo', label: 'Démonstration', icon: '🎯' },
   { value: 'meeting', label: 'Réunion', icon: '🤝' },
   { value: 'call', label: 'Appel', icon: '📞' },
-  { value: 'video', label: 'Visio', icon: '🎥' },
-  { value: 'onsite', label: 'Sur site', icon: '🏢' },
+];
+
+// Common time slots for quick selection
+const TIME_SLOTS = [
+  '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+  '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00',
 ];
 
 const DURATIONS = [15, 30, 45, 60, 90, 120];
@@ -47,7 +50,7 @@ export default function AppointmentModal({
     client_id: preselectedClient?.id || '',
     title: '',
     description: '',
-    appointment_type: 'consultation',
+    appointment_type: 'demo',
     scheduled_at: '',
     duration_minutes: 60,
     status: 'scheduled',
@@ -56,6 +59,10 @@ export default function AppointmentModal({
     send_reminder_24h: true,
     send_reminder_1h: true,
   });
+
+  // Separate date and time for easier input
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
 
   // Reset form when modal opens with preselected client
   useEffect(() => {
@@ -132,7 +139,7 @@ export default function AppointmentModal({
         client_id: '',
         title: '',
         description: '',
-        appointment_type: 'consultation',
+        appointment_type: 'demo',
         scheduled_at: '',
         duration_minutes: 60,
         status: 'scheduled',
@@ -141,6 +148,8 @@ export default function AppointmentModal({
         send_reminder_24h: true,
         send_reminder_1h: true,
       });
+      setSelectedDate('');
+      setSelectedTime('');
 
       onSuccess?.();
     } catch (error) {
@@ -156,7 +165,7 @@ export default function AppointmentModal({
       client_id: '',
       title: '',
       description: '',
-      appointment_type: 'consultation',
+      appointment_type: 'demo',
       scheduled_at: '',
       duration_minutes: 60,
       status: 'scheduled',
@@ -165,7 +174,24 @@ export default function AppointmentModal({
       send_reminder_24h: true,
       send_reminder_1h: true,
     });
+    setSelectedDate('');
+    setSelectedTime('');
     onClose();
+  };
+
+  // Combine date and time into scheduled_at
+  const handleDateChange = (date: string) => {
+    setSelectedDate(date);
+    if (date && selectedTime) {
+      setFormData({ ...formData, scheduled_at: `${date}T${selectedTime}` });
+    }
+  };
+
+  const handleTimeChange = (time: string) => {
+    setSelectedTime(time);
+    if (selectedDate && time) {
+      setFormData({ ...formData, scheduled_at: `${selectedDate}T${time}` });
+    }
   };
 
   return (
@@ -217,13 +243,31 @@ export default function AppointmentModal({
           ))}
         </Select>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-3 gap-4">
           <Input
-            label="Date et heure *"
-            type="datetime-local"
-            value={formData.scheduled_at}
-            onChange={(e) => setFormData({ ...formData, scheduled_at: e.target.value })}
+            label="Date *"
+            type="date"
+            value={selectedDate}
+            onChange={(e) => handleDateChange(e.target.value)}
           />
+
+          <div>
+            <label className="block text-sm font-medium text-[#0f172a] mb-1">
+              Heure *
+            </label>
+            <select
+              className="w-full px-3 py-2 border border-[#e2e8f0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#b8860b] focus:border-transparent bg-white"
+              value={selectedTime}
+              onChange={(e) => handleTimeChange(e.target.value)}
+            >
+              <option value="">Choisir l'heure</option>
+              {TIME_SLOTS.map((time) => (
+                <option key={time} value={time}>
+                  {time}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <Select
             label="Durée"
@@ -251,16 +295,11 @@ export default function AppointmentModal({
         </div>
 
         {formData.is_remote && (
-          <Select
-            label="Plateforme de visio"
-            value={formData.video_platform || 'meet'}
-            onChange={(e) => setFormData({ ...formData, video_platform: e.target.value })}
-          >
-            <option value="meet">🎥 Google Meet</option>
-            <option value="zoom">🎬 Zoom</option>
-            <option value="teams">💼 Microsoft Teams</option>
-            <option value="custom">🌐 MonApplication Meet</option>
-          </Select>
+          <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+            <p className="text-sm text-green-800">
+              🎥 Le lien Google Meet sera généré automatiquement
+            </p>
+          </div>
         )}
 
         {!formData.is_remote && (
@@ -293,7 +332,7 @@ export default function AppointmentModal({
             variant="primary"
             onClick={handleCreate}
             isLoading={creating}
-            disabled={!formData.client_id || !formData.title || !formData.scheduled_at}
+            disabled={!formData.client_id || !formData.title || !selectedDate || !selectedTime}
           >
             Créer le rendez-vous
           </Button>
