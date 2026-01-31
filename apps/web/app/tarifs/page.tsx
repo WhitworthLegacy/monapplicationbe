@@ -52,10 +52,10 @@ const packages = [
     price: "+1 500€ HT",
     priceNote: "Add-on",
     description: "Zéro oubli, zéro no-show",
-    detailedDescription: "Inclut tout le package Fondations + rappels SMS automatiques avant chaque RDV, emails de confirmation, alertes personnalisées et suivi complet de tous vos envois. Réduisez les no-shows de 80%.",
+    detailedDescription: "Inclut tout le package Fondations + rappels WhatsApp automatiques avant chaque RDV, emails de confirmation, alertes personnalisées et suivi complet de tous vos envois. Réduisez les no-shows de 80%.",
     features: [
       "Tout Fondations inclus",
-      "Rappels SMS avant RDV",
+      "Rappels WhatsApp avant RDV",
       "Emails automatiques",
       "Alertes personnalisées",
       "Confirmations auto",

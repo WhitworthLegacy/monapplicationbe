@@ -37,7 +37,7 @@ const solutions = [
     icon: CalendarCheck,
     title: "RDV qui se gèrent tout seuls",
     before: "Coups de fil, SMS, \"je vous rappelle\", post-it perdus...",
-    after: "Les clients réservent en ligne 24h/24. Rappels SMS automatiques. Zéro no-show.",
+    after: "Les clients réservent en ligne 24h/24. Rappels WhatsApp automatiques. Zéro no-show.",
     result: "Planning rempli",
   },
   {

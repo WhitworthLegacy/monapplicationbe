@@ -17,7 +17,7 @@ import {
   Clock,
   MousePointerClick,
   Send,
-  Bell,
+  MessageCircle,
   Eye,
   Sparkles,
   CheckCircle2,
@@ -42,8 +42,8 @@ const realisations = [
         text: "Emails de confirmation automatiques",
       },
       {
-        icon: Bell,
-        text: "Rappels SMS avant chaque RDV",
+        icon: MessageCircle,
+        text: "Rappels WhatsApp avant chaque RDV",
       },
       {
         icon: Clock,
