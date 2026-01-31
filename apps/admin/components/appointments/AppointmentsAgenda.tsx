@@ -48,8 +48,15 @@ const APPOINTMENT_TYPES: { value: AppointmentType; label: string; icon: string }
 
 const DURATIONS = [15, 30, 45, 60, 90, 120];
 
+interface Client {
+  id: string;
+  full_name: string;
+  company?: string;
+}
+
 export default function AppointmentsAgenda() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
@@ -75,6 +82,22 @@ export default function AppointmentsAgenda() {
   });
   const [creating, setCreating] = useState(false);
 
+  const fetchClients = useCallback(async () => {
+    try {
+      const response = await fetch('/api/clients');
+      const data: { data?: Client[]; error?: string } = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch clients');
+      }
+
+      setClients(data.data || []);
+    } catch (error) {
+      console.error('Error fetching clients:', error);
+      toast.addToast('Erreur lors du chargement des clients', 'error');
+    }
+  }, [toast]);
+
   const fetchAppointments = useCallback(async () => {
     setLoading(true);
     try {
@@ -96,7 +119,8 @@ export default function AppointmentsAgenda() {
 
   useEffect(() => {
     void fetchAppointments();
-  }, [fetchAppointments]);
+    void fetchClients();
+  }, [fetchAppointments, fetchClients]);
 
   const filteredAppointments = useMemo(() => {
     return appointments
@@ -400,6 +424,11 @@ export default function AppointmentsAgenda() {
             onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
           >
             <option value="">Sélectionner un client</option>
+            {clients.map((client) => (
+              <option key={client.id} value={client.id}>
+                {client.full_name}{client.company ? ` - ${client.company}` : ''}
+              </option>
+            ))}
           </Select>
 
           <Select
