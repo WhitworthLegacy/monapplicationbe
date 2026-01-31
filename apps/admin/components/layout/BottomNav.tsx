@@ -11,7 +11,6 @@ import {
   Settings,
 } from 'lucide-react';
 import { useUserRole } from '@/hooks/useUserRole';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 type NavItem = {
   label: string;
@@ -107,10 +106,6 @@ export default function BottomNav() {
           );
         })}
 
-        {/* Theme Toggle - always visible */}
-        <div className="flex items-center ml-2 pl-2 border-l border-[#e2e8f0] dark:border-gray-700">
-          <ThemeToggle />
-        </div>
       </div>
     </nav>
   );

@@ -12,8 +12,16 @@
   --color-text-muted: #64748b;
 }
 
+/* Force light mode - disable system dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light;
+  }
+}
+
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
 }
 
 body {

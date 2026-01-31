@@ -41,7 +41,7 @@ export default function Card({
 
   return (
     <div
-      className={`bg-white dark:bg-gray-800 dark:border-gray-700 rounded-2xl border border-[#e2e8f0] shadow-sm ${hoverStyles} ${paddings[padding]} ${className}`}
+      className={`bg-white rounded-2xl border border-[#e2e8f0] shadow-sm ${hoverStyles} ${paddings[padding]} ${className}`}
       onClick={onClick}
     >
       {children}

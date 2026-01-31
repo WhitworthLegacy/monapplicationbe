@@ -53,7 +53,7 @@ export default function Modal({
     <div className="fixed inset-0 z-50 overflow-y-auto animate-fadeIn">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#0f172a]/50 dark:bg-black/70 backdrop-blur-sm transition-all duration-300 animate-fadeIn"
+        className="fixed inset-0 bg-[#0f172a]/50 backdrop-blur-sm transition-all duration-300 animate-fadeIn"
         onClick={onClose}
       />
 
@@ -62,7 +62,7 @@ export default function Modal({
         <div
           className={`
             relative w-full ${sizes[size]}
-            bg-white dark:bg-gray-800 rounded-2xl shadow-2xl
+            bg-white rounded-2xl shadow-2xl
             transform transition-all duration-300 ease-out
             animate-scaleIn
           `}
@@ -70,14 +70,14 @@ export default function Modal({
         >
           {/* Header */}
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between p-6 border-b border-[#e2e8f0] dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-b border-[#e2e8f0]">
               {title && (
-                <h3 className="text-lg font-semibold text-[#0f172a] dark:text-gray-100">{title}</h3>
+                <h3 className="text-lg font-semibold text-[#0f172a]">{title}</h3>
               )}
               {showCloseButton && (
                 <button
                   onClick={onClose}
-                  className="p-1 rounded-lg text-[#64748b] hover:text-[#0f172a] dark:text-gray-400 dark:hover:text-gray-200 hover:bg-[#f1f5f9] dark:hover:bg-gray-700 transition-all duration-200 active:scale-90"
+                  className="p-1 rounded-lg text-[#64748b] hover:text-[#0f172a] hover:bg-[#f1f5f9] transition-all duration-200 active:scale-90"
                 >
                   <X className="w-5 h-5" />
                 </button>

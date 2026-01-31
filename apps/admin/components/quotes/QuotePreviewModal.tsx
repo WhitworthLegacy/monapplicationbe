@@ -108,11 +108,11 @@ export default function QuotePreviewModal({
     >
       <div className="flex flex-col h-[80vh]">
         {/* PDF Preview using iframe */}
-        <div className="flex-1 bg-gray-100 dark:bg-gray-900 rounded-lg overflow-hidden relative">
+        <div className="flex-1 bg-gray-100 rounded-lg overflow-hidden relative">
           {isLoadingPreview ? (
             <div className="absolute inset-0 flex items-center justify-center">
               <Loader2 className="w-8 h-8 animate-spin text-[#b8860b]" />
-              <span className="ml-2 text-gray-600 dark:text-gray-400">
+              <span className="ml-2 text-gray-600">
                 Génération de l'aperçu...
               </span>
             </div>
