@@ -95,10 +95,10 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ data: quote }, { status: 201 });
-  } catch (err) {
+  } catch (err: any) {
     console.error("Error creating quote:", err);
     return NextResponse.json(
-      { error: "Failed to create quote" },
+      { error: err?.message || "Failed to create quote", details: err },
       { status: 500 },
     );
   }

@@ -270,9 +270,12 @@ export default function UnifiedQuoteModal({
       });
 
       const data = await response.json();
+      console.log('Quote API response:', data);
 
       if (!response.ok || !data.data) {
-        throw new Error(data.error || 'Erreur lors de la création du devis');
+        const errorMsg = data.error || 'Erreur lors de la création du devis';
+        console.error('Quote creation error:', errorMsg, data.details);
+        throw new Error(errorMsg);
       }
 
       // Store the saved quote info (id and quote_number)
@@ -283,9 +286,9 @@ export default function UnifiedQuoteModal({
 
       // Open preview modal
       setShowPreview(true);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating draft quote:', error);
-      toast.addToast('❌ Erreur lors de la création du devis', 'error');
+      toast.addToast(`❌ ${error.message || 'Erreur lors de la création du devis'}`, 'error');
     } finally {
       setLoading(false);
     }
