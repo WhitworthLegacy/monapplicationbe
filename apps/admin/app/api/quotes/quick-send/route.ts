@@ -13,8 +13,12 @@ interface QuickQuoteRequest {
   client_email: string;
   client_company?: string;
   client_phone?: string;
+  title?: string;
+  description?: string;
   items: QuoteItem[];
   notes?: string;
+  tax_rate?: number;
+  pdf_base64?: string; // PDF file as base64 string
 }
 
 export async function POST(request: NextRequest) {
@@ -36,38 +40,47 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!body.pdf_base64) {
+      return NextResponse.json(
+        { error: 'PDF attachment required' },
+        { status: 400 }
+      );
+    }
+
     // Initialize Resend (lazy loading to avoid build errors)
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Calculate totals
+    const taxRate = body.tax_rate || 21;
     const subtotal = body.items.reduce(
       (sum, item) => sum + item.quantity * item.unit_price,
       0
     );
-    const tax = Math.round(subtotal * 0.21);
+    const tax = Math.round(subtotal * (taxRate / 100));
     const total = subtotal + tax;
 
-    // Format items for email
-    const itemsHtml = body.items
-      .map(
-        (item) => `
-        <tr style="border-bottom: 1px solid #e2e8f0;">
-          <td style="padding: 12px; text-align: left;">${item.description}</td>
-          <td style="padding: 12px; text-align: center;">${item.quantity}</td>
-          <td style="padding: 12px; text-align: right;">${(item.unit_price / 100).toFixed(2)} €</td>
-          <td style="padding: 12px; text-align: right; font-weight: 600;">
-            ${((item.quantity * item.unit_price) / 100).toFixed(2)} €
-          </td>
-        </tr>
-      `
-      )
-      .join('');
+    // Calculate 25% deposit
+    const deposit = Math.round(total * 0.25);
 
-    // Send quote email via Resend
+    // Get first name for personalized greeting
+    const firstName = body.client_name.split(' ')[0];
+
+    // Generate PDF filename
+    const today = new Date().toISOString().split('T')[0];
+    const clientSlug = body.client_name.replace(/\s+/g, '-').toLowerCase();
+    const pdfFilename = `devis-monapplication-${clientSlug}-${today}.pdf`;
+
+    // Send quote email via Resend with PDF attachment
     const emailResult = await resend.emails.send({
         from: 'MonApplication <contact@monapplication.be>',
         to: [body.client_email],
-        subject: `Votre devis de MonApplication`,
+        subject: `Votre devis MonApplication - ${body.title || 'Secrétaire digitale'}`,
+        attachments: [
+          {
+            filename: pdfFilename,
+            content: body.pdf_base64,
+          },
+        ],
         html: `
 <!DOCTYPE html>
 <html>
@@ -103,65 +116,54 @@ export async function POST(request: NextRequest) {
 
     <!-- Content -->
     <div style="padding: 40px 30px;">
-      <p style="margin: 0 0 24px 0; font-size: 16px; color: #0f172a; line-height: 1.6;">
-        Bonjour <strong>${body.client_name}</strong>,
+      <p style="margin: 0 0 24px 0; font-size: 18px; color: #0f172a; line-height: 1.6;">
+        Bonjour <strong>${firstName}</strong>,
       </p>
 
-      <p style="margin: 0 0 32px 0; font-size: 15px; color: #64748b; line-height: 1.6;">
-        Nous avons le plaisir de vous envoyer votre devis. Vous trouverez ci-dessous le détail de votre demande.
+      <p style="margin: 0 0 24px 0; font-size: 16px; color: #0f172a; line-height: 1.8;">
+        Merci pour votre intérêt envers nos services ! 🙏
       </p>
 
-      <!-- Quote Items Table -->
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
-        <thead>
-          <tr style="background: linear-gradient(to right, #f1f5f9, #e2e8f0);">
-            <th style="padding: 12px; text-align: left; font-weight: 600; color: #0f172a; font-size: 14px;">Description</th>
-            <th style="padding: 12px; text-align: center; font-weight: 600; color: #0f172a; font-size: 14px;">Qté</th>
-            <th style="padding: 12px; text-align: right; font-weight: 600; color: #0f172a; font-size: 14px;">Prix unit.</th>
-            <th style="padding: 12px; text-align: right; font-weight: 600; color: #0f172a; font-size: 14px;">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${itemsHtml}
-        </tbody>
-      </table>
+      <p style="margin: 0 0 24px 0; font-size: 16px; color: #64748b; line-height: 1.8;">
+        Veuillez trouver <strong style="color: #0f172a;">votre devis ci-joint en PDF</strong>.
+      </p>
 
-      <!-- Totals -->
-      <div style="background: linear-gradient(to right, #f1f5f9, #e2e8f0); border-radius: 12px; padding: 20px; margin-bottom: 32px;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-          <span style="color: #64748b; font-size: 14px;">Sous-total HT:</span>
-          <span style="color: #0f172a; font-weight: 600; font-size: 14px;">${(subtotal / 100).toFixed(2)} €</span>
+      <!-- Summary Box -->
+      <div style="background: linear-gradient(135deg, #fff9ed 0%, #fef3c7 100%); border: 2px solid #b8860b; border-radius: 12px; padding: 24px; margin: 32px 0;">
+        <div style="text-align: center; margin-bottom: 16px;">
+          <span style="font-size: 14px; color: #92400e; text-transform: uppercase; letter-spacing: 1px;">Montant total TTC</span>
+          <div style="font-size: 32px; font-weight: 700; color: #b8860b; margin-top: 4px;">
+            ${(total / 100).toFixed(2)} €
+          </div>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #cbd5e1;">
-          <span style="color: #64748b; font-size: 14px;">TVA (21%):</span>
-          <span style="color: #0f172a; font-weight: 600; font-size: 14px;">${(tax / 100).toFixed(2)} €</span>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: #0f172a; font-weight: 700; font-size: 18px;">Total TTC:</span>
-          <span style="color: #1e3a8a; font-weight: 700; font-size: 18px;">${(total / 100).toFixed(2)} €</span>
+        <div style="border-top: 1px solid #d4a72c; padding-top: 16px; text-align: center;">
+          <span style="font-size: 14px; color: #92400e;">Acompte de 25% pour démarrer :</span>
+          <div style="font-size: 24px; font-weight: 700; color: #0f172a; margin-top: 4px;">
+            ${(deposit / 100).toFixed(2)} €
+          </div>
         </div>
       </div>
 
-      ${
-        body.notes
-          ? `
-      <!-- Notes -->
-      <div style="background: #fef3c7; border-left: 4px solid #b8860b; padding: 16px; border-radius: 8px; margin-bottom: 32px;">
-        <p style="margin: 0; font-size: 14px; color: #92400e; line-height: 1.6;">
-          <strong>Note:</strong> ${body.notes}
-        </p>
+      <!-- Next Steps -->
+      <div style="background: #f0fdf4; border-left: 4px solid #22c55e; padding: 20px; border-radius: 8px; margin-bottom: 24px;">
+        <h3 style="margin: 0 0 12px 0; font-size: 16px; color: #166534;">📋 Pour démarrer votre projet :</h3>
+        <ol style="margin: 0; padding-left: 20px; color: #15803d; line-height: 1.8;">
+          <li>Renvoyez le devis signé par email</li>
+          <li>Payez l'acompte de <strong>${(deposit / 100).toFixed(2)} €</strong> (25%)</li>
+          <li>Nous démarrons immédiatement !</li>
+        </ol>
       </div>
-      `
-          : ''
-      }
 
+      <p style="margin: 0 0 24px 0; font-size: 14px; color: #64748b; line-height: 1.6; background: #f1f5f9; padding: 16px; border-radius: 8px;">
+        💡 <strong>Bon à savoir :</strong> Une facture pour le solde restant vous sera envoyée à la livraison de votre projet.
+      </p>
 
       <p style="margin: 0 0 16px 0; font-size: 14px; color: #64748b; line-height: 1.6;">
-        Ce devis est valable pendant 30 jours. Pour toute question, n'hésitez pas à nous contacter.
+        Ce devis est valable pendant <strong>30 jours</strong>. Pour toute question, n'hésitez pas à nous contacter !
       </p>
 
       <p style="margin: 0; font-size: 14px; color: #64748b; line-height: 1.6;">
-        Cordialement,<br>
+        À très vite,<br>
         <strong style="color: #0f172a;">L'équipe MonApplication</strong>
       </p>
     </div>
