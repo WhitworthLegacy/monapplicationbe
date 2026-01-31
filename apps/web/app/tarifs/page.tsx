@@ -301,9 +301,13 @@ export default function TarifsPage() {
                       {pkg.features.map((feature, i) => (
                         <span
                           key={i}
-                          className="inline-flex items-center gap-1 bg-gray-100 text-text-muted text-sm px-3 py-1 rounded-full"
+                          className={`inline-flex items-center gap-1 text-sm px-3 py-1 rounded-full ${
+                            feature.startsWith("Tout")
+                              ? "bg-primary/10 text-primary font-semibold"
+                              : "bg-gray-100 text-text-muted"
+                          }`}
                         >
-                          <Check className="w-3 h-3 text-green-500" />
+                          <Check className={`w-3 h-3 ${feature.startsWith("Tout") ? "text-primary" : "text-green-500"}`} />
                           {feature}
                         </span>
                       ))}
