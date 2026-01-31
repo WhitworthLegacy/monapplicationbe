@@ -24,8 +24,8 @@ export function LineChart({
   showLabels = true,
   className = "",
 }: LineChartProps) {
-  const { points, maxValue, minValue, path } = useMemo(() => {
-    if (data.length === 0) return { points: [], maxValue: 0, minValue: 0, path: "" };
+  const { points, maxValue, minValue, path, yAxisLabels } = useMemo(() => {
+    if (data.length === 0) return { points: [], maxValue: 0, minValue: 0, path: "", yAxisLabels: [] };
 
     const values = data.map(d => d.value);
     const max = Math.max(...values);
@@ -47,11 +47,19 @@ export function LineChart({
       .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`)
       .join(' ');
 
+    // Generate Y-axis labels (5 levels including min and max)
+    const yLabels = [0, 0.25, 0.5, 0.75, 1].map(ratio => {
+      const value = min + (range * ratio);
+      const yPosition = chartHeight - (ratio * chartHeight) + 20;
+      return { value, yPosition };
+    });
+
     return {
       points: calculatedPoints,
       maxValue: max,
       minValue: min,
       path: pathStr,
+      yAxisLabels: yLabels,
     };
   }, [data, height]);
 
@@ -64,28 +72,39 @@ export function LineChart({
   }
 
   return (
-    <div className={`relative ${className}`} style={{ height }}>
-      <svg
-        viewBox={`0 0 100 ${height}`}
-        className="w-full h-full"
-        preserveAspectRatio="none"
-      >
-        {/* Grid lines */}
-        {showGrid && (
-          <g opacity="0.1">
-            {[0, 25, 50, 75, 100].map((y) => (
-              <line
-                key={`grid-${y}`}
-                x1="0"
-                y1={y}
-                x2="100"
-                y2={y}
-                stroke="currentColor"
-                strokeWidth="0.5"
-              />
-            ))}
-          </g>
-        )}
+    <div className={`relative flex ${className}`} style={{ height }}>
+      {/* Y-axis labels */}
+      <div className="flex flex-col justify-between pr-2 text-xs text-[#64748b] font-medium" style={{ minWidth: '40px' }}>
+        {yAxisLabels.slice().reverse().map((label, i) => (
+          <div key={i} className="leading-none">
+            {Math.round(label.value).toLocaleString()}
+          </div>
+        ))}
+      </div>
+
+      {/* Chart */}
+      <div className="flex-1 relative">
+        <svg
+          viewBox={`0 0 100 ${height}`}
+          className="w-full h-full"
+          preserveAspectRatio="none"
+        >
+          {/* Horizontal grid lines with values */}
+          {showGrid && (
+            <g opacity="0.2">
+              {yAxisLabels.map((label, i) => (
+                <line
+                  key={`grid-${i}`}
+                  x1="0"
+                  y1={label.yPosition}
+                  x2="100"
+                  y2={label.yPosition}
+                  stroke="currentColor"
+                  strokeWidth="0.5"
+                />
+              ))}
+            </g>
+          )}
 
         {/* Gradient area under line */}
         <defs>
@@ -126,22 +145,23 @@ export function LineChart({
             />
           </g>
         ))}
-      </svg>
+        </svg>
 
-      {/* Labels */}
-      {showLabels && (
-        <div className="flex justify-between mt-2 px-1">
-          {data.map((d, i) => (
-            <span
-              key={i}
-              className="text-xs text-[#64748b] font-medium"
-              style={{ flex: 1, textAlign: i === 0 ? 'left' : i === data.length - 1 ? 'right' : 'center' }}
-            >
-              {d.label}
-            </span>
-          ))}
-        </div>
-      )}
+        {/* Labels */}
+        {showLabels && (
+          <div className="flex justify-between mt-2 px-1">
+            {data.map((d, i) => (
+              <span
+                key={i}
+                className="text-xs text-[#64748b] font-medium"
+                style={{ flex: 1, textAlign: i === 0 ? 'left' : i === data.length - 1 ? 'right' : 'center' }}
+              >
+                {d.label}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

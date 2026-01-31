@@ -5,6 +5,7 @@ import { createBrowserClient } from "@/lib/supabase/client";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { AddQuoteModal } from "@/components/quotes/AddQuoteModal";
 
 interface Quote {
   id: string;
@@ -40,31 +41,32 @@ export default function QuotesPage() {
     totalAmount: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  const fetchQuotes = async () => {
+    const supabase = createBrowserClient();
+    const { data } = await supabase
+      .from("quotes")
+      .select("*, client:clients(full_name)")
+      .order("created_at", { ascending: false });
+
+    if (data) {
+      setQuotes(data);
+
+      setStats({
+        total: data.length,
+        draft: data.filter((q) => q.status === "draft").length,
+        sent: data.filter((q) => q.status === "sent").length,
+        accepted: data.filter((q) => q.status === "accepted").length,
+        totalAmount: data
+          .filter((q) => q.status === "accepted")
+          .reduce((sum, q) => sum + (q.amount || 0), 0),
+      });
+    }
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const fetchQuotes = async () => {
-      const supabase = createBrowserClient();
-      const { data } = await supabase
-        .from("quotes")
-        .select("*, client:clients(full_name)")
-        .order("created_at", { ascending: false });
-
-      if (data) {
-        setQuotes(data);
-
-        setStats({
-          total: data.length,
-          draft: data.filter((q) => q.status === "draft").length,
-          sent: data.filter((q) => q.status === "sent").length,
-          accepted: data.filter((q) => q.status === "accepted").length,
-          totalAmount: data
-            .filter((q) => q.status === "accepted")
-            .reduce((sum, q) => sum + (q.amount || 0), 0),
-        });
-      }
-      setIsLoading(false);
-    };
-
     fetchQuotes();
   }, []);
 
@@ -76,7 +78,7 @@ export default function QuotesPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Devis</h1>
-        <Button>Nouveau devis</Button>
+        <Button onClick={() => setShowAddModal(true)}>Nouveau devis</Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -191,6 +193,12 @@ export default function QuotesPage() {
           </div>
         </CardContent>
       </Card>
+
+      <AddQuoteModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSuccess={() => fetchQuotes()}
+      />
     </div>
   );
 }
