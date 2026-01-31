@@ -23,6 +23,12 @@ import {
   Activity,
 } from "lucide-react";
 
+interface ComparisonDataPoint {
+  label: string;
+  current: number;
+  previous: number;
+}
+
 interface DashboardData {
   kpis: {
     totalClients: number;
@@ -38,7 +44,9 @@ interface DashboardData {
     avgDealSize: number;
   };
   revenueChart: { label: string; value: number }[];
+  revenueComparisonChart: ComparisonDataPoint[];
   clientGrowthChart: { label: string; value: number }[];
+  clientComparisonChart: ComparisonDataPoint[];
   leadSourcesChart: { label: string; value: number; color: string }[];
   conversionFunnel: { label: string; value: number; color: string }[];
   recentActivity: {
@@ -134,48 +142,71 @@ export default function DashboardPage() {
 
         const avgDealSize = acceptedQuotes > 0 ? revenue / acceptedQuotes : 0;
 
-        // Revenue chart (last 6 months)
-        const revenueByMonth: { [key: string]: number } = {};
+        // Revenue chart with year comparison
         const monthNames = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+        const currentYear = now.getFullYear();
+        const previousYear = currentYear - 1;
 
-        for (let i = 5; i >= 0; i--) {
-          const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-          const monthKey = `${monthNames[date.getMonth()]}`;
-          revenueByMonth[monthKey] = 0;
+        // Initialize revenue data for all 12 months
+        const revenueCurrentYear: { [key: number]: number } = {};
+        const revenuePreviousYear: { [key: number]: number } = {};
+        for (let i = 0; i < 12; i++) {
+          revenueCurrentYear[i] = 0;
+          revenuePreviousYear[i] = 0;
         }
 
         quotes?.filter(q => q.status === 'accepted').forEach(q => {
-          const date = new Date(q.accepted_at || '');
-          const monthKey = `${monthNames[date.getMonth()]}`;
-          if (monthKey in revenueByMonth) {
-            revenueByMonth[monthKey] += (q.total || 0) / 100;
+          const date = new Date(q.accepted_at || q.created_at || '');
+          const year = date.getFullYear();
+          const month = date.getMonth();
+          if (year === currentYear) {
+            revenueCurrentYear[month] += (q.total || 0) / 100;
+          } else if (year === previousYear) {
+            revenuePreviousYear[month] += (q.total || 0) / 100;
           }
         });
 
-        const revenueChart = Object.entries(revenueByMonth).map(([label, value]) => ({
+        // Create comparison data for all 12 months
+        const revenueComparisonChart: ComparisonDataPoint[] = monthNames.map((label, i) => ({
           label,
-          value: Math.round(value),
+          current: Math.round(revenueCurrentYear[i]),
+          previous: Math.round(revenuePreviousYear[i]),
         }));
 
-        // Client growth chart (last 6 months)
-        const clientsByMonth: { [key: string]: number } = {};
-        for (let i = 5; i >= 0; i--) {
-          const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-          const monthKey = `${monthNames[date.getMonth()]}`;
-          clientsByMonth[monthKey] = 0;
+        // Simple chart for backwards compatibility
+        const revenueChart = revenueComparisonChart.map(d => ({
+          label: d.label,
+          value: d.current,
+        }));
+
+        // Client growth chart with year comparison
+        const clientsCurrentYear: { [key: number]: number } = {};
+        const clientsPreviousYear: { [key: number]: number } = {};
+        for (let i = 0; i < 12; i++) {
+          clientsCurrentYear[i] = 0;
+          clientsPreviousYear[i] = 0;
         }
 
         clients?.forEach(c => {
           const date = new Date(c.created_at || '');
-          const monthKey = `${monthNames[date.getMonth()]}`;
-          if (monthKey in clientsByMonth) {
-            clientsByMonth[monthKey]++;
+          const year = date.getFullYear();
+          const month = date.getMonth();
+          if (year === currentYear) {
+            clientsCurrentYear[month]++;
+          } else if (year === previousYear) {
+            clientsPreviousYear[month]++;
           }
         });
 
-        const clientGrowthChart = Object.entries(clientsByMonth).map(([label, value]) => ({
+        const clientComparisonChart: ComparisonDataPoint[] = monthNames.map((label, i) => ({
           label,
-          value,
+          current: clientsCurrentYear[i],
+          previous: clientsPreviousYear[i],
+        }));
+
+        const clientGrowthChart = clientComparisonChart.map(d => ({
+          label: d.label,
+          value: d.current,
         }));
 
         // Lead sources
@@ -253,13 +284,15 @@ export default function DashboardPage() {
             quotesPending,
             quotesThisMonth,
             conversionRate,
-            conversionChange: 0, // Would calculate from historical data
+            conversionChange: 0,
             revenue,
             revenueChange,
             avgDealSize,
           },
           revenueChart,
+          revenueComparisonChart,
           clientGrowthChart,
+          clientComparisonChart,
           leadSourcesChart,
           conversionFunnel,
           recentActivity,
@@ -428,18 +461,22 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-lg font-bold text-[#0f172a]">Évolution du Revenu</h3>
-                <p className="text-sm text-[#64748b]">6 derniers mois</p>
+                <p className="text-sm text-[#64748b]">{new Date().getFullYear()} vs {new Date().getFullYear() - 1}</p>
               </div>
               <div className="p-2 rounded-lg bg-[#b8860b]/10">
                 <DollarSign className="w-5 h-5 text-[#b8860b]" />
               </div>
             </div>
             <LineChart
-              data={data.revenueChart}
-              height={250}
+              comparisonData={data.revenueComparisonChart}
+              height={280}
               color="#b8860b"
+              secondaryColor="#d4a72c"
               showGrid
               showLabels
+              showLegend
+              currentLabel={`${new Date().getFullYear()}`}
+              previousLabel={`${new Date().getFullYear() - 1}`}
             />
           </CardContent>
         </Card>
@@ -450,18 +487,22 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-lg font-bold text-[#0f172a]">Croissance Clients</h3>
-                <p className="text-sm text-[#64748b]">6 derniers mois</p>
+                <p className="text-sm text-[#64748b]">{new Date().getFullYear()} vs {new Date().getFullYear() - 1}</p>
               </div>
               <div className="p-2 rounded-lg bg-blue-100">
                 <Users className="w-5 h-5 text-blue-600" />
               </div>
             </div>
             <LineChart
-              data={data.clientGrowthChart}
-              height={250}
+              comparisonData={data.clientComparisonChart}
+              height={280}
               color="#1e3a8a"
+              secondaryColor="#64748b"
               showGrid
               showLabels
+              showLegend
+              currentLabel={`${new Date().getFullYear()}`}
+              previousLabel={`${new Date().getFullYear() - 1}`}
             />
           </CardContent>
         </Card>
