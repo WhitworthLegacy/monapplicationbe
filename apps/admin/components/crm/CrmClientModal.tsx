@@ -538,7 +538,7 @@ export default function CrmClientModal({
                       onChange={(e) => setFormData({
                         ...formData,
                         first_email_sent: e.target.checked,
-                        first_email_sent_at: e.target.checked ? new Date().toISOString() : null
+                        first_email_sent_at: e.target.checked ? new Date().toISOString() : undefined
                       })}
                       className="w-5 h-5 text-green-600 rounded focus:ring-green-500"
                     />
@@ -559,7 +559,7 @@ export default function CrmClientModal({
                       onChange={(e) => setFormData({
                         ...formData,
                         quote_sent: e.target.checked,
-                        quote_sent_at: e.target.checked ? new Date().toISOString() : null
+                        quote_sent_at: e.target.checked ? new Date().toISOString() : undefined
                       })}
                       className="w-5 h-5 text-green-600 rounded focus:ring-green-500"
                     />
@@ -580,7 +580,7 @@ export default function CrmClientModal({
                       onChange={(e) => setFormData({
                         ...formData,
                         meeting_scheduled: e.target.checked,
-                        meeting_scheduled_at: e.target.checked ? new Date().toISOString() : null
+                        meeting_scheduled_at: e.target.checked ? new Date().toISOString() : undefined
                       })}
                       className="w-5 h-5 text-green-600 rounded focus:ring-green-500"
                     />
@@ -601,7 +601,7 @@ export default function CrmClientModal({
                       onChange={(e) => setFormData({
                         ...formData,
                         follow_up_done: e.target.checked,
-                        follow_up_done_at: e.target.checked ? new Date().toISOString() : null
+                        follow_up_done_at: e.target.checked ? new Date().toISOString() : undefined
                       })}
                       className="w-5 h-5 text-green-600 rounded focus:ring-green-500"
                     />
