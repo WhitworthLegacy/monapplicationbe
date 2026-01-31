@@ -14,9 +14,9 @@ export default function Icon() {
           display: 'flex',
           flexWrap: 'wrap',
           gap: '2px',
-          padding: '4px',
+          padding: '2px',
           backgroundColor: 'white',
-          borderRadius: '6px',
+          borderRadius: '4px',
         }}
       >
         {/* Row 1 */}
