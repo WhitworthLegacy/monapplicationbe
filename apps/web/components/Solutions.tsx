@@ -23,7 +23,7 @@ const solutions = [
     icon: Bot,
     title: "Plus jamais d'appel manqué",
     before: "Vous êtes sur un chantier, le téléphone sonne, vous rappelez trop tard.",
-    after: "L'IA répond instantanément sur WhatsApp, Messenger, Instagram. Le client est pris en charge en 30 secondes.",
+    after: "Le système répond instantanément sur WhatsApp, Messenger, Instagram. Le client est pris en charge en 30 secondes.",
     result: "0 client perdu",
   },
   {
@@ -51,7 +51,7 @@ const solutions = [
     icon: MessageCircle,
     title: "Réponses pro 24h/24",
     before: "21h, vous répondez encore aux mails au lieu d'être avec votre famille.",
-    after: "L'IA répond naturellement à votre place. Vos soirées sont à vous.",
+    after: "L'automatisation répond à votre place. Vos soirées sont à vous.",
     result: "Vie pro/perso",
   },
   {

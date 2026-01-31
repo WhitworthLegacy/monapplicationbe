@@ -95,7 +95,7 @@ export function Hero() {
             </div>
             <div className="flex items-center gap-2 text-gray-400">
               <Zap size={20} className="text-accent" />
-              <span className="text-sm">WhatsApp, Messenger, IA</span>
+              <span className="text-sm">WhatsApp, Messenger, Auto</span>
             </div>
           </motion.div>
         </motion.div>

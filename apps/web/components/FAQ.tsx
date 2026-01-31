@@ -9,7 +9,7 @@ const faqs = [
   {
     question: "C'est quoi exactement une secrétaire digitale ?",
     answer:
-      "C'est un système automatisé qui gère vos tâches admin : réponse aux messages (WhatsApp, Messenger, Instagram), prise de RDV, envoi de devis, suivi clients... avec une IA qui répond naturellement, impossible à distinguer d'un humain. Elle travaille 24h/24 et ne prend jamais de congés.",
+      "C'est un système automatisé qui gère vos tâches admin : réponse aux messages (WhatsApp, Messenger, Instagram), prise de RDV, envoi de devis, suivi clients... avec des réponses automatisées disponibles 24h/24. Le système ne prend jamais de congés.",
   },
   {
     question: "Combien de temps pour mettre en place ?",
@@ -17,9 +17,9 @@ const faqs = [
       "30 jours entre notre premier appel et la mise en ligne de votre système. On s'occupe de tout : configuration, personnalisation à vos couleurs, import de vos données existantes si besoin.",
   },
   {
-    question: "Comment fonctionne la réponse IA ?",
+    question: "Comment fonctionne l'automatisation des réponses ?",
     answer:
-      "Notre IA répond automatiquement sur WhatsApp, Messenger et Instagram. Elle est formée sur votre métier et vos services. Les réponses sont naturelles et personnalisées — vos clients ne voient pas la différence avec un humain.",
+      "Le système répond automatiquement sur WhatsApp, Messenger et Instagram. Il est configuré selon votre métier et vos services. Les réponses sont personnalisées et disponibles 24h/24.",
   },
   {
     question: "C'est compliqué à utiliser ?",

@@ -390,15 +390,30 @@ export default function TarifsPage() {
                   )}
                   {!pack.savings && <div className="mb-4" />}
                   <div className="space-y-2 mb-6">
-                    {pack.includes.map((item) => (
-                      <div
-                        key={item}
-                        className="flex items-center justify-center gap-2 text-sm"
-                      >
+                    <div className="flex items-center justify-center gap-2 text-sm">
+                      {pack.features.fondations ? (
                         <Check className="w-4 h-4 text-green-500" />
-                        <span className="text-text-muted">{item}</span>
-                      </div>
-                    ))}
+                      ) : (
+                        <X className="w-4 h-4 text-red-400" />
+                      )}
+                      <span className={pack.features.fondations ? "text-text-muted" : "text-gray-400"}>Fondations</span>
+                    </div>
+                    <div className="flex items-center justify-center gap-2 text-sm">
+                      {pack.features.notifications ? (
+                        <Check className="w-4 h-4 text-green-500" />
+                      ) : (
+                        <X className="w-4 h-4 text-red-400" />
+                      )}
+                      <span className={pack.features.notifications ? "text-text-muted" : "text-gray-400"}>Notifications</span>
+                    </div>
+                    <div className="flex items-center justify-center gap-2 text-sm">
+                      {pack.features.marketing ? (
+                        <Check className="w-4 h-4 text-green-500" />
+                      ) : (
+                        <X className="w-4 h-4 text-red-400" />
+                      )}
+                      <span className={pack.features.marketing ? "text-text-muted" : "text-gray-400"}>Marketing</span>
+                    </div>
                   </div>
                   <Link
                     href="/contact"

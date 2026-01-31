@@ -32,7 +32,7 @@ const comparisonData = [
   {
     feature: "Canaux",
     secretary: "Téléphone, email",
-    digital: "WhatsApp, Messenger, Instagram, IA",
+    digital: "WhatsApp, Messenger, Instagram",
     highlight: false,
   },
   {
