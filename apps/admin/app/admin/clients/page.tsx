@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import AddClientModal from "@/components/clients/AddClientModal";
 
 interface Client {
   id: string;
@@ -49,22 +50,23 @@ export default function ClientsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [stageFilter, setStageFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  const fetchClients = async () => {
+    const supabase = createBrowserClient();
+    const { data } = await supabase
+      .from("clients")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (data) {
+      setClients(data);
+      setFilteredClients(data);
+    }
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const fetchClients = async () => {
-      const supabase = createBrowserClient();
-      const { data } = await supabase
-        .from("clients")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (data) {
-        setClients(data);
-        setFilteredClients(data);
-      }
-      setIsLoading(false);
-    };
-
     fetchClients();
   }, []);
 
@@ -96,7 +98,7 @@ export default function ClientsPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Clients</h1>
-        <Button>Ajouter un client</Button>
+        <Button onClick={() => setShowAddModal(true)}>Ajouter un client</Button>
       </div>
 
       <Card className="mb-6">
@@ -186,6 +188,14 @@ export default function ClientsPage() {
           </div>
         </CardContent>
       </Card>
+
+      <AddClientModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSuccess={() => {
+          fetchClients(); // Refresh the list
+        }}
+      />
     </div>
   );
 }
