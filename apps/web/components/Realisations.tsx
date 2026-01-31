@@ -22,6 +22,8 @@ import {
   Sparkles,
   CheckCircle2,
   ArrowRight,
+  Bell,
+  Zap,
 } from "lucide-react";
 import { DemoModal } from "./DemoModal";
 
@@ -61,20 +63,20 @@ const realisations = [
       "Entreprise de climatisation professionnelle. Suivi des prospects, devis automatisés et planification des interventions techniques.",
     benefits: [
       {
+        icon: Zap,
+        text: "Zéro prospect perdu grâce aux réponses rapides",
+      },
+      {
+        icon: Bell,
+        text: "Rappels entretien annuel automatiques",
+      },
+      {
         icon: Send,
         text: "Devis envoyé en moins de 5 minutes",
       },
       {
-        icon: FileText,
-        text: "Relance automatique après 3 jours",
-      },
-      {
         icon: Sparkles,
         text: "Pipeline commercial visuel (Kanban)",
-      },
-      {
-        icon: Clock,
-        text: "Zéro paperasse, tout est digital",
       },
     ],
     color: "from-blue-500 to-cyan-600",
