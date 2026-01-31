@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { FileText, Plus, Trash2, Send, Package } from 'lucide-react';
+import { FileText, Plus, Trash2, Send, Package as PackageIcon } from 'lucide-react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -358,7 +358,7 @@ export default function UnifiedQuoteModal({
         {/* Pack Selection */}
         <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border-2 border-blue-200">
           <div className="flex items-center gap-2 mb-3">
-            <Package className="w-5 h-5 text-blue-600" />
+            <PackageIcon className="w-5 h-5 text-blue-600" />
             <h3 className="text-sm font-bold text-[#0f172a]">
               Sélection rapide par pack
             </h3>
