@@ -36,12 +36,12 @@ export default function Card({
   };
 
   const hoverStyles = hover
-    ? 'transition-shadow duration-200 hover:shadow-md'
-    : '';
+    ? 'transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-[#cbd5e1] cursor-pointer active:scale-[0.98]'
+    : 'transition-all duration-200';
 
   return (
     <div
-      className={`bg-white rounded-2xl border border-[#e2e8f0] shadow-sm ${hoverStyles} ${paddings[padding]} ${className}`}
+      className={`bg-white dark:bg-gray-800 dark:border-gray-700 rounded-2xl border border-[#e2e8f0] shadow-sm ${hoverStyles} ${paddings[padding]} ${className}`}
       onClick={onClick}
     >
       {children}
