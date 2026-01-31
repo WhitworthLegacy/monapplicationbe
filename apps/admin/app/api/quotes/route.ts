@@ -81,6 +81,7 @@ export async function POST(request: NextRequest) {
         description: item.description,
         quantity: item.quantity,
         unit_price: item.unit_price,
+        line_total: item.quantity * item.unit_price,
         position: index,
       }));
 
