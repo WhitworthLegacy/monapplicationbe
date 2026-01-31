@@ -119,7 +119,7 @@ export default function AboutPage() {
               <div className="space-y-4 text-text-muted leading-relaxed">
                 <p>
                   Passionné par la technologie et l'entrepreneuriat, j'ai constaté
-                  un problème récurrent : les artisans et PME passent un temps fou
+                  un problème récurrent: les artisans et PME passent un temps fou
                   sur des tâches administratives au lieu de faire ce qu'ils aiment
                   – leur métier.
                 </p>
