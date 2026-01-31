@@ -8,7 +8,6 @@ import {
   Target,
   Calendar,
   FileText,
-  Activity,
   Settings,
 } from 'lucide-react';
 import { useUserRole } from '@/hooks/useUserRole';
@@ -29,15 +28,13 @@ type NavItem = {
 // 3. CRM (pipeline commercial)
 // 4. Appointments (rendez-vous)
 // 5. Quotes (devis)
-// 6. Activities (activités)
-// 7. Settings (paramètres)
+// 6. Settings (paramètres)
 const navItems: NavItem[] = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { label: 'Clients', href: '/admin/clients', icon: Users, roles: ['super_admin', 'admin', 'manager', 'staff'] },
   { label: 'CRM', href: '/admin/crm', icon: Target, roles: ['super_admin', 'admin', 'manager'] },
   { label: 'RDV', href: '/admin/appointments', icon: Calendar, roles: ['super_admin', 'admin', 'manager', 'staff'] },
   { label: 'Devis', href: '/admin/quotes', icon: FileText, roles: ['super_admin', 'admin', 'manager'] },
-  { label: 'Activités', href: '/admin/activities', icon: Activity, roles: ['super_admin'] },
   { label: 'Réglages', href: '/admin/settings', icon: Settings, roles: ['super_admin', 'admin'] },
 ];
 
