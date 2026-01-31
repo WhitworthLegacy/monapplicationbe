@@ -318,6 +318,7 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
 
   return (
     <Document>
+      {/* PAGE 1 - Devis principal */}
       <Page size="A4" style={styles.page}>
         {/* Header Bands */}
         <View style={styles.headerBand} />
@@ -377,14 +378,16 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
             </View>
           </View>
 
-          {/* Quote Title & Description */}
+          {/* Quote Title */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>{data.title}</Text>
             </View>
             <View style={styles.sectionDivider} />
             {data.description && (
-              <Text style={styles.description}>{data.description}</Text>
+              <Text style={[styles.description, { fontSize: 9, marginTop: 8 }]}>
+                ℹ️ Voir détails en annexe (page 2)
+              </Text>
             )}
           </View>
 
@@ -488,6 +491,61 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
           <View style={styles.footerBandPrimary} />
         </View>
       </Page>
+
+      {/* PAGE 2 - Annexe Description détaillée */}
+      {data.description && (
+        <Page size="A4" style={styles.page}>
+          {/* Header Bands */}
+          <View style={styles.headerBand} />
+          <View style={styles.headerBandAccent} />
+
+          {/* Header Content */}
+          <View style={styles.headerContent}>
+            <View>
+              <Text style={styles.logoText}>MonApplication</Text>
+              <Text style={styles.logoSubtext}>
+                Votre secrétaire digitale
+              </Text>
+            </View>
+            <View style={styles.headerRight}>
+              <View style={styles.quoteNumberBadge}>
+                <Text style={styles.quoteNumberText}>
+                  ANNEXE - Page 2/2
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Content */}
+          <View style={styles.content}>
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>
+                  DESCRIPTION DÉTAILLÉE - {data.title}
+                </Text>
+              </View>
+              <View style={styles.sectionDivider} />
+              <Text style={[styles.description, { marginTop: 15 }]}>
+                {data.description}
+              </Text>
+            </View>
+          </View>
+
+          {/* Footer */}
+          <View style={styles.footer} fixed>
+            <View style={styles.footerBand} />
+            <View style={styles.footerContent}>
+              <Text style={styles.footerText}>
+                MonApplication - Votre secrétaire digitale complète
+              </Text>
+              <Text style={styles.footerContact}>
+                contact@monapplication.be | Belgique
+              </Text>
+            </View>
+            <View style={styles.footerBandPrimary} />
+          </View>
+        </Page>
+      )}
     </Document>
   );
 }
