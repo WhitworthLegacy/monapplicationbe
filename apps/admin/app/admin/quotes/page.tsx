@@ -5,7 +5,7 @@ import { createBrowserClient } from "@/lib/supabase/client";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { AddQuoteModal } from "@/components/quotes/AddQuoteModal";
+import AddQuoteModal from "@/components/quotes/AddQuoteModal";
 
 interface Quote {
   id: string;

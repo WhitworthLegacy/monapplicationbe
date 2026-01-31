@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { createAndSendQuote } from '@/lib/falco';
-import type { FalcoInvoiceItem } from '@/lib/falco';
+
+interface QuoteItem {
+  description: string;
+  quantity: number;
+  unit_price: number; // in cents
+}
 
 interface QuickQuoteRequest {
   client_id: string;
@@ -9,14 +13,13 @@ interface QuickQuoteRequest {
   client_email: string;
   client_company?: string;
   client_phone?: string;
-  items: FalcoInvoiceItem[];
+  items: QuoteItem[];
   notes?: string;
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body: QuickQuoteRequest = await request.json();
-    const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Validation
     if (!body.client_email || !body.client_name) {
@@ -33,34 +36,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Step 1: Create and send quote via Falco
-    const falcoResult = await createAndSendQuote({
-      customer: {
-        name: body.client_name,
-        email: body.client_email,
-        phone: body.client_phone,
-        company_name: body.client_company,
-        address: {
-          country: 'BE',
-        },
-      },
-      items: body.items,
-      notes: body.notes,
-      email: body.client_email,
-    });
+    // Initialize Resend (lazy loading to avoid build errors)
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    if (!falcoResult.success) {
-      console.error('Falco quote creation failed:', falcoResult.error);
-      return NextResponse.json(
-        { error: falcoResult.error || 'Failed to create quote in Falco' },
-        { status: 500 }
-      );
-    }
-
-    const invoiceId = falcoResult.data?.invoiceId;
-    const pdfUrl = falcoResult.data?.pdfUrl;
-
-    // Step 2: Calculate totals for email
+    // Calculate totals
     const subtotal = body.items.reduce(
       (sum, item) => sum + item.quantity * item.unit_price,
       0
@@ -84,9 +63,8 @@ export async function POST(request: NextRequest) {
       )
       .join('');
 
-    // Step 3: Send notification email via Resend
-    try {
-      await resend.emails.send({
+    // Send quote email via Resend
+    const emailResult = await resend.emails.send({
         from: 'MonApplication <contact@monapplication.be>',
         to: [body.client_email],
         subject: `Votre devis de MonApplication`,
@@ -177,19 +155,6 @@ export async function POST(request: NextRequest) {
           : ''
       }
 
-      ${
-        pdfUrl
-          ? `
-      <!-- Download PDF Button -->
-      <div style="text-align: center; margin-bottom: 32px;">
-        <a href="${pdfUrl}"
-           style="display: inline-block; background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%); color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; box-shadow: 0 4px 6px rgba(30, 58, 138, 0.3);">
-          📄 Télécharger le PDF
-        </a>
-      </div>
-      `
-          : ''
-      }
 
       <p style="margin: 0 0 16px 0; font-size: 14px; color: #64748b; line-height: 1.6;">
         Ce devis est valable pendant 30 jours. Pour toute question, n'hésitez pas à nous contacter.
@@ -217,17 +182,20 @@ export async function POST(request: NextRequest) {
 </html>
         `,
       });
-    } catch (emailError) {
-      console.error('Email sending failed:', emailError);
-      // Don't fail the whole request if email fails, quote is already in Falco
+
+    if (emailResult.error) {
+      console.error('Email sending failed:', emailResult.error);
+      return NextResponse.json(
+        { error: 'Failed to send email' },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({
       success: true,
       data: {
-        invoiceId,
-        pdfUrl,
-        message: 'Devis créé et envoyé avec succès',
+        emailId: emailResult.data?.id,
+        message: 'Devis envoyé avec succès par email',
       },
     });
   } catch (error) {
