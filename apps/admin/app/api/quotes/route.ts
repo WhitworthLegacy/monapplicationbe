@@ -71,19 +71,28 @@ export async function POST(request: NextRequest) {
       .select()
       .single();
 
-    if (insertError) throw insertError;
+    if (insertError) {
+      console.error("Error inserting quote:", insertError);
+      throw insertError;
+    }
 
     if (items.length > 0) {
-      const itemsWithQuoteId = items.map((item: any) => ({
-        ...item,
+      const itemsWithQuoteId = items.map((item: any, index: number) => ({
         quote_id: quote.id,
+        description: item.description,
+        quantity: item.quantity,
+        unit_price: item.unit_price,
+        position: index,
       }));
 
       const { error: itemsError } = await supabase
         .from("quote_items")
         .insert(itemsWithQuoteId);
 
-      if (itemsError) throw itemsError;
+      if (itemsError) {
+        console.error("Error inserting quote items:", itemsError);
+        throw itemsError;
+      }
     }
 
     return NextResponse.json({ data: quote }, { status: 201 });
