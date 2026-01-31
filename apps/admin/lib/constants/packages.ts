@@ -111,7 +111,7 @@ export const PACKS: Pack[] = [
     price: 800000,
     priceLabel: '8 000€',
     originalPrice: 900000,
-    description: 'Tout automatisé + IA',
+    description: 'Tout automatisé',
     packageIds: ['fondations', 'notifications', 'marketing'],
     popular: false,
     savings: 'Économisez 1 000€',

@@ -102,18 +102,42 @@ export default function UnifiedQuoteModal({
     setDescription(desc);
 
     // Auto-fill items based on packages in the pack
-    const packageItems: QuoteItem[] = pack.packageIds.map((packageId) => {
-      const pkg = getPackageById(packageId);
-      if (!pkg) return { description: '', quantity: 1, unit_price: 0 };
+    // Special handling for FULL pack with discount
+    if (packId === 'full') {
+      const packageItems: QuoteItem[] = pack.packageIds.map((packageId) => {
+        const pkg = getPackageById(packageId);
+        if (!pkg) return { description: '', quantity: 1, unit_price: 0 };
 
-      return {
-        description: `${pkg.name} - ${pkg.description}`,
+        return {
+          description: `${pkg.name} - ${pkg.description}`,
+          quantity: 1,
+          unit_price: pkg.price,
+        };
+      });
+
+      // Add discount line
+      packageItems.push({
+        description: 'Réduction Pack FULL',
         quantity: 1,
-        unit_price: pkg.price, // already in cents
-      };
-    });
+        unit_price: -100000, // -1000€ in cents
+      });
 
-    setItems(packageItems);
+      setItems(packageItems);
+    } else {
+      const packageItems: QuoteItem[] = pack.packageIds.map((packageId) => {
+        const pkg = getPackageById(packageId);
+        if (!pkg) return { description: '', quantity: 1, unit_price: 0 };
+
+        return {
+          description: `${pkg.name} - ${pkg.description}`,
+          quantity: 1,
+          unit_price: pkg.price,
+        };
+      });
+
+      setItems(packageItems);
+    }
+
     setSelectedPackages(pack.packageIds);
   };
 
