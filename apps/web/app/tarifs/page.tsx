@@ -31,7 +31,7 @@ const packages = [
     name: "Fondations",
     icon: Layers,
     color: "bg-primary",
-    price: "5 000€",
+    price: "5 000€ HT",
     priceNote: "Base",
     description: "Votre secrétaire digitale complète",
     detailedDescription: "Tout ce qu'il faut pour automatiser votre admin : site web pro optimisé SEO, booking RDV en ligne 24h/24, générateur de devis en 2 clics, CRM clients complet, calendrier intelligent. Plus une formation de 2h et 30 jours de support.",
@@ -49,7 +49,7 @@ const packages = [
     name: "Notifications",
     icon: Bell,
     color: "bg-green-600",
-    price: "+1 500€",
+    price: "+1 500€ HT",
     priceNote: "Add-on",
     description: "Zéro oubli, zéro no-show",
     detailedDescription: "Inclut tout le package Fondations + rappels SMS automatiques avant chaque RDV, emails de confirmation, alertes personnalisées et suivi complet de tous vos envois. Réduisez les no-shows de 80%.",
@@ -67,7 +67,7 @@ const packages = [
     name: "Marketing",
     icon: MessageCircle,
     color: "bg-accent",
-    price: "+2 500€",
+    price: "+2 500€ HT",
     priceNote: "Add-on",
     description: "Automatisation 24h/24 sur tous les canaux",
     detailedDescription: "Inclut tout le package Fondations + Notifications. Soyez disponible partout, tout le temps : WhatsApp Business, Messenger et Instagram DM intégrés avec réponses automatisées. Disponible 24h/24.",
@@ -85,7 +85,7 @@ const packages = [
 const packs = [
   {
     name: "FONDATIONS",
-    price: "5 000€",
+    price: "5 000€ HT",
     originalPrice: null,
     popular: false,
     description: "Votre secrétaire digitale",
@@ -98,7 +98,7 @@ const packs = [
   },
   {
     name: "PRO",
-    price: "6 500€",
+    price: "6 500€ HT",
     originalPrice: null,
     popular: true,
     description: "Le plus populaire",
@@ -111,8 +111,8 @@ const packs = [
   },
   {
     name: "FULL",
-    price: "8 000€",
-    originalPrice: "9 000€",
+    price: "8 000€ HT",
+    originalPrice: "9 000€ HT",
     popular: false,
     description: "Tout automatisé",
     savings: "Économisez 1 000€",
@@ -133,7 +133,7 @@ const comparisonData = [
   {
     feature: "Coût première année",
     secretary: "~29 000€",
-    digital: "À partir de 5 000€",
+    digital: "À partir de 5 000€ HT",
   },
   {
     feature: "Mise en place",
