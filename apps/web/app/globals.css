@@ -51,9 +51,17 @@
   }
 }
 
+/* Force light mode - disable system dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light;
+  }
+}
+
 /* Base styles */
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
 }
 
 body {
