@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { useToast } from '@/components/ui/Toast';
 import { createBrowserClient } from '@/lib/supabase/client';
+import QuotePreviewModal from './QuotePreviewModal';
 import {
   PACKAGES,
   PACKS,
@@ -60,6 +61,7 @@ export default function UnifiedQuoteModal({
   const [notes, setNotes] = useState('');
   const [taxRate, setTaxRate] = useState(21);
   const [loading, setLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const toast = useToast();
 
   // Fetch clients if not in quick-send mode
@@ -206,7 +208,7 @@ export default function UnifiedQuoteModal({
     return { subtotal, taxAmount, total };
   };
 
-  const handleSubmit = async () => {
+  const handleGeneratePreview = () => {
     // Validation
     const client = preSelectedClient || selectedClient;
     if (!client) {
@@ -225,95 +227,68 @@ export default function UnifiedQuoteModal({
       return;
     }
 
+    // Open preview modal
+    setShowPreview(true);
+  };
+
+  const handleSendEmail = async (pdfBlob: Blob) => {
+    const client = preSelectedClient || selectedClient;
+    if (!client || !client.email) {
+      toast.addToast('Le client n\'a pas d\'email', 'error');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      if (mode === 'quick-send') {
-        // Quick send via email (existing functionality)
-        if (!client.email) {
-          toast.addToast('Le client n\'a pas d\'email', 'error');
-          setLoading(false);
-          return;
-        }
+      // Convert blob to base64
+      const reader = new FileReader();
+      const base64Promise = new Promise<string>((resolve) => {
+        reader.onloadend = () => {
+          const base64 = (reader.result as string).split(',')[1];
+          resolve(base64);
+        };
+        reader.readAsDataURL(pdfBlob);
+      });
 
-        const response = await fetch('/api/quotes/quick-send', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            client_id: client.id,
-            client_name: client.full_name,
-            client_email: client.email,
-            client_company: client.company,
-            client_phone: client.phone,
-            items: items.map((item) => ({
-              description: item.description,
-              quantity: item.quantity,
-              unit_price: item.unit_price, // already in cents
-            })),
-            notes,
-          }),
-        });
+      const pdfBase64 = await base64Promise;
 
-        const data: { success?: boolean; error?: string } = await response.json();
+      const response = await fetch('/api/quotes/quick-send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_id: client.id,
+          client_name: client.full_name,
+          client_email: client.email,
+          client_company: client.company,
+          client_phone: client.phone,
+          title,
+          description,
+          items: items.map((item) => ({
+            description: item.description,
+            quantity: item.quantity,
+            unit_price: item.unit_price,
+          })),
+          notes,
+          tax_rate: taxRate,
+          pdf_base64: pdfBase64,
+        }),
+      });
 
-        if (!response.ok || !data.success) {
-          throw new Error(data.error || 'Erreur lors de l\'envoi');
-        }
+      const data: { success?: boolean; error?: string } = await response.json();
 
-        toast.addToast('✅ Devis envoyé avec succès !', 'success');
-        resetForm();
-        onClose();
-        if (onSuccess) onSuccess();
-      } else {
-        // Create and save to database
-        const { subtotal, taxAmount, total } = calculateTotal();
-        const supabase = createBrowserClient();
-
-        // Create quote
-        const { data: quoteData, error: quoteError } = await supabase
-          .from('quotes')
-          .insert([
-            {
-              client_id: client.id,
-              title,
-              description: description || null,
-              subtotal,
-              tax_rate: taxRate,
-              tax_amount: taxAmount,
-              total,
-              status: 'draft',
-              notes: notes || null,
-            },
-          ])
-          .select()
-          .single();
-
-        if (quoteError) throw quoteError;
-
-        // Create quote items
-        const itemsToInsert = items.map((item, index) => ({
-          quote_id: quoteData.id,
-          description: item.description,
-          quantity: item.quantity,
-          unit_price: item.unit_price,
-          line_total: item.quantity * item.unit_price,
-          position: index,
-        }));
-
-        const { error: itemsError } = await supabase
-          .from('quote_items')
-          .insert(itemsToInsert);
-
-        if (itemsError) throw itemsError;
-
-        toast.addToast('✅ Devis créé avec succès !', 'success');
-        resetForm();
-        onClose();
-        if (onSuccess) onSuccess(quoteData.id);
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Erreur lors de l\'envoi');
       }
+
+      toast.addToast('✅ Devis envoyé avec succès !', 'success');
+      setShowPreview(false);
+      resetForm();
+      onClose();
+      if (onSuccess) onSuccess();
     } catch (error) {
-      console.error('Error creating/sending quote:', error);
-      toast.addToast('❌ Erreur lors de la création du devis', 'error');
+      console.error('Error sending quote:', error);
+      toast.addToast('❌ Erreur lors de l\'envoi du devis', 'error');
     } finally {
       setLoading(false);
     }
@@ -565,14 +540,36 @@ export default function UnifiedQuoteModal({
           <Button
             type="button"
             variant="primary"
-            onClick={handleSubmit}
+            onClick={handleGeneratePreview}
             isLoading={loading}
-            icon={mode === 'quick-send' ? <Send className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
+            icon={<FileText className="w-4 h-4" />}
           >
-            {mode === 'quick-send' ? 'Envoyer le devis' : 'Créer le devis'}
+            Générer devis
           </Button>
         </div>
       </div>
+
+      {/* Quote Preview Modal */}
+      {showPreview && selectedClient && (
+        <QuotePreviewModal
+          open={showPreview}
+          onClose={() => setShowPreview(false)}
+          data={{
+            quoteNumber: undefined,
+            clientName: (preSelectedClient || selectedClient)?.full_name || '',
+            clientEmail: (preSelectedClient || selectedClient)?.email,
+            clientPhone: (preSelectedClient || selectedClient)?.phone,
+            clientCompany: (preSelectedClient || selectedClient)?.company,
+            title,
+            description,
+            items,
+            notes,
+            taxRate,
+            validDays: 30,
+          }}
+          onSendEmail={handleSendEmail}
+        />
+      )}
     </Modal>
   );
 }
