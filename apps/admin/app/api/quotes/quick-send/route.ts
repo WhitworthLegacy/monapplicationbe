@@ -155,7 +155,7 @@ export async function POST(request: NextRequest) {
       </div>
 
       <p style="margin: 0 0 24px 0; font-size: 14px; color: #64748b; line-height: 1.6; background: #f1f5f9; padding: 16px; border-radius: 8px;">
-        💡 <strong>Bon à savoir :</strong> Une facture pour le solde restant vous sera envoyée à la livraison de votre projet.
+        💡 <strong>Bon à savoir :</strong> Une facture pour le solde total vous sera envoyée à la livraison de votre projet.
       </p>
 
       <p style="margin: 0 0 16px 0; font-size: 14px; color: #64748b; line-height: 1.6;">

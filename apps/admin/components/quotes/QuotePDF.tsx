@@ -450,7 +450,7 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
             <View style={styles.totalSection}>
               <View style={styles.totalBox}>
                 <View style={styles.totalRow}>
-                  <Text style={styles.totalLabel}>Sous-total:</Text>
+                  <Text style={styles.totalLabel}>Total HTVA:</Text>
                   <Text style={styles.totalValue}>
                     {(subtotal / 100).toFixed(2)}€
                   </Text>
@@ -464,7 +464,7 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
                   </Text>
                 </View>
                 <View style={styles.grandTotalRow}>
-                  <Text style={styles.grandTotalLabel}>TOTAL TTC</Text>
+                  <Text style={styles.grandTotalLabel}>TOTAL TVAC</Text>
                   <Text style={styles.grandTotalValue}>
                     {(total / 100).toFixed(2)}€
                   </Text>
