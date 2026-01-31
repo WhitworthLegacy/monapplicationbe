@@ -127,8 +127,6 @@ export default function CrmClientModal({
     const column = DEFAULT_CRM_COLUMNS.find((col) => col.slug === stage);
     switch (column?.color) {
       case 'gray': return 'secondary';
-      case 'blue': return 'primary';
-      case 'purple': return 'accent';
       case 'yellow': return 'warning';
       case 'teal': return 'success';
       case 'red': return 'danger';
