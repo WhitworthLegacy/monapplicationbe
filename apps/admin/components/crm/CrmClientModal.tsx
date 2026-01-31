@@ -23,7 +23,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { useToast } from '@/components/ui/Toast';
-import { QuickQuoteModal } from '@/components/quotes/QuickQuoteModal';
+import UnifiedQuoteModal from '@/components/quotes/UnifiedQuoteModal';
 import { CrmClient } from './types';
 import {
   DEFAULT_CRM_COLUMNS,
@@ -206,6 +206,7 @@ export default function CrmClientModal({
             variant="primary"
             size="sm"
             icon={<Calendar className="w-4 h-4" />}
+            onClick={() => window.location.href = '/admin/appointments'}
           >
             Planifier RDV
           </Button>
@@ -521,6 +522,192 @@ export default function CrmClientModal({
               </div>
             )}
 
+            {/* Progress Tracker */}
+            <div className="p-4 border-2 border-green-200 bg-green-50 rounded-lg">
+              <h3 className="text-sm font-bold text-[#0f172a] mb-4 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-green-600" />
+                Progression client
+              </h3>
+
+              {editMode ? (
+                <div className="space-y-3">
+                  <label className="flex items-center gap-3 cursor-pointer p-2 hover:bg-white/50 rounded transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={formData.first_email_sent || false}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        first_email_sent: e.target.checked,
+                        first_email_sent_at: e.target.checked ? new Date().toISOString() : null
+                      })}
+                      className="w-5 h-5 text-green-600 rounded focus:ring-green-500"
+                    />
+                    <div className="flex-1">
+                      <span className="text-sm font-medium">📧 1er email envoyé</span>
+                      {formData.first_email_sent && formData.first_email_sent_at && (
+                        <div className="text-xs text-green-600 mt-0.5">
+                          {formatDate(formData.first_email_sent_at)}
+                        </div>
+                      )}
+                    </div>
+                  </label>
+
+                  <label className="flex items-center gap-3 cursor-pointer p-2 hover:bg-white/50 rounded transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={formData.quote_sent || false}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        quote_sent: e.target.checked,
+                        quote_sent_at: e.target.checked ? new Date().toISOString() : null
+                      })}
+                      className="w-5 h-5 text-green-600 rounded focus:ring-green-500"
+                    />
+                    <div className="flex-1">
+                      <span className="text-sm font-medium">📄 Devis envoyé</span>
+                      {formData.quote_sent && formData.quote_sent_at && (
+                        <div className="text-xs text-green-600 mt-0.5">
+                          {formatDate(formData.quote_sent_at)}
+                        </div>
+                      )}
+                    </div>
+                  </label>
+
+                  <label className="flex items-center gap-3 cursor-pointer p-2 hover:bg-white/50 rounded transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={formData.meeting_scheduled || false}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        meeting_scheduled: e.target.checked,
+                        meeting_scheduled_at: e.target.checked ? new Date().toISOString() : null
+                      })}
+                      className="w-5 h-5 text-green-600 rounded focus:ring-green-500"
+                    />
+                    <div className="flex-1">
+                      <span className="text-sm font-medium">📅 RDV planifié</span>
+                      {formData.meeting_scheduled && formData.meeting_scheduled_at && (
+                        <div className="text-xs text-green-600 mt-0.5">
+                          {formatDate(formData.meeting_scheduled_at)}
+                        </div>
+                      )}
+                    </div>
+                  </label>
+
+                  <label className="flex items-center gap-3 cursor-pointer p-2 hover:bg-white/50 rounded transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={formData.follow_up_done || false}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        follow_up_done: e.target.checked,
+                        follow_up_done_at: e.target.checked ? new Date().toISOString() : null
+                      })}
+                      className="w-5 h-5 text-green-600 rounded focus:ring-green-500"
+                    />
+                    <div className="flex-1">
+                      <span className="text-sm font-medium">✅ Suivi effectué</span>
+                      {formData.follow_up_done && formData.follow_up_done_at && (
+                        <div className="text-xs text-green-600 mt-0.5">
+                          {formatDate(formData.follow_up_done_at)}
+                        </div>
+                      )}
+                    </div>
+                  </label>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm">
+                    {client.first_email_sent ? (
+                      <CheckCircle2 className="w-5 h-5 text-green-600" />
+                    ) : (
+                      <Circle className="w-5 h-5 text-gray-300" />
+                    )}
+                    <span className={client.first_email_sent ? 'text-green-700 font-medium' : 'text-gray-400'}>
+                      📧 1er email envoyé
+                    </span>
+                    {client.first_email_sent && client.first_email_sent_at && (
+                      <span className="text-xs text-green-600 ml-auto">
+                        {formatDate(client.first_email_sent_at)}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2 text-sm">
+                    {client.quote_sent ? (
+                      <CheckCircle2 className="w-5 h-5 text-green-600" />
+                    ) : (
+                      <Circle className="w-5 h-5 text-gray-300" />
+                    )}
+                    <span className={client.quote_sent ? 'text-green-700 font-medium' : 'text-gray-400'}>
+                      📄 Devis envoyé
+                    </span>
+                    {client.quote_sent && client.quote_sent_at && (
+                      <span className="text-xs text-green-600 ml-auto">
+                        {formatDate(client.quote_sent_at)}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2 text-sm">
+                    {client.meeting_scheduled ? (
+                      <CheckCircle2 className="w-5 h-5 text-green-600" />
+                    ) : (
+                      <Circle className="w-5 h-5 text-gray-300" />
+                    )}
+                    <span className={client.meeting_scheduled ? 'text-green-700 font-medium' : 'text-gray-400'}>
+                      📅 RDV planifié
+                    </span>
+                    {client.meeting_scheduled && client.meeting_scheduled_at && (
+                      <span className="text-xs text-green-600 ml-auto">
+                        {formatDate(client.meeting_scheduled_at)}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2 text-sm">
+                    {client.follow_up_done ? (
+                      <CheckCircle2 className="w-5 h-5 text-green-600" />
+                    ) : (
+                      <Circle className="w-5 h-5 text-gray-300" />
+                    )}
+                    <span className={client.follow_up_done ? 'text-green-700 font-medium' : 'text-gray-400'}>
+                      ✅ Suivi effectué
+                    </span>
+                    {client.follow_up_done && client.follow_up_done_at && (
+                      <span className="text-xs text-green-600 ml-auto">
+                        {formatDate(client.follow_up_done_at)}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="mt-4 pt-3 border-t border-green-200">
+                    <div className="flex items-center justify-between text-xs text-green-700 mb-2">
+                      <span>Progression</span>
+                      <span className="font-bold">
+                        {Math.round((
+                          [client.first_email_sent, client.quote_sent, client.meeting_scheduled, client.follow_up_done]
+                            .filter(Boolean).length / 4
+                        ) * 100)}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                      <div
+                        className="bg-gradient-to-r from-green-500 to-green-600 h-2.5 rounded-full transition-all duration-500"
+                        style={{
+                          width: `${(
+                            [client.first_email_sent, client.quote_sent, client.meeting_scheduled, client.follow_up_done]
+                              .filter(Boolean).length / 4
+                          ) * 100}%`
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Activity Stats */}
             <div className="p-4 border-2 border-[#e2e8f0] rounded-lg bg-gradient-to-br from-[#f8fafc] to-[#f1f5f9]">
               <h3 className="text-sm font-bold text-[#0f172a] mb-4">📈 Activité</h3>
@@ -567,7 +754,7 @@ export default function CrmClientModal({
       </Modal>
 
       {/* Quote Creation Modal */}
-      <QuickQuoteModal
+      <UnifiedQuoteModal
         client={client}
         isOpen={showQuoteModal}
         onClose={() => setShowQuoteModal(false)}
@@ -575,6 +762,7 @@ export default function CrmClientModal({
           setShowQuoteModal(false);
           toast.addToast('✅ Devis créé et envoyé !', 'success');
         }}
+        mode="quick-send"
       />
     </>
   );

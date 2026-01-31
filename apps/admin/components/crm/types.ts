@@ -59,6 +59,16 @@ export interface CrmClient {
   relance_2?: string;
   relance_3?: string;
 
+  // Progression client (checkboxes d'avancement)
+  first_email_sent?: boolean;
+  first_email_sent_at?: string;
+  quote_sent?: boolean;
+  quote_sent_at?: string;
+  meeting_scheduled?: boolean;
+  meeting_scheduled_at?: string;
+  follow_up_done?: boolean;
+  follow_up_done_at?: string;
+
   // Données
   notes?: string;
   tags?: string[];

@@ -5,7 +5,7 @@ import { createBrowserClient } from "@/lib/supabase/client";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import AddQuoteModal from "@/components/quotes/AddQuoteModal";
+import UnifiedQuoteModal from "@/components/quotes/UnifiedQuoteModal";
 
 interface Quote {
   id: string;
@@ -194,10 +194,11 @@ export default function QuotesPage() {
         </CardContent>
       </Card>
 
-      <AddQuoteModal
+      <UnifiedQuoteModal
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
         onSuccess={() => fetchQuotes()}
+        mode="create"
       />
     </div>
   );

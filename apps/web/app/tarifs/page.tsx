@@ -9,6 +9,7 @@ import {
 } from "@/lib/animations";
 import {
   Check,
+  X,
   ArrowRight,
   Layers,
   Zap,
@@ -51,8 +52,9 @@ const packages = [
     price: "+1 500€",
     priceNote: "Add-on",
     description: "Zéro oubli, zéro no-show",
-    detailedDescription: "Réduisez les no-shows de 80% : rappels SMS automatiques avant chaque RDV, emails de confirmation, alertes personnalisées et suivi complet de tous vos envois. Vos clients n'oublient plus jamais leurs rendez-vous.",
+    detailedDescription: "Inclut tout le package Fondations + rappels SMS automatiques avant chaque RDV, emails de confirmation, alertes personnalisées et suivi complet de tous vos envois. Réduisez les no-shows de 80%.",
     features: [
+      "Tout Fondations inclus",
       "Rappels SMS avant RDV",
       "Emails automatiques",
       "Alertes personnalisées",
@@ -67,13 +69,14 @@ const packages = [
     color: "bg-accent",
     price: "+2 500€",
     priceNote: "Add-on",
-    description: "Réponse IA 24h/24 sur tous les canaux",
-    detailedDescription: "Soyez disponible partout, tout le temps : WhatsApp Business, Messenger et Instagram DM intégrés avec une IA qui répond naturellement à vos clients. Impossible de la distinguer d'un humain — et elle travaille 24h/24.",
+    description: "Automatisation 24h/24 sur tous les canaux",
+    detailedDescription: "Inclut tout le package Fondations + Notifications. Soyez disponible partout, tout le temps : WhatsApp Business, Messenger et Instagram DM intégrés avec réponses automatisées. Disponible 24h/24.",
     features: [
+      "Tout Fondations + Notifications inclus",
       "WhatsApp Business intégré",
       "Messenger automatisé",
       "Instagram DM",
-      "Réponse IA naturelle",
+      "Réponses automatisées",
       "Disponible 24h/24",
     ],
   },
@@ -85,27 +88,39 @@ const packs = [
     price: "5 000€",
     originalPrice: null,
     popular: false,
-    includes: ["Fondations"],
     description: "Votre secrétaire digitale",
     savings: null,
+    features: {
+      fondations: true,
+      notifications: false,
+      marketing: false,
+    },
   },
   {
     name: "PRO",
     price: "6 500€",
     originalPrice: null,
     popular: true,
-    includes: ["Fondations", "Notifications"],
     description: "Le plus populaire",
     savings: null,
+    features: {
+      fondations: true,
+      notifications: true,
+      marketing: false,
+    },
   },
   {
     name: "FULL",
     price: "8 000€",
     originalPrice: "9 000€",
     popular: false,
-    includes: ["Fondations", "Notifications", "Marketing"],
-    description: "Tout automatisé + IA",
+    description: "Tout automatisé",
     savings: "Économisez 1 000€",
+    features: {
+      fondations: true,
+      notifications: true,
+      marketing: true,
+    },
   },
 ];
 
@@ -133,7 +148,7 @@ const comparisonData = [
   {
     feature: "Canaux",
     secretary: "Téléphone, email",
-    digital: "WhatsApp, Messenger, Instagram, IA",
+    digital: "WhatsApp, Messenger, Instagram",
   },
 ];
 
