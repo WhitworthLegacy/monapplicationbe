@@ -44,7 +44,7 @@ const faqs = [
   {
     question: "Y a-t-il des frais cachés ?",
     answer:
-      "Non. Le devis est clair et tout compris. On gère votre base de données et l'hébergement pour 50€/mois — et la 1ère année est gratuite. Pas de surprise, pas de petites lignes.",
+      "Non. Votre application admin est un paiement unique — pas d'abonnement. Le seul coût récurrent, c'est la maintenance de l'infrastructure (serveur, base de données, sécurité, sauvegardes) à 50€/mois, et on vous offre la 1ère année. Le devis est clair, pas de petites lignes.",
   },
 ];
 
