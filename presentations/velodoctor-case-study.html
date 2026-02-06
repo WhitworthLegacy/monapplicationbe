@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>monapplication.be — VeloDoctor Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #0f172a;
+  --secondary: #1e3a8a;
+  --accent: #b8860b;
+  --accent-light: #d4a017;
+  --red: #dc2626;
+  --red-dark: #991b1b;
+  --green: #16a34a;
+  --white: #ffffff;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+  --vd-teal: #00ACC2;
+  --vd-teal-light: #2dd4bf;
+  --vd-teal-mid: #14b8a6;
+  --vd-orange: #FF6D00;
+  --vd-orange-light: #fb923c;
+  --logo-gold: #b8860b;
+  --accent: #00ACC2;
+  --accent-light: #2dd4bf;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--primary);
+  color: var(--white);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
+
+/* ─── SLIDE CONTAINER ─── */
+.deck {
+  display: flex;
+  width: 1100vw; /* 11 slides */
+  height: 100vh;
+  overflow: hidden;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* ─── SLIDE BASE ─── */
+.slide {
+  min-width: 100vw;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── LOGO COMPONENT ─── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.logo-dots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+.logo-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+.logo-dots .d1 { background: #94a3b8; }
+.logo-dots .d2 { background: #64748b; }
+.logo-dots .d3 { background: var(--logo-gold); }
+.logo-dots .d4 { background: #64748b; }
+.logo-dots .d5 { background: var(--logo-gold); }
+.logo-dots .d6 { background: #94a3b8; }
+.logo-dots .d7 { background: var(--logo-gold); }
+.logo-dots .d8 { background: #94a3b8; }
+.logo-dots .d9 { background: #64748b; }
+.logo-text {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.logo-text .mon { color: #94a3b8; }
+.logo-text .app { color: var(--white); }
+.logo-text .be { color: var(--logo-gold); }
+
+.logo.lg .logo-dots .dot { width: 14px; height: 14px; }
+.logo.lg .logo-dots { gap: 5px; }
+.logo.lg .logo-text { font-size: 32px; }
+
+.logo.xl .logo-dots .dot { width: 18px; height: 18px; }
+.logo.xl .logo-dots { gap: 6px; }
+.logo.xl .logo-text { font-size: 40px; }
+
+/* ─── NAVIGATION ─── */
+.nav-dots {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 10px 20px;
+  border-radius: 40px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+}
+.nav-dot.active {
+  background: var(--accent);
+  box-shadow: 0 0 12px rgba(0, 172, 194, 0.5);
+  transform: scale(1.3);
+}
+.nav-dot:hover:not(.active) {
+  background: rgba(255,255,255,0.4);
+}
+
+.nav-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--white);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 0.3s ease;
+}
+.nav-arrow:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(0,172,194,0.3);
+}
+.nav-arrow.prev { left: 24px; }
+.nav-arrow.next { right: 24px; }
+.nav-arrow.hidden { opacity: 0; pointer-events: none; }
+
+/* ─── SLIDE COUNTER ─── */
+.slide-counter {
+  position: fixed;
+  top: 28px;
+  right: 36px;
+  z-index: 1000;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-400);
+  background: rgba(15,23,42,0.7);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.slide-counter span { color: var(--accent-light); font-weight: 700; }
+
+/* ─── UTILITIES ─── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.pill-gold {
+  background: linear-gradient(135deg, rgba(0,172,194,0.15), rgba(0,172,194,0.08));
+  color: var(--accent-light);
+  border: 1px solid rgba(0,172,194,0.3);
+}
+.pill-red {
+  background: rgba(220,38,38,0.08);
+  color: #fca5a5;
+  border: 1px solid rgba(220,38,38,0.2);
+}
+
+.badge {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.section-title {
+  font-size: clamp(28px, 3.5vw, 48px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.15;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.section-subtitle {
+  font-size: clamp(15px, 1.2vw, 18px);
+  color: var(--gray-400);
+  text-align: center;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+/* ─── BG PATTERNS ─── */
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.bg-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(150px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+/* ─── BROWSER FRAME (reused across mockup slides) ─── */
+.browser-frame {
+  background: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  width: 100%;
+}
+.browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #0f172a;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.browser-dots {
+  display: flex;
+  gap: 6px;
+}
+.browser-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.browser-dots span:nth-child(1) { background: #ef4444; }
+.browser-dots span:nth-child(2) { background: #f59e0b; }
+.browser-dots span:nth-child(3) { background: #22c55e; }
+.browser-url {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 11px;
+  color: var(--gray-500);
+  font-family: 'Inter', monospace;
+}
+.browser-body {
+  padding: 16px;
+}
+
+/* ─── MOCKUP FEATURES BAR ─── */
+.mockup-features-bar {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 20px;
+}
+.mockup-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--gray-400);
+  font-weight: 500;
+}
+.mockup-feature-item .mf-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgba(0,172,194,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 1 — COVER
+   ════════════════════════════════════════ */
+.slide-cover {
+  background: linear-gradient(160deg, #0f172a 0%, #0f2a2e 50%, #0f172a 100%);
+}
+.slide-cover .bg-glow {
+  background: var(--accent);
+  top: -200px;
+  right: -200px;
+  opacity: 0.2;
+}
+.slide-cover .bg-glow-2 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(140px);
+  opacity: 0.1;
+  pointer-events: none;
+  background: var(--accent-light);
+  bottom: -150px;
+  left: -100px;
+}
+
+.cover-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  z-index: 2;
+  text-align: center;
+}
+.cover-title {
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  max-width: 800px;
+}
+.cover-title .highlight {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cover-subtitle {
+  font-size: clamp(14px, 1.3vw, 18px);
+  color: var(--gray-400);
+  max-width: 650px;
+  line-height: 1.7;
+}
+.cover-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  border-radius: 2px;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 2 — LE CONTEXTE
+   ════════════════════════════════════════ */
+.slide-context {
+  background: linear-gradient(160deg, #0f172a 0%, #1a1a2e 100%);
+}
+.slide-context .bg-glow {
+  background: #dc2626;
+  top: -300px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.06;
+}
+.context-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  z-index: 2;
+  max-width: 900px;
+  width: 100%;
+}
+.pain-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 4px 0;
+}
+.pain-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  background: rgba(220, 38, 38, 0.06);
+  border: 1px solid rgba(220, 38, 38, 0.15);
+  color: #fca5a5;
+}
+.pain-pill::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(220,38,38,0.5);
+}
+.context-desc {
+  font-size: 15px;
+  color: var(--gray-400);
+  text-align: center;
+  max-width: 700px;
+  line-height: 1.7;
+}
+.stat-boxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  margin-top: 4px;
+}
+.stat-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 28px;
+  text-align: center;
+}
+.stat-box .stat-value {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--red);
+  letter-spacing: -0.5px;
+}
+.stat-box .stat-label {
+  font-size: 14px;
+  color: var(--gray-500);
+  margin-top: 6px;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 3 — DASHBOARD MOCKUP
+   ════════════════════════════════════════ */
+.slide-dashboard {
+  background: linear-gradient(160deg, #0f172a 0%, #111827 100%);
+}
+.slide-dashboard .bg-glow {
+  background: var(--vd-teal);
+  top: -300px;
+  right: -200px;
+  opacity: 0.07;
+}
+.mockup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  z-index: 2;
+  width: 100%;
+  max-width: 960px;
+}
+
+/* VeloDoctor internal mockup styles */
+.vd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.vd-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--vd-teal-light);
+}
+.vd-logo-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--vd-teal-mid), #0d9488);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+.vd-nav {
+  display: flex;
+  gap: 4px;
+}
+.vd-nav span {
+  font-size: 10px;
+  color: var(--gray-500);
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: default;
+}
+.vd-nav span.active {
+  background: rgba(0,172,194,0.2);
+  color: var(--vd-teal-light);
+}
+
+/* KPI Cards */
+.vd-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.vd-kpi {
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+.vd-kpi .val {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--vd-teal-light);
+}
+.vd-kpi .lbl {
+  font-size: 9px;
+  color: var(--gray-500);
+  margin-top: 2px;
+}
+
+/* Monthly metrics */
+.vd-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.vd-metric {
+  background: rgba(255,255,255,0.02);
+  border-radius: 6px;
+  padding: 8px;
+  text-align: center;
+}
+.vd-metric .m-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--vd-orange-light);
+}
+.vd-metric .m-lbl {
+  font-size: 8px;
+  color: var(--gray-500);
+  margin-top: 2px;
+}
+
+/* Pipeline row */
+.vd-pipeline {
+  display: flex;
+  gap: 6px;
+}
+.vd-pipe-item {
+  flex: 1;
+  background: rgba(255,255,255,0.03);
+  border-radius: 6px;
+  padding: 6px 8px;
+  text-align: center;
+  border-top: 2px solid;
+}
+.vd-pipe-item .p-count {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--gray-200);
+}
+.vd-pipe-item .p-label {
+  font-size: 8px;
+  color: var(--gray-500);
+  margin-top: 1px;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 4 — ATELIER KANBAN
+   ════════════════════════════════════════ */
+.slide-atelier {
+  background: linear-gradient(160deg, #0f172a 0%, #0c1222 100%);
+}
+.slide-atelier .bg-glow {
+  background: #6366f1;
+  bottom: -200px;
+  left: -200px;
+  opacity: 0.06;
+}
+
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+.kanban-col {
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.kanban-col-header {
+  padding: 8px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.kanban-col-header .col-count {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+}
+.kanban-cards {
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.kanban-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 6px;
+  padding: 8px;
+}
+.kanban-card .kc-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--gray-200);
+  margin-bottom: 3px;
+}
+.kanban-card .kc-id {
+  font-size: 8px;
+  color: var(--gray-500);
+  margin-bottom: 4px;
+}
+.kanban-card .kc-tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.kanban-card .kc-tag {
+  font-size: 8px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+.kc-tag.teal { background: rgba(0,172,194,0.15); color: var(--vd-teal-light); }
+.kc-tag.orange { background: rgba(255,109,0,0.15); color: var(--vd-orange-light); }
+.kc-tag.purple { background: rgba(139,92,246,0.15); color: #a78bfa; }
+.kanban-card .kc-checklist {
+  margin-top: 4px;
+  font-size: 8px;
+  color: var(--gray-500);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.kc-checklist .kc-bar {
+  flex: 1;
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.kc-checklist .kc-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 5 — COLLECTES & LIVRAISONS
+   ════════════════════════════════════════ */
+.slide-collectes {
+  background: linear-gradient(160deg, #0f172a 0%, #111827 100%);
+}
+.slide-collectes .bg-glow {
+  background: var(--vd-teal);
+  top: -200px;
+  left: -200px;
+  opacity: 0.06;
+}
+
+.collectes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.collectes-driver-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.driver-select {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,172,194,0.1);
+  border: 1px solid rgba(0,172,194,0.2);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 10px;
+  color: var(--vd-teal-light);
+  font-weight: 600;
+}
+.driver-avatar {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--vd-teal-mid), #0d9488);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+}
+.collectes-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+.mission-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.mission-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 10px;
+}
+.mission-card .mc-time {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--vd-teal-light);
+  margin-bottom: 4px;
+}
+.mission-card .mc-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-200);
+  margin-bottom: 2px;
+}
+.mission-card .mc-address {
+  font-size: 9px;
+  color: var(--gray-500);
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+.mission-card .mc-phone {
+  font-size: 9px;
+  color: var(--gray-500);
+  margin-bottom: 6px;
+}
+.mission-card .mc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mc-status {
+  font-size: 8px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.mc-status.confirmed { background: rgba(34,197,94,0.15); color: #4ade80; }
+.mc-status.enroute { background: rgba(59,130,246,0.15); color: #60a5fa; }
+.mc-status.waiting { background: rgba(245,158,11,0.15); color: #fbbf24; }
+.mc-actions {
+  display: flex;
+  gap: 4px;
+}
+.mc-actions .mc-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  cursor: default;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 6 — BOOKING / AGENDA
+   ════════════════════════════════════════ */
+.slide-booking {
+  background: linear-gradient(160deg, #0f172a 0%, #0c1222 100%);
+}
+.slide-booking .bg-glow {
+  background: var(--vd-orange);
+  top: -300px;
+  right: -150px;
+  opacity: 0.05;
+}
+
+.agenda-week {
+  display: grid;
+  grid-template-columns: 50px repeat(7, 1fr);
+  gap: 0;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+}
+.agenda-header {
+  background: rgba(0,172,194,0.1);
+  padding: 6px;
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--vd-teal-light);
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.agenda-header.corner {
+  background: rgba(255,255,255,0.03);
+}
+.agenda-time {
+  padding: 4px 6px;
+  font-size: 9px;
+  color: var(--gray-500);
+  text-align: right;
+  border-right: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 32px;
+}
+.agenda-cell {
+  min-height: 32px;
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+  border-right: 1px solid rgba(255,255,255,0.02);
+  padding: 2px;
+  position: relative;
+}
+.agenda-appt {
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-size: 7px;
+  font-weight: 600;
+  line-height: 1.3;
+  width: 100%;
+}
+.appt-collecte { background: rgba(34,197,94,0.2); color: #4ade80; border-left: 2px solid #22c55e; }
+.appt-livraison { background: rgba(59,130,246,0.2); color: #60a5fa; border-left: 2px solid #3b82f6; }
+.appt-reparation { background: rgba(255,109,0,0.2); color: var(--vd-orange-light); border-left: 2px solid var(--vd-orange); }
+.appt-diagnostic { background: rgba(139,92,246,0.2); color: #a78bfa; border-left: 2px solid #8b5cf6; }
+
+.agenda-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  justify-content: center;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: var(--gray-400);
+}
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 7 — STOCK / INVENTORY
+   ════════════════════════════════════════ */
+.slide-stock {
+  background: linear-gradient(160deg, #0f172a 0%, #111827 100%);
+}
+.slide-stock .bg-glow {
+  background: var(--vd-teal-mid);
+  bottom: -300px;
+  right: -200px;
+  opacity: 0.06;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+.product-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.product-card.low-stock {
+  border-color: rgba(220,38,38,0.3);
+}
+.product-img {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.product-info {
+  padding: 8px;
+}
+.product-info .pi-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--gray-200);
+  margin-bottom: 2px;
+}
+.product-info .pi-ref {
+  font-size: 8px;
+  color: var(--gray-500);
+  margin-bottom: 4px;
+}
+.product-info .pi-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.product-info .pi-price {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--vd-teal-light);
+}
+.product-info .pi-stock {
+  font-size: 8px;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+.pi-stock.ok { background: rgba(34,197,94,0.15); color: #4ade80; }
+.pi-stock.low { background: rgba(220,38,38,0.15); color: #fca5a5; }
+.product-info .pi-threshold {
+  font-size: 7px;
+  color: var(--gray-600);
+  margin-top: 3px;
+  text-align: right;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 8 — DEVIS & FINANCES
+   ════════════════════════════════════════ */
+.slide-devis {
+  background: linear-gradient(160deg, #0f172a 0%, #0c1222 100%);
+}
+.slide-devis .bg-glow {
+  background: var(--accent);
+  top: -300px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.05;
+}
+
+.devis-stats {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.devis-stat {
+  flex: 1;
+  background: rgba(255,255,255,0.04);
+  border-radius: 6px;
+  padding: 8px;
+  text-align: center;
+}
+.devis-stat .ds-val {
+  font-size: 16px;
+  font-weight: 800;
+}
+.devis-stat .ds-lbl {
+  font-size: 8px;
+  color: var(--gray-500);
+  margin-top: 1px;
+}
+
+.devis-table {
+  width: 100%;
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.devis-table-head {
+  display: grid;
+  grid-template-columns: 80px 2fr 1.5fr 1fr 80px 80px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.03);
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.devis-table-row {
+  display: grid;
+  grid-template-columns: 80px 2fr 1.5fr 1fr 80px 80px;
+  padding: 8px 12px;
+  font-size: 10px;
+  color: var(--gray-400);
+  border-top: 1px solid rgba(255,255,255,0.03);
+  align-items: center;
+}
+.devis-status {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 8px;
+  font-weight: 600;
+}
+.devis-status.draft { background: rgba(148,163,184,0.15); color: var(--gray-400); }
+.devis-status.sent { background: rgba(59,130,246,0.15); color: #60a5fa; }
+.devis-status.accepted { background: rgba(34,197,94,0.15); color: #4ade80; }
+.devis-status.rejected { background: rgba(220,38,38,0.15); color: #fca5a5; }
+
+/* ════════════════════════════════════════
+   SLIDE 9 — AUTOMATISATIONS
+   ════════════════════════════════════════ */
+.slide-automations {
+  background: linear-gradient(160deg, #0f172a 0%, #1a1a2e 100%);
+}
+.slide-automations .bg-glow {
+  background: var(--accent);
+  bottom: -200px;
+  right: -200px;
+  opacity: 0.06;
+}
+
+.automations-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 860px;
+  z-index: 2;
+}
+.auto-card {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+}
+.auto-trigger {
+  flex: 1;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.auto-trigger .at-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(0,172,194,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.auto-trigger .at-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-300);
+}
+.auto-arrow {
+  width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--accent-light);
+  flex-shrink: 0;
+}
+.auto-action {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(0,172,194,0.06), rgba(0,172,194,0.02));
+  border: 1px solid rgba(0,172,194,0.2);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.auto-action .aa-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(0,172,194,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.auto-action .aa-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-light);
+}
+
+/* ════════════════════════════════════════
+   SLIDE 10 — RESULTATS
+   ════════════════════════════════════════ */
+.slide-results {
+  background: linear-gradient(160deg, #0f172a 0%, #111827 100%);
+}
+.slide-results .bg-glow {
+  background: var(--vd-teal);
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.06;
+}
+
+.results-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  z-index: 2;
+  width: 100%;
+  max-width: 900px;
+}
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+}
+.result-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 36px 28px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.result-card:hover {
+  background: rgba(0,172,194,0.05);
+  border-color: rgba(0,172,194,0.15);
+  transform: translateY(-2px);
+}
+.result-card .rc-value {
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, var(--vd-teal-light), var(--vd-teal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.result-card .rc-label {
+  font-size: 15px;
+  color: var(--gray-400);
+  font-weight: 500;
+}
+.result-quote {
+  background: linear-gradient(135deg, rgba(0,172,194,0.08), rgba(0,172,194,0.03));
+  border: 1px solid rgba(0,172,194,0.2);
+  border-left: 4px solid var(--accent);
+  border-radius: 12px;
+  padding: 24px 32px;
+  width: 100%;
+  text-align: center;
+}
+.result-quote .rq-text {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--accent-light);
+  font-style: italic;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.result-quote .rq-author {
+  font-size: 13px;
+  color: var(--gray-500);
+  font-weight: 500;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 11 — CTA
+   ════════════════════════════════════════ */
+.slide-cta {
+  background: linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+.slide-cta .bg-glow {
+  background: var(--accent);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.08;
+  width: 800px;
+  height: 800px;
+}
+.cta-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  z-index: 2;
+  text-align: center;
+}
+.cta-title {
+  font-size: clamp(30px, 3.5vw, 50px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.15;
+}
+.cta-subtitle {
+  font-size: clamp(15px, 1.2vw, 18px);
+  color: var(--gray-400);
+  max-width: 550px;
+  line-height: 1.6;
+}
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 40px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: var(--primary);
+  font-size: 17px;
+  font-weight: 700;
+  border-radius: 14px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 24px rgba(0,172,194,0.3);
+  margin-top: 8px;
+}
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,172,194,0.45);
+}
+.cta-contact {
+  display: flex;
+  gap: 32px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.cta-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--gray-400);
+}
+.cta-contact-item .ci-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .slide { padding: 40px 24px; }
+  .stat-boxes { grid-template-columns: 1fr; }
+  .kanban-board { grid-template-columns: 1fr; }
+  .mission-cards { grid-template-columns: 1fr; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .results-grid { grid-template-columns: 1fr; }
+  .agenda-week { font-size: 7px; }
+  .auto-card { flex-direction: column; }
+  .auto-arrow { transform: rotate(90deg); width: auto; height: 32px; }
+  .mockup-features-bar { flex-direction: column; align-items: center; gap: 8px; }
+  .devis-table-head, .devis-table-row { grid-template-columns: 60px 1.5fr 1fr 0.8fr 60px 60px; font-size: 8px; }
+  .nav-arrow { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<div class="nav-dots" id="navDots"></div>
+<button class="nav-arrow prev" id="prevBtn" aria-label="Diapositive precedente">&#8592;</button>
+<button class="nav-arrow next" id="nextBtn" aria-label="Diapositive suivante">&#8594;</button>
+<div class="slide-counter" id="slideCounter"><span>1</span> / 11</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE DECK
+     ════════════════════════════════════════════ -->
+<div class="deck" id="deck">
+
+  <!-- ────────── SLIDE 1: COVER ────────── -->
+  <section class="slide slide-cover" id="slide-0">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+    <div class="cover-content">
+      <div class="logo xl">
+        <div class="logo-dots">
+          <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+          <span class="dot d4"></span><span class="dot d5"></span><span class="dot d6"></span>
+          <span class="dot d7"></span><span class="dot d8"></span><span class="dot d9"></span>
+        </div>
+        <div class="logo-text">
+          <span class="mon">mon</span><span class="app">application</span><span class="be">.be</span>
+        </div>
+      </div>
+      <div class="cover-divider"></div>
+      <h1 class="cover-title">
+        <span class="highlight">VeloDoctor</span>
+      </h1>
+      <p class="cover-subtitle">
+        Réparation vélo & E-commerce — Bruxelles
+      </p>
+      <span class="pill pill-gold">Étude de cas</span>
+      <div class="cover-divider"></div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 2: LE CONTEXTE ────────── -->
+  <section class="slide slide-context" id="slide-1">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="context-content">
+      <h2 class="section-title">Le d&eacute;fi de VeloDoctor</h2>
+      <p class="context-desc">
+        VeloDoctor grandit tr&egrave;s vite &mdash; trop vite pour tout g&eacute;rer &agrave; la main. Le chef de projet, au lieu de d&eacute;velopper de nouvelles id&eacute;es et d'am&eacute;liorer le service, se retrouve coinc&eacute; de 9h &agrave; 20h &agrave; r&eacute;pondre aux prospects, clients, messages et emails. Z&eacute;ro temps pour la strat&eacute;gie. Toute l'&eacute;nergie part dans l'admin.
+      </p>
+      <div class="pain-grid">
+        <span class="pain-pill">9h&ndash;20h &agrave; r&eacute;pondre</span>
+        <span class="pain-pill">Croissance bloqu&eacute;e</span>
+        <span class="pain-pill">Z&eacute;ro temps strat&eacute;gique</span>
+        <span class="pain-pill">Noy&eacute; dans les messages</span>
+      </div>
+      <div class="stat-boxes">
+        <div class="stat-box">
+          <div class="stat-value">11h/jour</div>
+          <div class="stat-label">pass&eacute;es &agrave; r&eacute;pondre au lieu de d&eacute;velopper</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value">0h</div>
+          <div class="stat-label">pour la strat&eacute;gie et la croissance</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 3: DASHBOARD MOCKUP ────────── -->
+  <section class="slide slide-dashboard" id="slide-2">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="mockup-content">
+      <h2 class="section-title" style="font-size:clamp(22px,2.8vw,36px);margin-bottom:8px;">Dashboard — Pilotez votre atelier</h2>
+      <div class="browser-frame">
+        <div class="browser-bar">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">admin.velodoctor.be/dashboard</div>
+        </div>
+        <div class="browser-body">
+          <!-- VD Header -->
+          <div class="vd-header">
+            <div class="vd-logo">
+              <div class="vd-logo-icon">&#128690;</div>
+              VeloDoctor
+            </div>
+            <div class="vd-nav">
+              <span class="active">Home</span>
+              <span>RDV</span>
+              <span>Atelier</span>
+              <span>CRM</span>
+              <span>Stock</span>
+              <span>Clients</span>
+            </div>
+          </div>
+          <!-- KPIs -->
+          <div class="vd-kpis">
+            <div class="vd-kpi"><div class="val">8</div><div class="lbl">RDV Aujourd'hui</div></div>
+            <div class="vd-kpi"><div class="val">15</div><div class="lbl">Vélos en atelier</div></div>
+            <div class="vd-kpi"><div class="val" style="color:#fca5a5;">3</div><div class="lbl">Alertes stock</div></div>
+            <div class="vd-kpi"><div class="val">234</div><div class="lbl">Total clients</div></div>
+          </div>
+          <!-- Monthly metrics -->
+          <div class="vd-metrics">
+            <div class="vd-metric"><div class="m-val">8.4k€</div><div class="m-lbl">CA Mensuel</div></div>
+            <div class="vd-metric"><div class="m-val">87%</div><div class="m-lbl">Taux conversion</div></div>
+            <div class="vd-metric"><div class="m-val">45</div><div class="m-lbl">Réparations terminées</div></div>
+            <div class="vd-metric"><div class="m-val">28</div><div class="m-lbl">Devis créés</div></div>
+          </div>
+          <!-- Pipeline -->
+          <div class="vd-pipeline">
+            <div class="vd-pipe-item" style="border-color:#f59e0b;">
+              <div class="p-count">4</div><div class="p-label">Collecte</div>
+            </div>
+            <div class="vd-pipe-item" style="border-color:var(--vd-teal);">
+              <div class="p-count">15</div><div class="p-label">Atelier</div>
+            </div>
+            <div class="vd-pipe-item" style="border-color:#22c55e;">
+              <div class="p-count">23</div><div class="p-label">Terminé</div>
+            </div>
+            <div class="vd-pipe-item" style="border-color:var(--vd-orange);">
+              <div class="p-count">3</div><div class="p-label">En attente paiement</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-features-bar">
+        <div class="mockup-feature-item"><span class="mf-icon">&#128065;</span> Vue d'ensemble instantanée</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#128200;</span> Métriques temps réel</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#9889;</span> Actions rapides</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 4: ATELIER KANBAN ────────── -->
+  <section class="slide slide-atelier" id="slide-3">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="mockup-content">
+      <h2 class="section-title" style="font-size:clamp(22px,2.8vw,36px);margin-bottom:8px;">Atelier — Suivi des réparations</h2>
+      <div class="browser-frame">
+        <div class="browser-bar">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">admin.velodoctor.be/atelier</div>
+        </div>
+        <div class="browser-body">
+          <div class="vd-header">
+            <div class="vd-logo">
+              <div class="vd-logo-icon">&#128690;</div>
+              VeloDoctor
+            </div>
+            <div class="vd-nav">
+              <span>Home</span>
+              <span>RDV</span>
+              <span class="active">Atelier</span>
+              <span>CRM</span>
+              <span>Stock</span>
+              <span>Clients</span>
+            </div>
+          </div>
+          <div class="kanban-board">
+            <!-- Diagnostic Column -->
+            <div class="kanban-col">
+              <div class="kanban-col-header" style="background:rgba(245,158,11,0.12);color:#fbbf24;">
+                Diagnostic <span class="col-count">3</span>
+              </div>
+              <div class="kanban-cards">
+                <div class="kanban-card">
+                  <div class="kc-name">Marc Dupont</div>
+                  <div class="kc-id">#0234</div>
+                  <div class="kc-tags">
+                    <span class="kc-tag teal">Vélo électrique</span>
+                    <span class="kc-tag orange">Réparation</span>
+                  </div>
+                </div>
+                <div class="kanban-card">
+                  <div class="kc-name">Sophie Laurent</div>
+                  <div class="kc-id">#0235</div>
+                  <div class="kc-tags">
+                    <span class="kc-tag teal">VTT</span>
+                    <span class="kc-tag orange">Réparation</span>
+                  </div>
+                </div>
+                <div class="kanban-card">
+                  <div class="kc-name">Jean Petit</div>
+                  <div class="kc-id">#0236</div>
+                  <div class="kc-tags">
+                    <span class="kc-tag teal">Vélo ville</span>
+                    <span class="kc-tag purple">Diagnostic</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Réparation Column -->
+            <div class="kanban-col">
+              <div class="kanban-col-header" style="background:rgba(99,102,241,0.12);color:#818cf8;">
+                Réparation <span class="col-count">3</span>
+              </div>
+              <div class="kanban-cards">
+                <div class="kanban-card">
+                  <div class="kc-name">Élise Bernard</div>
+                  <div class="kc-id">#0229</div>
+                  <div class="kc-tags">
+                    <span class="kc-tag teal">Vélo cargo</span>
+                    <span class="kc-tag orange">Réparation</span>
+                  </div>
+                  <div class="kc-checklist">
+                    3/4 <div class="kc-bar"><div class="kc-bar-fill" style="width:75%;background:var(--vd-teal);"></div></div>
+                  </div>
+                </div>
+                <div class="kanban-card">
+                  <div class="kc-name">Pierre Martin</div>
+                  <div class="kc-id">#0230</div>
+                  <div class="kc-tags">
+                    <span class="kc-tag teal">Vélo électrique</span>
+                    <span class="kc-tag orange">Réparation</span>
+                  </div>
+                  <div class="kc-checklist">
+                    2/5 <div class="kc-bar"><div class="kc-bar-fill" style="width:40%;background:var(--vd-orange);"></div></div>
+                  </div>
+                </div>
+                <div class="kanban-card">
+                  <div class="kc-name">Nadia Kessler</div>
+                  <div class="kc-id">#0231</div>
+                  <div class="kc-tags">
+                    <span class="kc-tag teal">Vélo pliant</span>
+                    <span class="kc-tag orange">Réparation</span>
+                  </div>
+                  <div class="kc-checklist">
+                    4/6 <div class="kc-bar"><div class="kc-bar-fill" style="width:67%;background:var(--vd-teal);"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Contrôle Final Column -->
+            <div class="kanban-col">
+              <div class="kanban-col-header" style="background:rgba(139,92,246,0.12);color:#a78bfa;">
+                Contrôle Final <span class="col-count">2</span>
+              </div>
+              <div class="kanban-cards">
+                <div class="kanban-card">
+                  <div class="kc-name">Thomas Willems</div>
+                  <div class="kc-id">#0225</div>
+                  <div class="kc-tags">
+                    <span class="kc-tag teal">Vélo route</span>
+                    <span class="kc-tag purple">Contrôle</span>
+                  </div>
+                  <div class="kc-checklist">
+                    4/4 <div class="kc-bar"><div class="kc-bar-fill" style="width:100%;background:#22c55e;"></div></div>
+                  </div>
+                </div>
+                <div class="kanban-card">
+                  <div class="kc-name">Claire Janssen</div>
+                  <div class="kc-id">#0226</div>
+                  <div class="kc-tags">
+                    <span class="kc-tag teal">Vélo électrique</span>
+                    <span class="kc-tag purple">Contrôle</span>
+                  </div>
+                  <div class="kc-checklist">
+                    5/5 <div class="kc-bar"><div class="kc-bar-fill" style="width:100%;background:#22c55e;"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-features-bar">
+        <div class="mockup-feature-item"><span class="mf-icon">&#9881;</span> Workflow automatisé</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#9745;</span> Checklists intégrées</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#9993;</span> Emails automatiques à chaque étape</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 5: COLLECTES & LIVRAISONS ────────── -->
+  <section class="slide slide-collectes" id="slide-4">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="mockup-content">
+      <h2 class="section-title" style="font-size:clamp(22px,2.8vw,36px);margin-bottom:8px;">Collectes — Gérez vos chauffeurs</h2>
+      <div class="browser-frame">
+        <div class="browser-bar">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">admin.velodoctor.be/collectes</div>
+        </div>
+        <div class="browser-body">
+          <div class="vd-header">
+            <div class="vd-logo">
+              <div class="vd-logo-icon">&#128690;</div>
+              VeloDoctor
+            </div>
+            <div class="vd-nav">
+              <span>Home</span>
+              <span class="active">Collectes</span>
+              <span>Atelier</span>
+              <span>CRM</span>
+              <span>Stock</span>
+              <span>Clients</span>
+            </div>
+          </div>
+          <div class="collectes-container">
+            <div class="collectes-driver-bar">
+              <div class="driver-select">
+                <div class="driver-avatar">&#128100;</div>
+                Karim B. — Chauffeur
+                <span style="font-size:8px;opacity:0.6;">&#9660;</span>
+              </div>
+              <div style="font-size:10px;color:var(--gray-500);">6 missions aujourd'hui</div>
+            </div>
+            <div class="collectes-section-label">Aujourd'hui</div>
+            <div class="mission-cards">
+              <div class="mission-card">
+                <div class="mc-time">09:00 — 10:30</div>
+                <div class="mc-name">Marc Dupont</div>
+                <div class="mc-address">Rue de Flandre 42, 1000 Bruxelles</div>
+                <div class="mc-phone">+32 478 12 34 56</div>
+                <div class="mc-footer">
+                  <span class="mc-status confirmed">Confirmé</span>
+                  <div class="mc-actions">
+                    <span class="mc-btn">&#128222;</span>
+                    <span class="mc-btn">&#128506;</span>
+                    <span class="mc-btn">&#10004;</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mission-card">
+                <div class="mc-time">10:30 — 12:00</div>
+                <div class="mc-name">Sophie Laurent</div>
+                <div class="mc-address">Av. Louise 120, 1050 Ixelles</div>
+                <div class="mc-phone">+32 479 98 76 54</div>
+                <div class="mc-footer">
+                  <span class="mc-status enroute">En route</span>
+                  <div class="mc-actions">
+                    <span class="mc-btn">&#128222;</span>
+                    <span class="mc-btn">&#128506;</span>
+                    <span class="mc-btn">&#10004;</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mission-card">
+                <div class="mc-time">13:30 — 15:00</div>
+                <div class="mc-name">Élise Bernard</div>
+                <div class="mc-address">Chaussée de Mons 85, 1070 Anderlecht</div>
+                <div class="mc-phone">+32 476 55 44 33</div>
+                <div class="mc-footer">
+                  <span class="mc-status waiting">En attente</span>
+                  <div class="mc-actions">
+                    <span class="mc-btn">&#128222;</span>
+                    <span class="mc-btn">&#128506;</span>
+                    <span class="mc-btn">&#10004;</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="collectes-section-label">À venir</div>
+            <div class="mission-cards" style="grid-template-columns: repeat(2, 1fr);">
+              <div class="mission-card" style="opacity:0.6;">
+                <div class="mc-time">Demain 09:00 — 10:30</div>
+                <div class="mc-name">Pierre Martin</div>
+                <div class="mc-address">Rue Haute 155, 1000 Bruxelles</div>
+                <div class="mc-phone">+32 477 22 11 00</div>
+                <div class="mc-footer">
+                  <span class="mc-status waiting">Planifié</span>
+                  <div class="mc-actions">
+                    <span class="mc-btn">&#128222;</span>
+                    <span class="mc-btn">&#128506;</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mission-card" style="opacity:0.6;">
+                <div class="mc-time">Demain 14:00 — 15:30</div>
+                <div class="mc-name">Nadia Kessler</div>
+                <div class="mc-address">Bd du Souverain 24, 1160 Auderghem</div>
+                <div class="mc-phone">+32 474 66 77 88</div>
+                <div class="mc-footer">
+                  <span class="mc-status waiting">Planifié</span>
+                  <div class="mc-actions">
+                    <span class="mc-btn">&#128222;</span>
+                    <span class="mc-btn">&#128506;</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-features-bar">
+        <div class="mockup-feature-item"><span class="mf-icon">&#128506;</span> Navigation GPS (Waze/Google Maps)</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#128222;</span> Appel en 1 clic</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#128205;</span> Suivi temps réel</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 6: BOOKING / AGENDA ────────── -->
+  <section class="slide slide-booking" id="slide-5">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="mockup-content">
+      <h2 class="section-title" style="font-size:clamp(22px,2.8vw,36px);margin-bottom:8px;">Réservations — Booking en ligne 24h/24</h2>
+      <div class="browser-frame">
+        <div class="browser-bar">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">admin.velodoctor.be/appointments</div>
+        </div>
+        <div class="browser-body">
+          <div class="vd-header">
+            <div class="vd-logo">
+              <div class="vd-logo-icon">&#128690;</div>
+              VeloDoctor
+            </div>
+            <div class="vd-nav">
+              <span>Home</span>
+              <span class="active">RDV</span>
+              <span>Atelier</span>
+              <span>CRM</span>
+              <span>Stock</span>
+              <span>Clients</span>
+            </div>
+          </div>
+          <!-- Agenda Legend -->
+          <div class="agenda-legend" style="margin-bottom:8px;margin-top:4px;">
+            <div class="legend-item"><div class="legend-dot" style="background:#22c55e;"></div> Collecte</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#3b82f6;"></div> Livraison</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--vd-orange);"></div> Réparation</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6;"></div> Diagnostic</div>
+          </div>
+          <!-- Week Agenda -->
+          <div class="agenda-week">
+            <!-- Header row -->
+            <div class="agenda-header corner"></div>
+            <div class="agenda-header">Lun</div>
+            <div class="agenda-header">Mar</div>
+            <div class="agenda-header">Mer</div>
+            <div class="agenda-header">Jeu</div>
+            <div class="agenda-header">Ven</div>
+            <div class="agenda-header">Sam</div>
+            <div class="agenda-header">Dim</div>
+            <!-- 09:00 -->
+            <div class="agenda-time">09:00</div>
+            <div class="agenda-cell"><div class="agenda-appt appt-collecte">Dupont M.</div></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"><div class="agenda-appt appt-reparation">Bernard E.</div></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"><div class="agenda-appt appt-collecte">Petit J.</div></div>
+            <div class="agenda-cell"><div class="agenda-appt appt-diagnostic">Kessler N.</div></div>
+            <div class="agenda-cell"></div>
+            <!-- 10:30 -->
+            <div class="agenda-time">10:30</div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"><div class="agenda-appt appt-livraison">Martin P.</div></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"><div class="agenda-appt appt-reparation">Willems T.</div></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"></div>
+            <!-- 12:00 -->
+            <div class="agenda-time">12:00</div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"><div class="agenda-appt appt-diagnostic">Janssen C.</div></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"><div class="agenda-appt appt-livraison">Dupont M.</div></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"></div>
+            <!-- 13:30 -->
+            <div class="agenda-time">13:30</div>
+            <div class="agenda-cell"><div class="agenda-appt appt-reparation">Laurent S.</div></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"><div class="agenda-appt appt-collecte">Bernard E.</div></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"><div class="agenda-appt appt-reparation">Martin P.</div></div>
+            <div class="agenda-cell"></div>
+            <!-- 15:00 -->
+            <div class="agenda-time">15:00</div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"><div class="agenda-appt appt-collecte">Willems T.</div></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"><div class="agenda-appt appt-diagnostic">Laurent S.</div></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"></div>
+            <!-- 16:30 -->
+            <div class="agenda-time">16:30</div>
+            <div class="agenda-cell"><div class="agenda-appt appt-livraison">Janssen C.</div></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"><div class="agenda-appt appt-livraison">Petit J.</div></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"></div>
+            <div class="agenda-cell"></div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-features-bar">
+        <div class="mockup-feature-item"><span class="mf-icon">&#128197;</span> Clients réservent en ligne</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#128172;</span> Rappels WhatsApp auto</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#128269;</span> Filtres par service</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 7: STOCK / INVENTORY ────────── -->
+  <section class="slide slide-stock" id="slide-6">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="mockup-content">
+      <h2 class="section-title" style="font-size:clamp(22px,2.8vw,36px);margin-bottom:8px;">Stock — Gestion des pièces</h2>
+      <div class="browser-frame">
+        <div class="browser-bar">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">admin.velodoctor.be/inventory</div>
+        </div>
+        <div class="browser-body">
+          <div class="vd-header">
+            <div class="vd-logo">
+              <div class="vd-logo-icon">&#128690;</div>
+              VeloDoctor
+            </div>
+            <div class="vd-nav">
+              <span>Home</span>
+              <span>RDV</span>
+              <span>Atelier</span>
+              <span>CRM</span>
+              <span class="active">Stock</span>
+              <span>Clients</span>
+            </div>
+          </div>
+          <div class="product-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+              <div class="product-img" style="background:rgba(0,172,194,0.08);">&#128718;</div>
+              <div class="product-info">
+                <div class="pi-name">Pneu Schwalbe 26"</div>
+                <div class="pi-ref">REF-001</div>
+                <div class="pi-row">
+                  <span class="pi-price">24.90€</span>
+                  <span class="pi-stock ok">12 en stock</span>
+                </div>
+                <div class="pi-threshold">Min: 5</div>
+              </div>
+            </div>
+            <!-- Product 2 -->
+            <div class="product-card">
+              <div class="product-img" style="background:rgba(255,109,0,0.08);">&#9881;</div>
+              <div class="product-info">
+                <div class="pi-name">Chaîne Shimano</div>
+                <div class="pi-ref">REF-002</div>
+                <div class="pi-row">
+                  <span class="pi-price">18.50€</span>
+                  <span class="pi-stock ok">8 en stock</span>
+                </div>
+                <div class="pi-threshold">Min: 4</div>
+              </div>
+            </div>
+            <!-- Product 3 -->
+            <div class="product-card low-stock">
+              <div class="product-img" style="background:rgba(220,38,38,0.08);">&#128736;</div>
+              <div class="product-info">
+                <div class="pi-name">Frein à disque</div>
+                <div class="pi-ref">REF-003</div>
+                <div class="pi-row">
+                  <span class="pi-price">34.90€</span>
+                  <span class="pi-stock low">2 en stock</span>
+                </div>
+                <div class="pi-threshold">Min: 5 &#9888;</div>
+              </div>
+            </div>
+            <!-- Product 4 -->
+            <div class="product-card">
+              <div class="product-img" style="background:rgba(0,172,194,0.08);">&#128297;</div>
+              <div class="product-info">
+                <div class="pi-name">Câble dérailleur</div>
+                <div class="pi-ref">REF-004</div>
+                <div class="pi-row">
+                  <span class="pi-price">6.90€</span>
+                  <span class="pi-stock ok">24 en stock</span>
+                </div>
+                <div class="pi-threshold">Min: 10</div>
+              </div>
+            </div>
+            <!-- Product 5 -->
+            <div class="product-card low-stock">
+              <div class="product-img" style="background:rgba(220,38,38,0.08);">&#129520;</div>
+              <div class="product-info">
+                <div class="pi-name">Kit rustine</div>
+                <div class="pi-ref">REF-005</div>
+                <div class="pi-row">
+                  <span class="pi-price">4.50€</span>
+                  <span class="pi-stock low">1 en stock</span>
+                </div>
+                <div class="pi-threshold">Min: 8 &#9888;</div>
+              </div>
+            </div>
+            <!-- Product 6 -->
+            <div class="product-card">
+              <div class="product-img" style="background:rgba(0,172,194,0.08);">&#11044;</div>
+              <div class="product-info">
+                <div class="pi-name">Chambre à air</div>
+                <div class="pi-ref">REF-006</div>
+                <div class="pi-row">
+                  <span class="pi-price">7.90€</span>
+                  <span class="pi-stock ok">18 en stock</span>
+                </div>
+                <div class="pi-threshold">Min: 6</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-features-bar">
+        <div class="mockup-feature-item"><span class="mf-icon">&#128680;</span> Alertes stock bas</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#128259;</span> Mouvements IN/OUT</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#128176;</span> Prix et références</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 8: DEVIS & FINANCES ────────── -->
+  <section class="slide slide-devis" id="slide-7">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="mockup-content">
+      <h2 class="section-title" style="font-size:clamp(22px,2.8vw,36px);margin-bottom:8px;">Devis & Finances — Tout automatisé</h2>
+      <div class="browser-frame">
+        <div class="browser-bar">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">admin.velodoctor.be/devis</div>
+        </div>
+        <div class="browser-body">
+          <div class="vd-header">
+            <div class="vd-logo">
+              <div class="vd-logo-icon">&#128690;</div>
+              VeloDoctor
+            </div>
+            <div class="vd-nav">
+              <span>Home</span>
+              <span>RDV</span>
+              <span>Atelier</span>
+              <span class="active">CRM</span>
+              <span>Stock</span>
+              <span>Clients</span>
+            </div>
+          </div>
+          <!-- Stats row -->
+          <div class="devis-stats">
+            <div class="devis-stat"><div class="ds-val" style="color:var(--gray-200);">89</div><div class="ds-lbl">Total</div></div>
+            <div class="devis-stat"><div class="ds-val" style="color:var(--gray-400);">5</div><div class="ds-lbl">Brouillon</div></div>
+            <div class="devis-stat"><div class="ds-val" style="color:#60a5fa;">12</div><div class="ds-lbl">Envoyé</div></div>
+            <div class="devis-stat"><div class="ds-val" style="color:#4ade80;">67</div><div class="ds-lbl">Accepté</div></div>
+            <div class="devis-stat"><div class="ds-val" style="color:#fca5a5;">5</div><div class="ds-lbl">Refusé</div></div>
+          </div>
+          <!-- Table -->
+          <div class="devis-table">
+            <div class="devis-table-head">
+              <span>N° Devis</span>
+              <span>Client</span>
+              <span>Véhicule</span>
+              <span>Montant</span>
+              <span>Statut</span>
+              <span>Date</span>
+            </div>
+            <div class="devis-table-row">
+              <span style="color:var(--vd-teal-light);font-weight:600;">D-089</span>
+              <span>Marc Dupont</span>
+              <span>Vélo électrique</span>
+              <span style="font-weight:700;color:var(--gray-200);">485.00€</span>
+              <span><span class="devis-status accepted">Accepté</span></span>
+              <span>04/02/26</span>
+            </div>
+            <div class="devis-table-row">
+              <span style="color:var(--vd-teal-light);font-weight:600;">D-088</span>
+              <span>Sophie Laurent</span>
+              <span>VTT</span>
+              <span style="font-weight:700;color:var(--gray-200);">128.50€</span>
+              <span><span class="devis-status sent">Envoyé</span></span>
+              <span>03/02/26</span>
+            </div>
+            <div class="devis-table-row">
+              <span style="color:var(--vd-teal-light);font-weight:600;">D-087</span>
+              <span>Élise Bernard</span>
+              <span>Vélo cargo</span>
+              <span style="font-weight:700;color:var(--gray-200);">712.00€</span>
+              <span><span class="devis-status accepted">Accepté</span></span>
+              <span>02/02/26</span>
+            </div>
+            <div class="devis-table-row">
+              <span style="color:var(--vd-teal-light);font-weight:600;">D-086</span>
+              <span>Jean Petit</span>
+              <span>Vélo ville</span>
+              <span style="font-weight:700;color:var(--gray-200);">95.00€</span>
+              <span><span class="devis-status rejected">Refusé</span></span>
+              <span>01/02/26</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-features-bar">
+        <div class="mockup-feature-item"><span class="mf-icon">&#128196;</span> PDF automatique</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#9993;</span> Envoi par email</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#128200;</span> Suivi acceptation</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 9: AUTOMATISATIONS ────────── -->
+  <section class="slide slide-automations" id="slide-8">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="mockup-content">
+      <h2 class="section-title" style="margin-bottom:4px;">Automatisations — Zéro effort</h2>
+      <p class="section-subtitle" style="margin-bottom:16px;">De la collecte à la livraison, tout se fait sans intervention manuelle.</p>
+      <div class="automations-grid">
+        <!-- Auto 1 -->
+        <div class="auto-card">
+          <div class="auto-trigger">
+            <div class="at-icon">&#128197;</div>
+            <div class="at-text">Nouveau booking</div>
+          </div>
+          <div class="auto-arrow">&#10132;</div>
+          <div class="auto-action">
+            <div class="aa-icon">&#128172;</div>
+            <div class="aa-text">Confirmation WhatsApp + email</div>
+          </div>
+        </div>
+        <!-- Auto 2 -->
+        <div class="auto-card">
+          <div class="auto-trigger">
+            <div class="at-icon">&#128269;</div>
+            <div class="at-text">Diagnostic terminé</div>
+          </div>
+          <div class="auto-arrow">&#10132;</div>
+          <div class="auto-action">
+            <div class="aa-icon">&#128196;</div>
+            <div class="aa-text">Devis auto envoyé au client</div>
+          </div>
+        </div>
+        <!-- Auto 3 -->
+        <div class="auto-card">
+          <div class="auto-trigger">
+            <div class="at-icon">&#9989;</div>
+            <div class="at-text">Devis accepté</div>
+          </div>
+          <div class="auto-arrow">&#10132;</div>
+          <div class="auto-action">
+            <div class="aa-icon">&#128295;</div>
+            <div class="aa-text">Réparation lancée en atelier</div>
+          </div>
+        </div>
+        <!-- Auto 4 -->
+        <div class="auto-card">
+          <div class="auto-trigger">
+            <div class="at-icon">&#128690;</div>
+            <div class="at-text">Vélo prêt</div>
+          </div>
+          <div class="auto-arrow">&#10132;</div>
+          <div class="auto-action">
+            <div class="aa-icon">&#128232;</div>
+            <div class="aa-text">Notification client + planning livraison</div>
+          </div>
+        </div>
+        <!-- Auto 5 -->
+        <div class="auto-card">
+          <div class="auto-trigger">
+            <div class="at-icon">&#128176;</div>
+            <div class="at-text">Facture impayée</div>
+          </div>
+          <div class="auto-arrow">&#10132;</div>
+          <div class="auto-action">
+            <div class="aa-icon">&#9200;</div>
+            <div class="aa-text">Relance automatique à J+7, J+14</div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-features-bar" style="margin-top:12px;">
+        <div class="mockup-feature-item"><span class="mf-icon">&#128260;</span> De la collecte à la livraison</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#9993;</span> Emails à chaque étape</div>
+        <div class="mockup-feature-item"><span class="mf-icon">&#129302;</span> 0 intervention manuelle</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 10: RÉSULTATS ────────── -->
+  <section class="slide slide-results" id="slide-9">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="results-content">
+      <h2 class="section-title">Ce qui a chang&eacute;</h2>
+      <div class="results-grid">
+        <div class="result-card">
+          <div class="rc-value">9h&ndash;20h &#8594; Lib&eacute;r&eacute;</div>
+          <div class="rc-label">Le chef de projet ne r&eacute;pond plus &agrave; tout &mdash; le syst&egrave;me g&egrave;re</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-value">R&eacute;ponses auto</div>
+          <div class="rc-label">Prospects et clients re&ccedil;oivent une r&eacute;ponse imm&eacute;diate, 24h/24</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-value">Temps strat&eacute;gique</div>
+          <div class="rc-label">Enfin du temps pour d&eacute;velopper de nouvelles id&eacute;es et grandir</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-value">Tout centralis&eacute;</div>
+          <div class="rc-label">Messages, clients, r&eacute;parations, commandes &mdash; au m&ecirc;me endroit</div>
+        </div>
+      </div>
+      <div class="result-quote">
+        <div class="rq-text">&laquo; Je peux enfin me concentrer sur le d&eacute;veloppement au lieu de r&eacute;pondre aux messages. &raquo;</div>
+        <div class="rq-author">&mdash; VeloDoctor, Bruxelles</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 11: CLOSING CTA ────────── -->
+  <section class="slide slide-cta" id="slide-10">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="cta-content">
+      <div class="logo xl">
+        <div class="logo-dots">
+          <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+          <span class="dot d4"></span><span class="dot d5"></span><span class="dot d6"></span>
+          <span class="dot d7"></span><span class="dot d8"></span><span class="dot d9"></span>
+        </div>
+        <div class="logo-text">
+          <span class="mon">mon</span><span class="app">application</span><span class="be">.be</span>
+        </div>
+      </div>
+      <div class="cover-divider"></div>
+      <h2 class="cta-title">Vous aussi, transformez<br>votre business.</h2>
+      <p class="cta-subtitle">Un seul investissement. Tout inclus. Opérationnel en 30 jours.</p>
+      <a href="mailto:info@monapplication.be" class="cta-button">
+        Demandez votre devis gratuit &#8594;
+      </a>
+      <div class="cta-contact">
+        <div class="cta-contact-item">
+          <span class="ci-icon">&#9993;</span>
+          info@monapplication.be
+        </div>
+        <div class="cta-contact-item">
+          <span class="ci-icon">&#128222;</span>
+          +32 XXX XX XX XX
+        </div>
+        <div class="cta-contact-item">
+          <span class="ci-icon">&#127760;</span>
+          www.monapplication.be
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /.deck -->
+
+<script>
+(function() {
+  const TOTAL_SLIDES = 11;
+  let currentSlide = 0;
+  const deck = document.getElementById('deck');
+  const navDotsContainer = document.getElementById('navDots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const counter = document.getElementById('slideCounter');
+
+  // Build nav dots
+  for (let i = 0; i < TOTAL_SLIDES; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+    dot.addEventListener('click', function() { goSlide(i); });
+    navDotsContainer.appendChild(dot);
+  }
+
+  function goSlide(index) {
+    if (index < 0 || index >= TOTAL_SLIDES) return;
+    currentSlide = index;
+    deck.style.transform = 'translateX(-' + (index * 100) + 'vw)';
+    updateUI();
+  }
+
+  function updateUI() {
+    var dots = navDotsContainer.querySelectorAll('.nav-dot');
+    dots.forEach(function(d, i) { d.classList.toggle('active', i === currentSlide); });
+    prevBtn.classList.toggle('hidden', currentSlide === 0);
+    nextBtn.classList.toggle('hidden', currentSlide === TOTAL_SLIDES - 1);
+    counter.innerHTML = '<span>' + (currentSlide + 1) + '</span> / ' + TOTAL_SLIDES;
+  }
+
+  // Arrow button clicks
+  prevBtn.addEventListener('click', function() { goSlide(currentSlide - 1); });
+  nextBtn.addEventListener('click', function() { goSlide(currentSlide + 1); });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      goSlide(currentSlide + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goSlide(currentSlide - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goSlide(TOTAL_SLIDES - 1);
+    }
+  });
+
+  // Touch swipe support
+  var touchStartX = 0;
+  var touchStartY = 0;
+  deck.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  deck.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) goSlide(currentSlide + 1);
+      else goSlide(currentSlide - 1);
+    }
+  }, { passive: true });
+
+  // Initial state
+  updateUI();
+})();
+</script>
+
+</body>
+</html>

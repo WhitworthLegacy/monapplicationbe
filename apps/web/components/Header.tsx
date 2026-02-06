@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 
 const navLinks = [
   { href: "/#problemes", label: "Le problème" },
@@ -15,9 +15,18 @@ const navLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
+const caseStudies = [
+  { href: "/presentations/velodoctor-case-study.html", label: "VeloDoctor", sub: "Réparation vélos" },
+  { href: "/presentations/aircooling-case-study.html", label: "AirCooling", sub: "HVAC & Climatisation" },
+  { href: "/presentations/closing-call.html", label: "Présentation commerciale", sub: "Secrétaire digitale" },
+];
+
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCaseStudyOpen, setIsCaseStudyOpen] = useState(false);
+  const [isMobileCaseStudyOpen, setIsMobileCaseStudyOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,6 +34,16 @@ export function Header() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsCaseStudyOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -63,6 +82,46 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Études de cas dropdown */}
+            <div ref={dropdownRef} className="relative">
+              <button
+                onClick={() => setIsCaseStudyOpen(!isCaseStudyOpen)}
+                className="flex items-center gap-1 text-text-muted hover:text-primary transition-colors text-sm font-medium"
+              >
+                Études de cas
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform duration-200 ${isCaseStudyOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+              <AnimatePresence>
+                {isCaseStudyOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden"
+                  >
+                    {caseStudies.map((study) => (
+                      <a
+                        key={study.href}
+                        href={study.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setIsCaseStudyOpen(false)}
+                        className="flex flex-col px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0"
+                      >
+                        <span className="text-sm font-semibold text-primary">{study.label}</span>
+                        <span className="text-xs text-text-muted">{study.sub}</span>
+                      </a>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             <Link
               href="/diagnostic"
               className="bg-accent hover:bg-accent-light text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:shadow-lg hover:shadow-accent/20"
@@ -102,6 +161,43 @@ export function Header() {
                   {link.label}
                 </Link>
               ))}
+
+              {/* Études de cas - mobile */}
+              <button
+                onClick={() => setIsMobileCaseStudyOpen(!isMobileCaseStudyOpen)}
+                className="flex items-center justify-between text-text-muted hover:text-primary transition-colors py-3 px-4 rounded-lg hover:bg-background text-sm font-medium"
+              >
+                Études de cas
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform duration-200 ${isMobileCaseStudyOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+              <AnimatePresence>
+                {isMobileCaseStudyOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="flex flex-col gap-1 pl-4"
+                  >
+                    {caseStudies.map((study) => (
+                      <a
+                        key={study.href}
+                        href={study.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex flex-col py-2 px-4 rounded-lg hover:bg-background transition-colors"
+                      >
+                        <span className="text-sm font-semibold text-primary">{study.label}</span>
+                        <span className="text-xs text-text-muted">{study.sub}</span>
+                      </a>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               <Link
                 href="/diagnostic"
                 onClick={() => setIsMobileMenuOpen(false)}

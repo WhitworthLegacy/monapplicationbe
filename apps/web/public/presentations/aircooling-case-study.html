@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>monapplication.be — AirCooling Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #0f172a;
+  --secondary: #1e3a8a;
+  --accent: #b8860b;
+  --accent-light: #d4a017;
+  --red: #dc2626;
+  --red-dark: #991b1b;
+  --green: #16a34a;
+  --white: #ffffff;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+  --ac-blue: #2563eb;
+  --ac-blue-light: #60a5fa;
+  --ac-blue-pale: #93c5fd;
+  --logo-gold: #b8860b;
+  --accent: #2563eb;
+  --accent-light: #60a5fa;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--primary);
+  color: var(--white);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
+
+/* ─── SLIDE CONTAINER ─── */
+.deck {
+  display: flex;
+  width: 1000vw; /* 10 slides */
+  height: 100vh;
+  overflow: hidden;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* ─── SLIDE BASE ─── */
+.slide {
+  min-width: 100vw;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── LOGO COMPONENT ─── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.logo-dots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+.logo-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+.logo-dots .d1 { background: #94a3b8; }
+.logo-dots .d2 { background: #64748b; }
+.logo-dots .d3 { background: var(--logo-gold); }
+.logo-dots .d4 { background: #64748b; }
+.logo-dots .d5 { background: var(--logo-gold); }
+.logo-dots .d6 { background: #94a3b8; }
+.logo-dots .d7 { background: var(--logo-gold); }
+.logo-dots .d8 { background: #94a3b8; }
+.logo-dots .d9 { background: #64748b; }
+.logo-text {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.logo-text .mon { color: #94a3b8; }
+.logo-text .app { color: var(--white); }
+.logo-text .be { color: var(--logo-gold); }
+
+.logo.lg .logo-dots .dot { width: 14px; height: 14px; }
+.logo.lg .logo-dots { gap: 5px; }
+.logo.lg .logo-text { font-size: 32px; }
+
+.logo.xl .logo-dots .dot { width: 18px; height: 18px; }
+.logo.xl .logo-dots { gap: 6px; }
+.logo.xl .logo-text { font-size: 40px; }
+
+/* ─── NAVIGATION ─── */
+.nav-dots {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 10px 20px;
+  border-radius: 40px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+}
+.nav-dot.active {
+  background: var(--accent);
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.5);
+  transform: scale(1.3);
+}
+.nav-dot:hover:not(.active) {
+  background: rgba(255,255,255,0.4);
+}
+
+.nav-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--white);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 0.3s ease;
+}
+.nav-arrow:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(37,99,235,0.3);
+}
+.nav-arrow.prev { left: 24px; }
+.nav-arrow.next { right: 24px; }
+.nav-arrow.hidden { opacity: 0; pointer-events: none; }
+
+/* ─── SLIDE COUNTER ─── */
+.slide-counter {
+  position: fixed;
+  top: 28px;
+  right: 36px;
+  z-index: 1000;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-400);
+  background: rgba(15,23,42,0.7);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.slide-counter span { color: var(--accent-light); font-weight: 700; }
+
+/* ─── UTILITIES ─── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.pill-gold {
+  background: linear-gradient(135deg, rgba(37,99,235,0.15), rgba(37,99,235,0.08));
+  color: var(--accent-light);
+  border: 1px solid rgba(37,99,235,0.3);
+}
+.pill-red {
+  background: rgba(220,38,38,0.08);
+  color: #fca5a5;
+  border: 1px solid rgba(220,38,38,0.2);
+}
+
+.section-title {
+  font-size: clamp(28px, 3.5vw, 48px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.15;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.section-subtitle {
+  font-size: clamp(15px, 1.2vw, 18px);
+  color: var(--gray-400);
+  text-align: center;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+/* ─── BG PATTERNS ─── */
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.bg-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(150px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+/* ─── SLIDE CONTENT WRAPPER ─── */
+.slide-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  z-index: 2;
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* ─── FEATURE BULLETS (below mockups) ─── */
+.mockup-features-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.mockup-feat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--gray-400);
+}
+.mockup-feat::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ac-blue-light);
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════
+   BROWSER FRAME (shared across mockup slides)
+   ════════════════════════════════════════ */
+.browser-frame {
+  background: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  width: 100%;
+}
+.browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #0f172a;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.browser-dots {
+  display: flex;
+  gap: 6px;
+}
+.browser-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.browser-dots span:nth-child(1) { background: #ef4444; }
+.browser-dots span:nth-child(2) { background: #f59e0b; }
+.browser-dots span:nth-child(3) { background: #22c55e; }
+.browser-url {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 11px;
+  color: var(--gray-500);
+  font-family: 'Inter', monospace;
+}
+.browser-body {
+  padding: 16px;
+  min-height: 200px;
+}
+
+/* ════════════════════════════════════════
+   SHARED MOCKUP INTERNAL STYLES
+   ════════════════════════════════════════ */
+.mock-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.mock-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ac-blue-light);
+}
+.mock-logo-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--ac-blue), #1d4ed8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+.mock-nav {
+  display: flex;
+  gap: 6px;
+}
+.mock-nav span {
+  font-size: 10px;
+  color: var(--gray-500);
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: default;
+}
+.mock-nav span.active {
+  background: rgba(37,99,235,0.2);
+  color: var(--ac-blue-light);
+}
+
+/* ════════════════════════════════════════
+   SLIDE 1 — COVER
+   ════════════════════════════════════════ */
+.slide-cover {
+  background: linear-gradient(160deg, #0f172a 0%, #0f1d3a 50%, #0f172a 100%);
+}
+.slide-cover .bg-glow {
+  background: var(--accent);
+  top: -200px;
+  right: -200px;
+  opacity: 0.2;
+}
+.slide-cover .bg-glow-2 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(140px);
+  opacity: 0.1;
+  pointer-events: none;
+  background: var(--accent-light);
+  bottom: -150px;
+  left: -100px;
+}
+
+.cover-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  z-index: 2;
+  text-align: center;
+}
+.cover-title {
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1.05;
+}
+.cover-title .highlight {
+  background: linear-gradient(135deg, var(--ac-blue), var(--ac-blue-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cover-subtitle {
+  font-size: clamp(15px, 1.3vw, 20px);
+  color: var(--gray-400);
+  max-width: 650px;
+  line-height: 1.7;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.cover-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  border-radius: 2px;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 2 — LE CONTEXTE
+   ════════════════════════════════════════ */
+.slide-context {
+  background: linear-gradient(160deg, #0f172a 0%, #1a1a2e 100%);
+}
+.slide-context .bg-glow {
+  background: #dc2626;
+  top: -300px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.06;
+}
+.pain-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 4px 0;
+}
+.pain-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  background: rgba(220, 38, 38, 0.06);
+  border: 1px solid rgba(220, 38, 38, 0.15);
+  color: #fca5a5;
+}
+.pain-pill::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(220,38,38,0.5);
+}
+.context-desc {
+  font-size: 15px;
+  color: var(--gray-400);
+  text-align: center;
+  max-width: 680px;
+  line-height: 1.7;
+}
+.stat-boxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  max-width: 600px;
+}
+.stat-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 28px;
+  text-align: center;
+}
+.stat-box .stat-val {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--red);
+  letter-spacing: -1px;
+}
+.stat-box .stat-label {
+  font-size: 14px;
+  color: var(--gray-400);
+  margin-top: 6px;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 3 — DASHBOARD MOCKUP
+   ════════════════════════════════════════ */
+.slide-dashboard {
+  background: linear-gradient(160deg, #0f172a 0%, #111827 100%);
+}
+.slide-dashboard .bg-glow {
+  background: var(--ac-blue);
+  top: -250px;
+  right: -200px;
+  opacity: 0.08;
+}
+
+.dash-kpis {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.dash-kpi {
+  background: rgba(255,255,255,0.04);
+  border-radius: 6px;
+  padding: 8px 6px;
+  text-align: center;
+}
+.dash-kpi .kval {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ac-blue-light);
+}
+.dash-kpi .klbl {
+  font-size: 8px;
+  color: var(--gray-500);
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
+.dash-chart {
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  padding: 10px 10px 8px;
+  margin-bottom: 10px;
+}
+.dash-chart-label {
+  font-size: 9px;
+  color: var(--gray-500);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.dash-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  height: 55px;
+}
+.dash-bar {
+  flex: 1;
+  background: linear-gradient(to top, var(--ac-blue), var(--ac-blue-light));
+  border-radius: 3px 3px 0 0;
+  min-height: 6px;
+  position: relative;
+}
+.dash-bar-label {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 6px;
+  color: var(--gray-600);
+  white-space: nowrap;
+}
+
+.dash-actions {
+  display: flex;
+  gap: 6px;
+}
+.dash-action-btn {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 600;
+  text-align: center;
+  cursor: default;
+}
+.dash-action-btn.primary {
+  background: linear-gradient(135deg, var(--ac-blue), #1d4ed8);
+  color: var(--white);
+}
+.dash-action-btn.secondary {
+  background: rgba(37,99,235,0.12);
+  color: var(--ac-blue-light);
+  border: 1px solid rgba(37,99,235,0.2);
+}
+
+/* ════════════════════════════════════════
+   SLIDE 4 — CRM KANBAN MOCKUP
+   ════════════════════════════════════════ */
+.slide-crm {
+  background: linear-gradient(160deg, #0f172a 0%, #111827 100%);
+}
+.slide-crm .bg-glow {
+  background: var(--ac-blue);
+  bottom: -250px;
+  left: -200px;
+  opacity: 0.08;
+}
+
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.kanban-col {
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.kanban-col-header {
+  padding: 7px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.kanban-col-header .count {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.1);
+}
+.kanban-col.prospect .kanban-col-header { background: rgba(148,163,184,0.15); color: var(--gray-300); }
+.kanban-col.devis .kanban-col-header { background: rgba(234,179,8,0.15); color: #fbbf24; }
+.kanban-col.gagne .kanban-col-header { background: rgba(34,197,94,0.15); color: #4ade80; }
+.kanban-col.perdu .kanban-col-header { background: rgba(239,68,68,0.15); color: #f87171; }
+
+.kanban-col-body {
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 100px;
+}
+.kanban-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 6px;
+  padding: 8px;
+}
+.kanban-card-name {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gray-200);
+  margin-bottom: 2px;
+}
+.kanban-card-company {
+  font-size: 8px;
+  color: var(--gray-500);
+  margin-bottom: 4px;
+}
+.kanban-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.kanban-card-phone {
+  font-size: 8px;
+  color: var(--gray-500);
+}
+.kanban-card-badge {
+  font-size: 7px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.badge-site { background: rgba(37,99,235,0.2); color: var(--ac-blue-light); }
+.badge-referral { background: rgba(168,85,247,0.2); color: #c084fc; }
+.badge-google { background: rgba(234,179,8,0.2); color: #fbbf24; }
+.badge-phone { background: rgba(34,197,94,0.2); color: #4ade80; }
+
+/* ════════════════════════════════════════
+   SLIDE 5 — APPOINTMENTS MOCKUP
+   ════════════════════════════════════════ */
+.slide-appointments {
+  background: linear-gradient(160deg, #0f172a 0%, #111827 100%);
+}
+.slide-appointments .bg-glow {
+  background: var(--ac-blue);
+  top: -200px;
+  left: -200px;
+  opacity: 0.08;
+}
+
+.agenda-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.agenda-date-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.agenda-date-header {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ac-blue-light);
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(37,99,235,0.15);
+  margin-bottom: 2px;
+}
+.agenda-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+.agenda-time {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray-300);
+  min-width: 38px;
+  text-align: center;
+}
+.agenda-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.agenda-icon.consultation { background: rgba(37,99,235,0.15); }
+.agenda-icon.demo { background: rgba(168,85,247,0.15); }
+.agenda-icon.meeting { background: rgba(234,179,8,0.15); }
+.agenda-icon.video { background: rgba(34,197,94,0.15); }
+.agenda-details {
+  flex: 1;
+  min-width: 0;
+}
+.agenda-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--gray-200);
+}
+.agenda-client {
+  font-size: 8px;
+  color: var(--gray-500);
+}
+.agenda-status {
+  font-size: 8px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.status-scheduled { background: rgba(37,99,235,0.15); color: var(--ac-blue-light); }
+.status-confirmed { background: rgba(34,197,94,0.15); color: #4ade80; }
+.status-completed { background: rgba(148,163,184,0.15); color: var(--gray-400); }
+
+/* ════════════════════════════════════════
+   SLIDE 6 — DEVIS MOCKUP
+   ════════════════════════════════════════ */
+.slide-devis {
+  background: linear-gradient(160deg, #0f172a 0%, #111827 100%);
+}
+.slide-devis .bg-glow {
+  background: var(--accent);
+  bottom: -300px;
+  right: -200px;
+  opacity: 0.06;
+}
+
+.devis-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.devis-stat-card {
+  background: rgba(255,255,255,0.04);
+  border-radius: 6px;
+  padding: 8px;
+  text-align: center;
+}
+.devis-stat-val {
+  font-size: 16px;
+  font-weight: 800;
+}
+.devis-stat-val.total { color: var(--ac-blue-light); }
+.devis-stat-val.draft { color: var(--gray-400); }
+.devis-stat-val.sent { color: var(--ac-blue-light); }
+.devis-stat-val.accepted { color: #4ade80; }
+.devis-stat-lbl {
+  font-size: 8px;
+  color: var(--gray-500);
+  margin-top: 1px;
+}
+
+.devis-table {
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+.devis-table-head {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr 1.5fr 0.8fr 0.7fr 0.8fr;
+  padding: 7px 10px;
+  background: rgba(255,255,255,0.03);
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.devis-table-row {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr 1.5fr 0.8fr 0.7fr 0.8fr;
+  padding: 7px 10px;
+  font-size: 9px;
+  color: var(--gray-400);
+  border-top: 1px solid rgba(255,255,255,0.03);
+  align-items: center;
+}
+.devis-table-row:hover {
+  background: rgba(255,255,255,0.02);
+}
+.devis-status {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 8px;
+  font-weight: 600;
+}
+.devis-status.draft { background: rgba(148,163,184,0.15); color: var(--gray-400); }
+.devis-status.sent { background: rgba(37,99,235,0.15); color: var(--ac-blue-light); }
+.devis-status.accepted { background: rgba(34,197,94,0.15); color: #4ade80; }
+.devis-status.expired { background: rgba(239,68,68,0.15); color: #f87171; }
+
+/* ════════════════════════════════════════
+   SLIDE 7 — AUTOMATIONS
+   ════════════════════════════════════════ */
+.slide-automations {
+  background: linear-gradient(160deg, #0f172a 0%, #111827 100%);
+}
+.slide-automations .bg-glow {
+  background: var(--accent);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.06;
+}
+
+.auto-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+  max-width: 880px;
+}
+.auto-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+.auto-card:hover {
+  background: rgba(37,99,235,0.04);
+  border-color: rgba(37,99,235,0.12);
+}
+.auto-trigger {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  min-width: 100px;
+  flex-shrink: 0;
+}
+.auto-trigger-icon {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+.auto-trigger-text {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--gray-300);
+  line-height: 1.3;
+}
+.auto-arrow {
+  font-size: 18px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.auto-action {
+  background: rgba(37,99,235,0.06);
+  border: 1px solid rgba(37,99,235,0.15);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  flex: 1;
+}
+.auto-action-icon {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+.auto-action-text {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent-light);
+  line-height: 1.3;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 8 — RESULTATS
+   ════════════════════════════════════════ */
+.slide-results {
+  background: linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+.slide-results .bg-glow {
+  background: var(--green);
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.06;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+}
+.result-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 32px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+.result-card:hover {
+  background: rgba(34,197,94,0.05);
+  border-color: rgba(34,197,94,0.15);
+  transform: translateY(-2px);
+}
+.result-icon {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+.result-value {
+  font-size: clamp(22px, 2.5vw, 32px);
+  font-weight: 900;
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+.result-label {
+  font-size: 14px;
+  color: var(--gray-400);
+  line-height: 1.4;
+}
+
+.result-quote {
+  background: rgba(37,99,235,0.06);
+  border: 1px solid rgba(37,99,235,0.15);
+  border-left: 4px solid var(--accent);
+  border-radius: 12px;
+  padding: 20px 28px;
+  max-width: 800px;
+  text-align: center;
+  margin-top: 8px;
+}
+.result-quote-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--white);
+  font-style: italic;
+  margin-bottom: 6px;
+}
+.result-quote-author {
+  font-size: 13px;
+  color: var(--accent-light);
+  font-weight: 500;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 9 — CE QU'ON A LIVRE
+   ════════════════════════════════════════ */
+.slide-delivered {
+  background: linear-gradient(160deg, #0f172a 0%, #0c1222 100%);
+}
+.slide-delivered .bg-glow {
+  background: var(--accent);
+  bottom: -200px;
+  right: -200px;
+  opacity: 0.06;
+}
+
+.checklist-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  width: 100%;
+  max-width: 900px;
+}
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 18px 20px;
+  transition: all 0.3s ease;
+}
+.check-item:hover {
+  background: rgba(37,99,235,0.05);
+  border-color: rgba(37,99,235,0.12);
+  transform: translateY(-1px);
+}
+.check-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(37,99,235,0.2), rgba(37,99,235,0.08));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--accent-light);
+  flex-shrink: 0;
+}
+.check-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-200);
+  line-height: 1.3;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 10 — CTA
+   ════════════════════════════════════════ */
+.slide-cta {
+  background: linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+.slide-cta .bg-glow {
+  background: var(--accent);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.08;
+  width: 800px;
+  height: 800px;
+}
+.cta-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  z-index: 2;
+  text-align: center;
+}
+.cta-title {
+  font-size: clamp(30px, 3.5vw, 50px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.15;
+}
+.cta-subtitle {
+  font-size: clamp(15px, 1.2vw, 18px);
+  color: var(--gray-400);
+  max-width: 550px;
+  line-height: 1.6;
+}
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 40px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: var(--primary);
+  font-size: 17px;
+  font-weight: 700;
+  border-radius: 14px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 24px rgba(37,99,235,0.3);
+  margin-top: 8px;
+}
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(37,99,235,0.45);
+}
+.cta-contact {
+  display: flex;
+  gap: 32px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.cta-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--gray-400);
+}
+.cta-contact-item .ci-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .slide { padding: 40px 24px; }
+  .dash-kpis { grid-template-columns: repeat(3, 1fr); }
+  .kanban-board { grid-template-columns: repeat(2, 1fr); }
+  .devis-stats-row { grid-template-columns: repeat(2, 1fr); }
+  .devis-table-head,
+  .devis-table-row { grid-template-columns: 1fr 1fr 1fr; }
+  .devis-table-head span:nth-child(n+4),
+  .devis-table-row span:nth-child(n+4) { display: none; }
+  .auto-grid { grid-template-columns: 1fr; }
+  .results-grid { grid-template-columns: 1fr; }
+  .checklist-grid { grid-template-columns: 1fr 1fr; }
+  .stat-boxes { grid-template-columns: 1fr; }
+  .nav-arrow { display: none; }
+}
+@media (max-width: 600px) {
+  .slide { padding: 32px 16px; }
+  .checklist-grid { grid-template-columns: 1fr; }
+  .kanban-board { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<div class="nav-dots" id="navDots"></div>
+<button class="nav-arrow prev" id="prevBtn" aria-label="Diapositive precedente">&#8592;</button>
+<button class="nav-arrow next" id="nextBtn" aria-label="Diapositive suivante">&#8594;</button>
+<div class="slide-counter" id="slideCounter"><span>1</span> / 10</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE DECK
+     ════════════════════════════════════════════ -->
+<div class="deck" id="deck">
+
+  <!-- ────────── SLIDE 1: COVER ────────── -->
+  <section class="slide slide-cover" id="slide-0">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+    <div class="cover-content">
+      <div class="logo xl">
+        <div class="logo-dots">
+          <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+          <span class="dot d4"></span><span class="dot d5"></span><span class="dot d6"></span>
+          <span class="dot d7"></span><span class="dot d8"></span><span class="dot d9"></span>
+        </div>
+        <div class="logo-text">
+          <span class="mon">mon</span><span class="app">application</span><span class="be">.be</span>
+        </div>
+      </div>
+      <div class="cover-divider"></div>
+      <span class="pill pill-gold">&#128218; &Eacute;tude de cas</span>
+      <h1 class="cover-title">
+        <span class="highlight">AirCooling</span>
+      </h1>
+      <p class="cover-subtitle">
+        HVAC &amp; Climatisation &mdash; Bruxelles
+      </p>
+      <div class="cover-divider"></div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 2: LE CONTEXTE ────────── -->
+  <section class="slide slide-context" id="slide-1">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="slide-content">
+      <h2 class="section-title">Le d&eacute;fi d'AirCooling</h2>
+      <div class="pain-grid">
+        <span class="pain-pill">Fiches prospects papier</span>
+        <span class="pain-pill">Planning sur tableau &amp; feutres</span>
+        <span class="pain-pill">Feuilles perdues</span>
+        <span class="pain-pill">Entretiens annuels oubli&eacute;s</span>
+      </div>
+      <p class="context-desc">
+        12 ans d'activit&eacute;, 5 ans &agrave; dire &laquo; on va digitaliser &raquo; &mdash; sans jamais le faire. Le patron note les prospects sur papier entre deux chantiers, le planning tient sur un tableau blanc, et des feuilles disparaissent chaque semaine. 1 secr&eacute;taire fixe + 1 stagiaire n'arrivent plus &agrave; suivre. R&eacute;sultat : des relances oubli&eacute;es, des entretiens annuels jamais replanifi&eacute;s, des clients qui partent &agrave; la concurrence.
+      </p>
+      <div class="stat-boxes">
+        <div class="stat-box">
+          <div class="stat-val">5 ans</div>
+          <div class="stat-label">de &laquo; on va digitaliser &raquo;</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">0 suivi</div>
+          <div class="stat-label">entretiens annuels oubli&eacute;s</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 3: DASHBOARD MOCKUP ────────── -->
+  <section class="slide slide-dashboard" id="slide-2">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="slide-content">
+      <h2 class="section-title">Dashboard &mdash; Vue d'ensemble en temps r&eacute;el</h2>
+      <div class="browser-frame" style="max-width:960px;">
+        <div class="browser-bar">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">admin.aircooling.be/dashboard</div>
+        </div>
+        <div class="browser-body">
+          <!-- Mockup header -->
+          <div class="mock-header">
+            <div class="mock-logo">
+              <div class="mock-logo-icon">&#10052;</div>
+              AirCooling
+            </div>
+            <div class="mock-nav">
+              <span class="active">Dashboard</span>
+              <span>CRM</span>
+              <span>Clients</span>
+              <span>Devis</span>
+              <span>Planning</span>
+            </div>
+          </div>
+          <!-- KPI cards -->
+          <div class="dash-kpis">
+            <div class="dash-kpi">
+              <div class="kval">847</div>
+              <div class="klbl">Total Clients</div>
+            </div>
+            <div class="dash-kpi">
+              <div class="kval">12</div>
+              <div class="klbl">RDV Aujourd'hui</div>
+            </div>
+            <div class="dash-kpi">
+              <div class="kval">23</div>
+              <div class="klbl">Devis en Attente</div>
+            </div>
+            <div class="dash-kpi">
+              <div class="kval">94%</div>
+              <div class="klbl">Taux Conversion</div>
+            </div>
+            <div class="dash-kpi">
+              <div class="kval" style="color:#4ade80;">127k&euro;</div>
+              <div class="klbl">Revenu Total</div>
+            </div>
+            <div class="dash-kpi">
+              <div class="kval">4.2k&euro;</div>
+              <div class="klbl">Taille Moy. Deal</div>
+            </div>
+          </div>
+          <!-- Revenue chart -->
+          <div class="dash-chart">
+            <div class="dash-chart-label">Revenu mensuel (&euro;)</div>
+            <div class="dash-bars">
+              <div class="dash-bar" style="height:40%"><span class="dash-bar-label">Jan</span></div>
+              <div class="dash-bar" style="height:50%"><span class="dash-bar-label">F&eacute;v</span></div>
+              <div class="dash-bar" style="height:38%"><span class="dash-bar-label">Mar</span></div>
+              <div class="dash-bar" style="height:55%"><span class="dash-bar-label">Avr</span></div>
+              <div class="dash-bar" style="height:72%"><span class="dash-bar-label">Mai</span></div>
+              <div class="dash-bar" style="height:85%"><span class="dash-bar-label">Jun</span></div>
+              <div class="dash-bar" style="height:90%"><span class="dash-bar-label">Jul</span></div>
+              <div class="dash-bar" style="height:95%"><span class="dash-bar-label">Ao&ucirc;</span></div>
+              <div class="dash-bar" style="height:68%"><span class="dash-bar-label">Sep</span></div>
+              <div class="dash-bar" style="height:58%"><span class="dash-bar-label">Oct</span></div>
+              <div class="dash-bar" style="height:45%"><span class="dash-bar-label">Nov</span></div>
+              <div class="dash-bar" style="height:52%"><span class="dash-bar-label">D&eacute;c</span></div>
+            </div>
+          </div>
+          <!-- Quick actions -->
+          <div class="dash-actions">
+            <div class="dash-action-btn primary">+ Nouveau Client</div>
+            <div class="dash-action-btn secondary">&#128197; Planifier RDV</div>
+            <div class="dash-action-btn secondary">&#128196; Cr&eacute;er Devis</div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-features-row">
+        <span class="mockup-feat">KPIs temps r&eacute;el</span>
+        <span class="mockup-feat">Graphiques d'&eacute;volution</span>
+        <span class="mockup-feat">Actions rapides</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 4: CRM KANBAN MOCKUP ────────── -->
+  <section class="slide slide-crm" id="slide-3">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="slide-content">
+      <h2 class="section-title">CRM &mdash; Pipeline commercial visuel</h2>
+      <div class="browser-frame" style="max-width:960px;">
+        <div class="browser-bar">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">admin.aircooling.be/crm</div>
+        </div>
+        <div class="browser-body">
+          <!-- Mockup header -->
+          <div class="mock-header">
+            <div class="mock-logo">
+              <div class="mock-logo-icon">&#10052;</div>
+              AirCooling
+            </div>
+            <div class="mock-nav">
+              <span>Dashboard</span>
+              <span class="active">CRM</span>
+              <span>Clients</span>
+              <span>Devis</span>
+              <span>Planning</span>
+            </div>
+          </div>
+          <!-- Kanban board -->
+          <div class="kanban-board">
+            <!-- Prospect column -->
+            <div class="kanban-col prospect">
+              <div class="kanban-col-header">
+                Prospect <span class="count">2</span>
+              </div>
+              <div class="kanban-col-body">
+                <div class="kanban-card">
+                  <div class="kanban-card-name">Marc Dubois</div>
+                  <div class="kanban-card-company">Restaurant Le Petit Chef</div>
+                  <div class="kanban-card-meta">
+                    <span class="kanban-card-phone">0472 XX XX XX</span>
+                    <span class="kanban-card-badge badge-site">Site</span>
+                  </div>
+                </div>
+                <div class="kanban-card">
+                  <div class="kanban-card-name">Sophie Laurent</div>
+                  <div class="kanban-card-company">Cabinet M&eacute;dical Ixelles</div>
+                  <div class="kanban-card-meta">
+                    <span class="kanban-card-phone">0498 XX XX XX</span>
+                    <span class="kanban-card-badge badge-google">Google</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Devis envoyé column -->
+            <div class="kanban-col devis">
+              <div class="kanban-col-header">
+                Devis envoy&eacute; <span class="count">2</span>
+              </div>
+              <div class="kanban-col-body">
+                <div class="kanban-card">
+                  <div class="kanban-card-name">Jean Peeters</div>
+                  <div class="kanban-card-company">Boulangerie Maison Dor&eacute;e</div>
+                  <div class="kanban-card-meta">
+                    <span class="kanban-card-phone">0477 XX XX XX</span>
+                    <span class="kanban-card-badge badge-referral">Referral</span>
+                  </div>
+                </div>
+                <div class="kanban-card">
+                  <div class="kanban-card-name">Anna Vandenberghe</div>
+                  <div class="kanban-card-company">Salon Coiffure Brillance</div>
+                  <div class="kanban-card-meta">
+                    <span class="kanban-card-phone">0485 XX XX XX</span>
+                    <span class="kanban-card-badge badge-phone">T&eacute;l.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Gagné column -->
+            <div class="kanban-col gagne">
+              <div class="kanban-col-header">
+                Gagn&eacute; <span class="count">1</span>
+              </div>
+              <div class="kanban-col-body">
+                <div class="kanban-card">
+                  <div class="kanban-card-name">Philippe Martin</div>
+                  <div class="kanban-card-company">H&ocirc;tel &amp; Spa Amandine</div>
+                  <div class="kanban-card-meta">
+                    <span class="kanban-card-phone">0491 XX XX XX</span>
+                    <span class="kanban-card-badge badge-site">Site</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Perdu column -->
+            <div class="kanban-col perdu">
+              <div class="kanban-col-header">
+                Perdu <span class="count">1</span>
+              </div>
+              <div class="kanban-col-body">
+                <div class="kanban-card">
+                  <div class="kanban-card-name">Luc Janssen</div>
+                  <div class="kanban-card-company">Garage M&eacute;canique Express</div>
+                  <div class="kanban-card-meta">
+                    <span class="kanban-card-phone">0468 XX XX XX</span>
+                    <span class="kanban-card-badge badge-google">Google</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-features-row">
+        <span class="mockup-feat">Drag &amp; drop</span>
+        <span class="mockup-feat">Filtrage avanc&eacute;</span>
+        <span class="mockup-feat">Suivi automatis&eacute;</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 5: APPOINTMENTS MOCKUP ────────── -->
+  <section class="slide slide-appointments" id="slide-4">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="slide-content">
+      <h2 class="section-title">Planning &mdash; Agenda intelligent</h2>
+      <div class="browser-frame" style="max-width:960px;">
+        <div class="browser-bar">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">admin.aircooling.be/appointments</div>
+        </div>
+        <div class="browser-body">
+          <!-- Mockup header -->
+          <div class="mock-header">
+            <div class="mock-logo">
+              <div class="mock-logo-icon">&#10052;</div>
+              AirCooling
+            </div>
+            <div class="mock-nav">
+              <span>Dashboard</span>
+              <span>CRM</span>
+              <span>Clients</span>
+              <span>Devis</span>
+              <span class="active">Planning</span>
+            </div>
+          </div>
+          <!-- Agenda -->
+          <div class="agenda-container">
+            <!-- Today -->
+            <div class="agenda-date-group">
+              <div class="agenda-date-header">&#128197; Aujourd'hui &mdash; 6 f&eacute;vrier</div>
+              <div class="agenda-card">
+                <div class="agenda-time">09:00</div>
+                <div class="agenda-icon consultation">&#10052;</div>
+                <div class="agenda-details">
+                  <div class="agenda-title">Installation climatisation</div>
+                  <div class="agenda-client">Marc Dubois &mdash; Restaurant Le Petit Chef</div>
+                </div>
+                <span class="agenda-status status-confirmed">Confirm&eacute;</span>
+              </div>
+              <div class="agenda-card">
+                <div class="agenda-time">10:30</div>
+                <div class="agenda-icon demo">&#128736;</div>
+                <div class="agenda-details">
+                  <div class="agenda-title">Diagnostic panne PAC</div>
+                  <div class="agenda-client">Sophie Laurent &mdash; Cabinet M&eacute;dical Ixelles</div>
+                </div>
+                <span class="agenda-status status-scheduled">Planifi&eacute;</span>
+              </div>
+              <div class="agenda-card">
+                <div class="agenda-time">14:00</div>
+                <div class="agenda-icon video">&#128249;</div>
+                <div class="agenda-details">
+                  <div class="agenda-title">Consultation vid&eacute;o &mdash; Devis</div>
+                  <div class="agenda-client">Anna Vandenberghe &mdash; Salon Brillance</div>
+                </div>
+                <span class="agenda-status status-scheduled">Planifi&eacute;</span>
+              </div>
+            </div>
+            <!-- Tomorrow -->
+            <div class="agenda-date-group">
+              <div class="agenda-date-header">&#128197; Demain &mdash; 7 f&eacute;vrier</div>
+              <div class="agenda-card">
+                <div class="agenda-time">08:30</div>
+                <div class="agenda-icon meeting">&#129309;</div>
+                <div class="agenda-details">
+                  <div class="agenda-title">Entretien annuel chauffage</div>
+                  <div class="agenda-client">Philippe Martin &mdash; H&ocirc;tel &amp; Spa Amandine</div>
+                </div>
+                <span class="agenda-status status-confirmed">Confirm&eacute;</span>
+              </div>
+              <div class="agenda-card">
+                <div class="agenda-time">11:00</div>
+                <div class="agenda-icon consultation">&#10052;</div>
+                <div class="agenda-details">
+                  <div class="agenda-title">Remplacement unit&eacute; ext&eacute;rieure</div>
+                  <div class="agenda-client">Jean Peeters &mdash; Boulangerie Maison Dor&eacute;e</div>
+                </div>
+                <span class="agenda-status status-scheduled">Planifi&eacute;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-features-row">
+        <span class="mockup-feat">R&eacute;servation 24h/24</span>
+        <span class="mockup-feat">Rappels automatiques</span>
+        <span class="mockup-feat">Lien vid&eacute;o auto</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 6: DEVIS MOCKUP ────────── -->
+  <section class="slide slide-devis" id="slide-5">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="slide-content">
+      <h2 class="section-title">Devis &mdash; Cr&eacute;ation et suivi en 2 clics</h2>
+      <div class="browser-frame" style="max-width:960px;">
+        <div class="browser-bar">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">admin.aircooling.be/quotes</div>
+        </div>
+        <div class="browser-body">
+          <!-- Mockup header -->
+          <div class="mock-header">
+            <div class="mock-logo">
+              <div class="mock-logo-icon">&#10052;</div>
+              AirCooling
+            </div>
+            <div class="mock-nav">
+              <span>Dashboard</span>
+              <span>CRM</span>
+              <span>Clients</span>
+              <span class="active">Devis</span>
+              <span>Planning</span>
+            </div>
+          </div>
+          <!-- Stats row -->
+          <div class="devis-stats-row">
+            <div class="devis-stat-card">
+              <div class="devis-stat-val total">156</div>
+              <div class="devis-stat-lbl">Total</div>
+            </div>
+            <div class="devis-stat-card">
+              <div class="devis-stat-val draft">12</div>
+              <div class="devis-stat-lbl">Brouillon</div>
+            </div>
+            <div class="devis-stat-card">
+              <div class="devis-stat-val sent">23</div>
+              <div class="devis-stat-lbl">Envoy&eacute;</div>
+            </div>
+            <div class="devis-stat-card">
+              <div class="devis-stat-val accepted">121</div>
+              <div class="devis-stat-lbl">Accept&eacute;</div>
+            </div>
+          </div>
+          <!-- Table -->
+          <div class="devis-table">
+            <div class="devis-table-head">
+              <span>N&deg; Devis</span>
+              <span>Client</span>
+              <span>Titre</span>
+              <span>Montant</span>
+              <span>Statut</span>
+              <span>Date</span>
+            </div>
+            <div class="devis-table-row">
+              <span style="color:var(--ac-blue-light);font-weight:600;">DEV-156</span>
+              <span>Marc Dubois</span>
+              <span>Installation climatisation 3 zones</span>
+              <span style="font-weight:700;color:var(--gray-300);">8 450&euro;</span>
+              <span><span class="devis-status accepted">Accept&eacute;</span></span>
+              <span>05/02</span>
+            </div>
+            <div class="devis-table-row">
+              <span style="color:var(--ac-blue-light);font-weight:600;">DEV-155</span>
+              <span>Sophie Laurent</span>
+              <span>Entretien annuel PAC</span>
+              <span style="font-weight:700;color:var(--gray-300);">1 200&euro;</span>
+              <span><span class="devis-status sent">Envoy&eacute;</span></span>
+              <span>04/02</span>
+            </div>
+            <div class="devis-table-row">
+              <span style="color:var(--ac-blue-light);font-weight:600;">DEV-154</span>
+              <span>Jean Peeters</span>
+              <span>Remplacement unit&eacute; ext&eacute;rieure</span>
+              <span style="font-weight:700;color:var(--gray-300);">3 800&euro;</span>
+              <span><span class="devis-status sent">Envoy&eacute;</span></span>
+              <span>03/02</span>
+            </div>
+            <div class="devis-table-row">
+              <span style="color:var(--ac-blue-light);font-weight:600;">DEV-153</span>
+              <span>Anna V.</span>
+              <span>Installation chauffage central</span>
+              <span style="font-weight:700;color:var(--gray-300);">12 600&euro;</span>
+              <span><span class="devis-status draft">Brouillon</span></span>
+              <span>02/02</span>
+            </div>
+            <div class="devis-table-row">
+              <span style="color:var(--ac-blue-light);font-weight:600;">DEV-152</span>
+              <span>Luc Janssen</span>
+              <span>D&eacute;pannage climatisation urgente</span>
+              <span style="font-weight:700;color:var(--gray-300);">650&euro;</span>
+              <span><span class="devis-status expired">Expir&eacute;</span></span>
+              <span>28/01</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-features-row">
+        <span class="mockup-feat">Templates pr&eacute;d&eacute;finis</span>
+        <span class="mockup-feat">Envoi en 1 clic</span>
+        <span class="mockup-feat">Signature &eacute;lectronique</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 7: AUTOMATIONS ────────── -->
+  <section class="slide slide-automations" id="slide-6">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="slide-content">
+      <h2 class="section-title">Automatisations &mdash; Votre secr&eacute;taire digitale</h2>
+      <p class="section-subtitle" style="margin-bottom:8px;">Chaque &eacute;v&eacute;nement d&eacute;clenche une action. Z&eacute;ro intervention manuelle.</p>
+      <div class="auto-grid">
+        <!-- Automation 1 -->
+        <div class="auto-card">
+          <div class="auto-trigger">
+            <div class="auto-trigger-icon">&#128100;</div>
+            <div class="auto-trigger-text">Nouveau prospect</div>
+          </div>
+          <div class="auto-arrow">&#8594;</div>
+          <div class="auto-action">
+            <div class="auto-action-icon">&#128172;</div>
+            <div class="auto-action-text">R&eacute;ponse WhatsApp auto en 30 sec</div>
+          </div>
+        </div>
+        <!-- Automation 2 -->
+        <div class="auto-card">
+          <div class="auto-trigger">
+            <div class="auto-trigger-icon">&#9989;</div>
+            <div class="auto-trigger-text">Devis accept&eacute;</div>
+          </div>
+          <div class="auto-arrow">&#8594;</div>
+          <div class="auto-action">
+            <div class="auto-action-icon">&#128196;</div>
+            <div class="auto-action-text">Facture + planning auto</div>
+          </div>
+        </div>
+        <!-- Automation 3 -->
+        <div class="auto-card">
+          <div class="auto-trigger">
+            <div class="auto-trigger-icon">&#128197;</div>
+            <div class="auto-trigger-text">RDV dans 24h</div>
+          </div>
+          <div class="auto-arrow">&#8594;</div>
+          <div class="auto-action">
+            <div class="auto-action-icon">&#128276;</div>
+            <div class="auto-action-text">Rappel WhatsApp + email</div>
+          </div>
+        </div>
+        <!-- Automation 4 -->
+        <div class="auto-card">
+          <div class="auto-trigger">
+            <div class="auto-trigger-icon">&#128181;</div>
+            <div class="auto-trigger-text">Facture impay&eacute;e 7j</div>
+          </div>
+          <div class="auto-arrow">&#8594;</div>
+          <div class="auto-action">
+            <div class="auto-action-icon">&#128176;</div>
+            <div class="auto-action-text">Relance polie automatique</div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-features-row" style="margin-top:16px;">
+        <span class="mockup-feat">0 intervention manuelle</span>
+        <span class="mockup-feat">24h/24 &mdash; 7j/7</span>
+        <span class="mockup-feat">Personnalisable</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 8: RESULTATS ────────── -->
+  <section class="slide slide-results" id="slide-7">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="slide-content">
+      <h2 class="section-title">Ce qui a chang&eacute;</h2>
+      <div class="results-grid">
+        <div class="result-card">
+          <div class="result-icon">&#128203;</div>
+          <div class="result-value">Papier &#8594; Digital</div>
+          <div class="result-label">Fiches prospects, bons de commande, planning &mdash; tout centralis&eacute;</div>
+        </div>
+        <div class="result-card">
+          <div class="result-icon">&#128197;</div>
+          <div class="result-value">Tableau blanc &#8594; App</div>
+          <div class="result-label">Planning digital accessible partout, fini les feutres et les oublis</div>
+        </div>
+        <div class="result-card">
+          <div class="result-icon">&#128276;</div>
+          <div class="result-value">Rappels auto</div>
+          <div class="result-label">Entretiens annuels relanc&eacute;s automatiquement &mdash; plus aucun oubli</div>
+        </div>
+        <div class="result-card">
+          <div class="result-icon">&#128101;</div>
+          <div class="result-value">Secr&eacute;taire soulag&eacute;e</div>
+          <div class="result-label">Moins de t&acirc;ches r&eacute;p&eacute;titives, plus de temps pour le vrai travail</div>
+        </div>
+      </div>
+      <div class="result-quote">
+        <div class="result-quote-text">&laquo; En 12 ans on n'avait jamais r&eacute;ussi &agrave; digitaliser. L&agrave;, c'est fait. &raquo;</div>
+        <div class="result-quote-author">&mdash; AirCooling</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 9: CE QU'ON A LIVRE ────────── -->
+  <section class="slide slide-delivered" id="slide-8">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="slide-content">
+      <h2 class="section-title">Ce qu'on a livr&eacute;</h2>
+      <p class="section-subtitle" style="margin-bottom:12px;">Une plateforme compl&egrave;te, sur mesure, livr&eacute;e en 30 jours.</p>
+      <div class="checklist-grid">
+        <div class="check-item">
+          <div class="check-icon">&#10003;</div>
+          <div class="check-text">Site web bilingue FR/NL</div>
+        </div>
+        <div class="check-item">
+          <div class="check-icon">&#10003;</div>
+          <div class="check-text">Dashboard KPIs temps r&eacute;el</div>
+        </div>
+        <div class="check-item">
+          <div class="check-icon">&#10003;</div>
+          <div class="check-text">CRM Kanban drag &amp; drop</div>
+        </div>
+        <div class="check-item">
+          <div class="check-icon">&#10003;</div>
+          <div class="check-text">Booking en ligne 24h/24</div>
+        </div>
+        <div class="check-item">
+          <div class="check-icon">&#10003;</div>
+          <div class="check-text">Devis automatis&eacute;s</div>
+        </div>
+        <div class="check-item">
+          <div class="check-icon">&#10003;</div>
+          <div class="check-text">Rappels WhatsApp</div>
+        </div>
+        <div class="check-item">
+          <div class="check-icon">&#10003;</div>
+          <div class="check-text">Signature &eacute;lectronique</div>
+        </div>
+        <div class="check-item">
+          <div class="check-icon">&#10003;</div>
+          <div class="check-text">Pipeline commercial</div>
+        </div>
+        <div class="check-item">
+          <div class="check-icon">&#10003;</div>
+          <div class="check-text">Tableau de bord financier</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 10: CLOSING CTA ────────── -->
+  <section class="slide slide-cta" id="slide-9">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="cta-content">
+      <div class="logo xl">
+        <div class="logo-dots">
+          <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+          <span class="dot d4"></span><span class="dot d5"></span><span class="dot d6"></span>
+          <span class="dot d7"></span><span class="dot d8"></span><span class="dot d9"></span>
+        </div>
+        <div class="logo-text">
+          <span class="mon">mon</span><span class="app">application</span><span class="be">.be</span>
+        </div>
+      </div>
+      <div class="cover-divider"></div>
+      <h2 class="cta-title">Vous aussi, transformez<br>votre business.</h2>
+      <p class="cta-subtitle">Un seul investissement. Tout inclus. Op&eacute;rationnel en 30 jours.</p>
+      <a href="mailto:info@monapplication.be" class="cta-button">
+        Demandez votre devis gratuit &#8594;
+      </a>
+      <div class="cta-contact">
+        <div class="cta-contact-item">
+          <span class="ci-icon">&#9993;</span>
+          info@monapplication.be
+        </div>
+        <div class="cta-contact-item">
+          <span class="ci-icon">&#128222;</span>
+          +32 XXX XX XX XX
+        </div>
+        <div class="cta-contact-item">
+          <span class="ci-icon">&#127760;</span>
+          www.monapplication.be
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /.deck -->
+
+<script>
+(function() {
+  const TOTAL_SLIDES = 10;
+  let currentSlide = 0;
+  const deck = document.getElementById('deck');
+  const navDotsContainer = document.getElementById('navDots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const counter = document.getElementById('slideCounter');
+
+  // Build nav dots
+  for (let i = 0; i < TOTAL_SLIDES; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+    dot.addEventListener('click', function() { goSlide(i); });
+    navDotsContainer.appendChild(dot);
+  }
+
+  function goSlide(index) {
+    if (index < 0 || index >= TOTAL_SLIDES) return;
+    currentSlide = index;
+    deck.style.transform = 'translateX(-' + (index * 100) + 'vw)';
+    updateUI();
+  }
+
+  function updateUI() {
+    var dots = navDotsContainer.querySelectorAll('.nav-dot');
+    dots.forEach(function(d, i) { d.classList.toggle('active', i === currentSlide); });
+    prevBtn.classList.toggle('hidden', currentSlide === 0);
+    nextBtn.classList.toggle('hidden', currentSlide === TOTAL_SLIDES - 1);
+    counter.innerHTML = '<span>' + (currentSlide + 1) + '</span> / ' + TOTAL_SLIDES;
+  }
+
+  // Arrow button clicks
+  prevBtn.addEventListener('click', function() { goSlide(currentSlide - 1); });
+  nextBtn.addEventListener('click', function() { goSlide(currentSlide + 1); });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      goSlide(currentSlide + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goSlide(currentSlide - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goSlide(TOTAL_SLIDES - 1);
+    }
+  });
+
+  // Touch swipe support
+  var touchStartX = 0;
+  var touchStartY = 0;
+  deck.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  deck.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) goSlide(currentSlide + 1);
+      else goSlide(currentSlide - 1);
+    }
+  }, { passive: true });
+
+  // Initial state
+  updateUI();
+})();
+</script>
+
+</body>
+</html>

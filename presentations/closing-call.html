@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>monapplication.be — Votre secrétaire digitale</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #0f172a;
+  --secondary: #1e3a8a;
+  --accent: #b8860b;
+  --accent-light: #d4a017;
+  --red: #dc2626;
+  --red-dark: #991b1b;
+  --green: #16a34a;
+  --white: #ffffff;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--primary);
+  color: var(--white);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
+
+/* ─── SLIDE CONTAINER ─── */
+.deck {
+  display: flex;
+  width: 900vw; /* 9 slides */
+  height: 100vh;
+  overflow: hidden;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* ─── SLIDE BASE ─── */
+.slide {
+  min-width: 100vw;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── LOGO COMPONENT ─── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.logo-dots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+.logo-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+.logo-dots .d1 { background: #94a3b8; }
+.logo-dots .d2 { background: #64748b; }
+.logo-dots .d3 { background: var(--accent); }
+.logo-dots .d4 { background: #64748b; }
+.logo-dots .d5 { background: var(--accent); }
+.logo-dots .d6 { background: #94a3b8; }
+.logo-dots .d7 { background: var(--accent); }
+.logo-dots .d8 { background: #94a3b8; }
+.logo-dots .d9 { background: #64748b; }
+.logo-text {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.logo-text .mon { color: #94a3b8; }
+.logo-text .app { color: var(--white); }
+.logo-text .be { color: var(--accent); }
+
+.logo.lg .logo-dots .dot { width: 14px; height: 14px; }
+.logo.lg .logo-dots { gap: 5px; }
+.logo.lg .logo-text { font-size: 32px; }
+
+.logo.xl .logo-dots .dot { width: 18px; height: 18px; }
+.logo.xl .logo-dots { gap: 6px; }
+.logo.xl .logo-text { font-size: 40px; }
+
+/* ─── NAVIGATION ─── */
+.nav-dots {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 10px 20px;
+  border-radius: 40px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+}
+.nav-dot.active {
+  background: var(--accent);
+  box-shadow: 0 0 12px rgba(184, 134, 11, 0.5);
+  transform: scale(1.3);
+}
+.nav-dot:hover:not(.active) {
+  background: rgba(255,255,255,0.4);
+}
+
+.nav-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--white);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 0.3s ease;
+}
+.nav-arrow:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(184,134,11,0.3);
+}
+.nav-arrow.prev { left: 24px; }
+.nav-arrow.next { right: 24px; }
+.nav-arrow.hidden { opacity: 0; pointer-events: none; }
+
+/* ─── SLIDE COUNTER ─── */
+.slide-counter {
+  position: fixed;
+  top: 28px;
+  right: 36px;
+  z-index: 1000;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-400);
+  background: rgba(15,23,42,0.7);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.slide-counter span { color: var(--accent); font-weight: 700; }
+
+/* ─── UTILITIES ─── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.pill-gold {
+  background: linear-gradient(135deg, rgba(184,134,11,0.15), rgba(184,134,11,0.08));
+  color: var(--accent-light);
+  border: 1px solid rgba(184,134,11,0.3);
+}
+.pill-red {
+  background: rgba(220,38,38,0.08);
+  color: #fca5a5;
+  border: 1px solid rgba(220,38,38,0.2);
+}
+
+.badge {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.section-title {
+  font-size: clamp(28px, 3.5vw, 48px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.15;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.section-subtitle {
+  font-size: clamp(15px, 1.2vw, 18px);
+  color: var(--gray-400);
+  text-align: center;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+/* ─── BG PATTERNS ─── */
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.bg-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(150px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 1 — COVER
+   ════════════════════════════════════════ */
+.slide-cover {
+  background: linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+.slide-cover .bg-glow {
+  background: var(--secondary);
+  top: -200px;
+  right: -200px;
+}
+.slide-cover .bg-glow-2 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(140px);
+  opacity: 0.08;
+  pointer-events: none;
+  background: var(--accent);
+  bottom: -150px;
+  left: -100px;
+}
+
+.cover-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  z-index: 2;
+  text-align: center;
+}
+.cover-title {
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  max-width: 800px;
+}
+.cover-title .highlight {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cover-subtitle {
+  font-size: clamp(14px, 1.3vw, 18px);
+  color: var(--gray-400);
+  max-width: 650px;
+  line-height: 1.7;
+}
+.cover-pills {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+}
+.cover-pills .pill-gold::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.cover-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  border-radius: 2px;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 2 — LE PROBLEME
+   ════════════════════════════════════════ */
+.slide-problem {
+  background: linear-gradient(160deg, #0f172a 0%, #1a1a2e 100%);
+}
+.slide-problem .bg-glow {
+  background: #dc2626;
+  top: -300px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.06;
+}
+.problem-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  z-index: 2;
+  max-width: 900px;
+  width: 100%;
+}
+.problem-badge {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--gray-400);
+  border-radius: 8px;
+  font-size: 14px;
+}
+.pain-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 8px 0;
+}
+.pain-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  background: rgba(220, 38, 38, 0.06);
+  border: 1px solid rgba(220, 38, 38, 0.15);
+  color: #fca5a5;
+}
+.pain-pill::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(220,38,38,0.5);
+}
+.compare-boxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  margin-top: 8px;
+}
+.compare-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 28px;
+  text-align: center;
+}
+.compare-box .question {
+  font-size: 15px;
+  color: var(--gray-400);
+  margin-bottom: 12px;
+}
+.compare-box .answer {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--red);
+  letter-spacing: -0.5px;
+}
+.compare-box .answer-sub {
+  font-size: 13px;
+  color: var(--gray-500);
+  margin-top: 4px;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 3 — AVANT / APRÈS
+   ════════════════════════════════════════ */
+.slide-beforeafter {
+  background: linear-gradient(160deg, #0f172a 0%, #111827 100%);
+}
+.ba-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  width: 100%;
+  max-width: 960px;
+  z-index: 2;
+}
+.ba-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+.ba-card:hover {
+  background: rgba(184,134,11,0.05);
+  border-color: rgba(184,134,11,0.15);
+  transform: translateY(-2px);
+}
+.ba-card h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ba-card h3 .ico { font-size: 18px; }
+.ba-section {
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.ba-section.before {
+  background: rgba(220,38,38,0.06);
+  border: 1px solid rgba(220,38,38,0.12);
+  color: #fca5a5;
+}
+.ba-section.after {
+  background: rgba(22,163,74,0.06);
+  border: 1px solid rgba(22,163,74,0.12);
+  color: #86efac;
+}
+.ba-section .lbl {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+  display: block;
+}
+.ba-section.before .lbl { color: var(--red); }
+.ba-section.after .lbl { color: #22c55e; }
+.ba-result {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-light);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+}
+.ba-result::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 4 — COÛT STATUS QUO
+   ════════════════════════════════════════ */
+.slide-costs {
+  background: linear-gradient(160deg, #0f172a 0%, #1a0a0a 100%);
+}
+.cost-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  width: 100%;
+  max-width: 800px;
+}
+.cost-card {
+  background: rgba(220,38,38,0.04);
+  border: 1px solid rgba(220,38,38,0.12);
+  border-radius: 20px;
+  padding: 36px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.cost-card .cost-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: rgba(220,38,38,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+.cost-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gray-200);
+}
+.cost-card .cost-price {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--red);
+  letter-spacing: -1px;
+}
+.cost-card .cost-sub {
+  font-size: 13px;
+  color: var(--gray-500);
+}
+.warning-box {
+  background: linear-gradient(135deg, rgba(220,38,38,0.12), rgba(220,38,38,0.06));
+  border: 2px solid rgba(220,38,38,0.3);
+  border-radius: 16px;
+  padding: 24px 36px;
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+  margin-top: 8px;
+}
+.warning-box .label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fca5a5;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.warning-box .amount {
+  font-size: clamp(16px, 1.5vw, 20px);
+  font-weight: 700;
+  color: #fca5a5;
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 5 — VS COMPARISON
+   ════════════════════════════════════════ */
+.slide-vs {
+  background: linear-gradient(160deg, #0f172a 0%, #111827 100%);
+}
+.vs-container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  width: 100%;
+  max-width: 960px;
+  align-items: stretch;
+  z-index: 2;
+}
+.vs-column {
+  border-radius: 20px;
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.vs-column.market {
+  background: rgba(220,38,38,0.05);
+  border: 1px solid rgba(220,38,38,0.15);
+}
+.vs-column.ours {
+  background: linear-gradient(160deg, rgba(184,134,11,0.08), rgba(30,58,138,0.1));
+  border: 1px solid rgba(184,134,11,0.2);
+}
+.vs-column-header {
+  font-size: 18px;
+  font-weight: 800;
+  text-align: center;
+  padding-bottom: 20px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.vs-column.market .vs-column-header { color: #fca5a5; }
+.vs-column.ours .vs-column-header { color: var(--accent-light); }
+
+.vs-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  font-size: 15px;
+  font-weight: 500;
+}
+.vs-item .icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.vs-column.market .vs-item .icon {
+  background: rgba(220,38,38,0.15);
+  color: #fca5a5;
+}
+.vs-column.market .vs-item { color: var(--gray-400); }
+.vs-column.ours .vs-item .icon {
+  background: rgba(184,134,11,0.2);
+  color: var(--accent-light);
+}
+.vs-column.ours .vs-item { color: var(--gray-200); }
+
+.vs-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+.vs-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--gray-800));
+  border: 2px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--white);
+  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+  margin: 0 -20px;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 6 — 5 BLOCS
+   ════════════════════════════════════════ */
+.slide-blocs {
+  background: linear-gradient(160deg, #0f172a 0%, #0c1222 100%);
+}
+.blocs-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  width: 100%;
+  max-width: 1000px;
+  z-index: 2;
+}
+.bloc-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 24px 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+.bloc-card:hover {
+  background: rgba(184,134,11,0.06);
+  border-color: rgba(184,134,11,0.15);
+  transform: translateY(-4px);
+}
+.bloc-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.bloc-icon.fondations { background: linear-gradient(135deg, rgba(100,116,139,0.2), rgba(100,116,139,0.08)); }
+.bloc-icon.admin { background: linear-gradient(135deg, rgba(30,58,138,0.2), rgba(30,58,138,0.08)); }
+.bloc-icon.auto { background: linear-gradient(135deg, rgba(22,163,74,0.2), rgba(22,163,74,0.08)); }
+.bloc-icon.comm { background: linear-gradient(135deg, rgba(184,134,11,0.2), rgba(184,134,11,0.08)); }
+.bloc-icon.accomp { background: linear-gradient(135deg, rgba(147,51,234,0.2), rgba(147,51,234,0.08)); }
+.bloc-card h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.3;
+}
+.bloc-features {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+  width: 100%;
+}
+.bloc-feat {
+  font-size: 10px;
+  color: var(--gray-400);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 0;
+}
+.bloc-feat::before {
+  content: '✓';
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 7 — REALISATIONS / MOCKUPS
+   ════════════════════════════════════════ */
+.slide-mockups {
+  background: linear-gradient(160deg, #0f172a 0%, #111827 100%);
+}
+.mockups-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  width: 100%;
+  max-width: 1050px;
+  z-index: 2;
+}
+.mockup-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Browser frame */
+.browser-frame {
+  background: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #0f172a;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.browser-dots {
+  display: flex;
+  gap: 6px;
+}
+.browser-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.browser-dots span:nth-child(1) { background: #ef4444; }
+.browser-dots span:nth-child(2) { background: #f59e0b; }
+.browser-dots span:nth-child(3) { background: #22c55e; }
+.browser-url {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 11px;
+  color: var(--gray-500);
+  font-family: 'Inter', monospace;
+}
+.browser-body {
+  padding: 16px;
+  min-height: 220px;
+}
+
+/* AirCooling mockup */
+.ac-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ac-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ac-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #60a5fa;
+}
+.ac-logo-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+.ac-nav {
+  display: flex;
+  gap: 10px;
+}
+.ac-nav span {
+  font-size: 10px;
+  color: var(--gray-500);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.ac-nav span.active {
+  background: rgba(37,99,235,0.2);
+  color: #60a5fa;
+}
+.ac-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.ac-kpi {
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+.ac-kpi .val {
+  font-size: 18px;
+  font-weight: 800;
+  color: #60a5fa;
+}
+.ac-kpi .lbl {
+  font-size: 9px;
+  color: var(--gray-500);
+  margin-top: 2px;
+}
+.ac-chart {
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  padding: 10px;
+  height: 60px;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+.ac-bar {
+  flex: 1;
+  background: linear-gradient(to top, #2563eb, #60a5fa);
+  border-radius: 3px 3px 0 0;
+  min-height: 8px;
+}
+
+/* VeloDoctor mockup */
+.vd-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.vd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.vd-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2dd4bf;
+}
+.vd-logo-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #14b8a6, #0d9488);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+.vd-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.vd-kpi {
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+.vd-kpi .val {
+  font-size: 18px;
+  font-weight: 800;
+  color: #2dd4bf;
+}
+.vd-kpi .lbl {
+  font-size: 9px;
+  color: var(--gray-500);
+  margin-top: 2px;
+}
+.vd-table {
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.vd-table-head {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 6px 10px;
+  background: rgba(255,255,255,0.03);
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.vd-table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 6px 10px;
+  font-size: 10px;
+  color: var(--gray-400);
+  border-top: 1px solid rgba(255,255,255,0.03);
+}
+.vd-status {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 600;
+}
+.vd-status.done { background: rgba(34,197,94,0.15); color: #4ade80; }
+.vd-status.pending { background: rgba(251,146,60,0.15); color: #fb923c; }
+
+/* Mockup label */
+.mockup-info {
+  text-align: center;
+}
+.mockup-info h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.mockup-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+.mockup-feat {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--gray-400);
+}
+
+/* ════════════════════════════════════════
+   SLIDE 8 — POURQUOI NOUS
+   ════════════════════════════════════════ */
+.slide-why {
+  background: linear-gradient(160deg, #0f172a 0%, #111827 100%);
+}
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  max-width: 880px;
+  z-index: 2;
+}
+.why-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-left: 4px solid var(--accent);
+  border-radius: 16px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+.why-card:hover {
+  background: rgba(184,134,11,0.05);
+  border-color: rgba(184,134,11,0.15);
+  border-left-color: var(--accent-light);
+}
+.why-card .why-icon {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+.why-card h3 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--white);
+}
+.why-card p {
+  font-size: 14px;
+  color: var(--gray-400);
+  line-height: 1.6;
+}
+
+/* ════════════════════════════════════════
+   SLIDE 9 — CLOSING CTA
+   ════════════════════════════════════════ */
+.slide-cta {
+  background: linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+.slide-cta .bg-glow {
+  background: var(--accent);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.08;
+  width: 800px;
+  height: 800px;
+}
+.cta-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  z-index: 2;
+  text-align: center;
+}
+.cta-title {
+  font-size: clamp(30px, 3.5vw, 50px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.15;
+}
+.cta-subtitle {
+  font-size: clamp(15px, 1.2vw, 18px);
+  color: var(--gray-400);
+  max-width: 550px;
+  line-height: 1.6;
+}
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 40px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: var(--primary);
+  font-size: 17px;
+  font-weight: 700;
+  border-radius: 14px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 24px rgba(184,134,11,0.3);
+  margin-top: 8px;
+}
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(184,134,11,0.45);
+}
+.cta-contact {
+  display: flex;
+  gap: 32px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.cta-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--gray-400);
+}
+.cta-contact-item .ci-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .slide { padding: 40px 32px; }
+  .ba-grid { grid-template-columns: repeat(2, 1fr); }
+  .compare-boxes { grid-template-columns: 1fr; }
+  .cost-cards { grid-template-columns: 1fr; }
+  .vs-container { grid-template-columns: 1fr; gap: 16px; }
+  .vs-circle { order: -1; }
+  .vs-badge { margin: 0; }
+  .mockups-container { grid-template-columns: 1fr; }
+  .blocs-grid { grid-template-columns: repeat(3, 1fr); }
+  .why-grid { grid-template-columns: 1fr; }
+  .nav-arrow { display: none; }
+}
+@media (max-width: 600px) {
+  .ba-grid { grid-template-columns: 1fr; }
+  .blocs-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<div class="nav-dots" id="navDots"></div>
+<button class="nav-arrow prev" id="prevBtn" aria-label="Diapositive precedente">&#8592;</button>
+<button class="nav-arrow next" id="nextBtn" aria-label="Diapositive suivante">&#8594;</button>
+<div class="slide-counter" id="slideCounter"><span>1</span> / 9</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE DECK
+     ════════════════════════════════════════════ -->
+<div class="deck" id="deck">
+
+  <!-- ────────── SLIDE 1: COVER ────────── -->
+  <section class="slide slide-cover" id="slide-0">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+    <div class="cover-content">
+      <div class="logo xl">
+        <div class="logo-dots">
+          <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+          <span class="dot d4"></span><span class="dot d5"></span><span class="dot d6"></span>
+          <span class="dot d7"></span><span class="dot d8"></span><span class="dot d9"></span>
+        </div>
+        <div class="logo-text">
+          <span class="mon">mon</span><span class="app">application</span><span class="be">.be</span>
+        </div>
+      </div>
+      <div class="cover-divider"></div>
+      <h1 class="cover-title">
+        Votre <span class="highlight">secrétaire digitale.</span><br>
+        Propulsée par l'IA.
+      </h1>
+      <p class="cover-subtitle">
+        Elle gère vos appels, devis, rendez-vous, relances et toute votre admin — 24h/24, sans congés, sans erreurs.
+      </p>
+      <div class="cover-pills">
+        <span class="pill pill-gold">Spécialistes en automatisation</span>
+        <span class="pill pill-gold">Opérationnel en 30 jours</span>
+        <span class="pill pill-gold">Paiement unique</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 2: LE PROBLÈME ────────── -->
+  <section class="slide slide-problem" id="slide-1">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="problem-content">
+      <h2 class="section-title">Vous faites plus d'admin<br>que de business.</h2>
+      <div class="badge problem-badge" style="padding:10px 24px;">
+        Plombier, chauffagiste, mécanicien, artisan... Vous n'êtes pas secrétaire.
+      </div>
+      <div class="pain-grid">
+        <span class="pain-pill">Appels manqués</span>
+        <span class="pain-pill">Devis en retard</span>
+        <span class="pain-pill">Excel le soir</span>
+        <span class="pain-pill">Oublis de rappels</span>
+        <span class="pain-pill">Mails à 22h</span>
+        <span class="pain-pill">Secrétaire trop chère</span>
+      </div>
+      <div class="compare-boxes">
+        <div class="compare-box">
+          <div class="question">Vous faites tout seul ?</div>
+          <div class="answer">+15h/semaine perdues</div>
+          <div class="answer-sub">Temps qui ne génère aucun revenu</div>
+        </div>
+        <div class="compare-box">
+          <div class="question">Vous avez une secrétaire ?</div>
+          <div class="answer">2 500€/mois minimum</div>
+          <div class="answer-sub">30 000€/an sans charges incluses</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 3: AVANT / APRÈS ────────── -->
+  <section class="slide slide-beforeafter" id="slide-2">
+    <div class="bg-grid"></div>
+    <div class="prices-content" style="display:flex;flex-direction:column;align-items:center;gap:20px;z-index:2;width:100%;max-width:1000px;">
+      <h2 class="section-title">Avant vs Après.<br>La différence.</h2>
+      <p class="section-subtitle" style="margin-bottom:4px;">Votre secrétaire digitale s'occupe de tout. Vous, vous bossez.</p>
+      <div class="ba-grid">
+        <!-- Card 1 -->
+        <div class="ba-card">
+          <h3><span class="ico">&#128222;</span> Appels manqués</h3>
+          <div class="ba-section before">
+            <span class="lbl">Avant</span>
+            Vous êtes sur un chantier, le téléphone sonne, vous rappelez trop tard. Le client a trouvé quelqu'un d'autre.
+          </div>
+          <div class="ba-section after">
+            <span class="lbl">Après</span>
+            Le système répond instantanément sur WhatsApp, Messenger, Instagram. Client pris en charge en 30 secondes.
+          </div>
+          <div class="ba-result">0 client perdu</div>
+        </div>
+        <!-- Card 2 -->
+        <div class="ba-card">
+          <h3><span class="ico">&#128203;</span> Devis en retard</h3>
+          <div class="ba-section before">
+            <span class="lbl">Avant</span>
+            Le devis traîne 3 jours. Le client a déjà signé chez un concurrent.
+          </div>
+          <div class="ba-section after">
+            <span class="lbl">Après</span>
+            Templates prêts, calcul automatique, envoi en 2 clics depuis votre téléphone.
+          </div>
+          <div class="ba-result">Devis le jour même</div>
+        </div>
+        <!-- Card 3 -->
+        <div class="ba-card">
+          <h3><span class="ico">&#128197;</span> Booking chaotique</h3>
+          <div class="ba-section before">
+            <span class="lbl">Avant</span>
+            Coups de fil, SMS, "je vous rappelle", post-it perdus. Rendez-vous oubliés.
+          </div>
+          <div class="ba-section after">
+            <span class="lbl">Après</span>
+            Les clients réservent en ligne 24h/24. Rappels WhatsApp automatiques. Zéro no-show.
+          </div>
+          <div class="ba-result">Planning rempli</div>
+        </div>
+        <!-- Card 4 -->
+        <div class="ba-card">
+          <h3><span class="ico">&#128101;</span> Infos éparpillées</h3>
+          <div class="ba-section before">
+            <span class="lbl">Avant</span>
+            Notes sur papier, Excel, WhatsApp... Vous cherchez 10 minutes l'adresse du client.
+          </div>
+          <div class="ba-section after">
+            <span class="lbl">Après</span>
+            Coordonnées, historique, devis, paiements — tout au même endroit en 1 clic.
+          </div>
+          <div class="ba-result">Tout centralisé</div>
+        </div>
+        <!-- Card 5 -->
+        <div class="ba-card">
+          <h3><span class="ico">&#128172;</span> Mails à 22h</h3>
+          <div class="ba-section before">
+            <span class="lbl">Avant</span>
+            21h, vous répondez encore aux messages au lieu d'être avec votre famille.
+          </div>
+          <div class="ba-section after">
+            <span class="lbl">Après</span>
+            L'automatisation répond à votre place. Vos soirées sont à vous.
+          </div>
+          <div class="ba-result">Vie pro / perso</div>
+        </div>
+        <!-- Card 6 -->
+        <div class="ba-card">
+          <h3><span class="ico">&#128176;</span> Paiements oubliés</h3>
+          <div class="ba-section before">
+            <span class="lbl">Avant</span>
+            Vous oubliez de relancer. Le client ne paie pas. Vous perdez de l'argent.
+          </div>
+          <div class="ba-section after">
+            <span class="lbl">Après</span>
+            Le système relance poliment à 7, 14, 30 jours. Sans effort de votre part.
+          </div>
+          <div class="ba-result">Trésorerie saine</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 4: COÛT DU STATUS QUO ────────── -->
+  <section class="slide slide-costs" id="slide-3">
+    <div class="bg-grid"></div>
+    <div class="prices-content" style="display:flex;flex-direction:column;align-items:center;gap:20px;z-index:2;width:100%;max-width:1000px;">
+      <span class="pill pill-red">&#9888; Le prix de l'inaction</span>
+      <h2 class="section-title">Ne rien changer<br>vous coûte plus cher.</h2>
+      <p class="section-subtitle">Ce que vous perdez chaque mois sans automatisation.</p>
+      <div class="cost-cards">
+        <div class="cost-card">
+          <div class="cost-icon">&#9201;</div>
+          <h3>Temps d'admin perdu</h3>
+          <div class="cost-price">15h/semaine</div>
+          <div class="cost-sub">720 heures/an de travail non-facturé</div>
+        </div>
+        <div class="cost-card">
+          <div class="cost-icon">&#128100;</div>
+          <h3>Secrétaire humaine</h3>
+          <div class="cost-price">~2 500€/mois</div>
+          <div class="cost-sub">30 000€/an minimum + congés + erreurs</div>
+        </div>
+      </div>
+      <div class="warning-box">
+        <div class="label">Et ce n'est pas tout</div>
+        <div class="amount">Appels manqués = clients perdus. Devis en retard = contrats signés ailleurs.<br>No-shows = planning troué. Relances oubliées = factures impayées.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 5: VS COMPARISON ────────── -->
+  <section class="slide slide-vs" id="slide-4">
+    <div class="bg-grid"></div>
+    <div class="prices-content" style="display:flex;flex-direction:column;align-items:center;gap:20px;z-index:2;width:100%;max-width:1000px;">
+      <h2 class="section-title">Comparez les deux réalités.</h2>
+      <p class="section-subtitle" style="margin-bottom:8px;">Sans automatisation vs avec monapplication.be</p>
+      <div class="vs-container">
+        <!-- Sans automatisation -->
+        <div class="vs-column market">
+          <div class="vs-column-header">&#10060; Sans automatisation</div>
+          <div class="vs-item"><span class="icon">&#9201;</span> 15h/semaine d'admin le soir</div>
+          <div class="vs-item"><span class="icon">&#128222;</span> Appels manqués régulièrement</div>
+          <div class="vs-item"><span class="icon">&#128203;</span> Devis qui traînent 3 jours</div>
+          <div class="vs-item"><span class="icon">&#128196;</span> Infos sur papier, Excel, WhatsApp</div>
+          <div class="vs-item"><span class="icon">&#128176;</span> 2 500€/mois si secrétaire</div>
+          <div class="vs-item"><span class="icon">&#128276;</span> Oublis de rappels et relances</div>
+        </div>
+        <!-- VS badge -->
+        <div class="vs-circle">
+          <div class="vs-badge">VS</div>
+        </div>
+        <!-- Avec monapplication.be -->
+        <div class="vs-column ours">
+          <div class="vs-column-header">&#9989; Avec monapplication.be</div>
+          <div class="vs-item"><span class="icon">&#9889;</span> 0h d'admin — tout est automatisé</div>
+          <div class="vs-item"><span class="icon">&#129302;</span> Réponses IA instantanées 24h/24</div>
+          <div class="vs-item"><span class="icon">&#128203;</span> Devis en 2 clics, envoi immédiat</div>
+          <div class="vs-item"><span class="icon">&#128241;</span> Tout centralisé en 1 application</div>
+          <div class="vs-item"><span class="icon">&#128176;</span> Paiement unique</div>
+          <div class="vs-item"><span class="icon">&#128276;</span> Rappels et relances automatiques</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 6: 5 BLOCS ────────── -->
+  <section class="slide slide-blocs" id="slide-5">
+    <div class="bg-grid"></div>
+    <div class="prices-content" style="display:flex;flex-direction:column;align-items:center;gap:20px;z-index:2;width:100%;max-width:1000px;">
+      <h2 class="section-title">5 blocs. Votre système complet.</h2>
+      <p class="section-subtitle" style="margin-bottom:8px;">On construit votre application admin et on automatise votre quotidien.</p>
+      <div class="blocs-grid">
+        <!-- Bloc 1 -->
+        <div class="bloc-card">
+          <div class="bloc-icon fondations">&#9881;</div>
+          <h3>Fondations Techniques</h3>
+          <div class="bloc-features">
+            <span class="bloc-feat">Hébergement dédié</span>
+            <span class="bloc-feat">Base de données sécurisée</span>
+            <span class="bloc-feat">SSL & sauvegardes auto</span>
+            <span class="bloc-feat">Maintenance incluse</span>
+          </div>
+        </div>
+        <!-- Bloc 2 -->
+        <div class="bloc-card">
+          <div class="bloc-icon admin">&#128241;</div>
+          <h3>Application Admin</h3>
+          <div class="bloc-features">
+            <span class="bloc-feat">CRM Clients complet</span>
+            <span class="bloc-feat">Agenda & Booking 24h/24</span>
+            <span class="bloc-feat">Devis & Factures auto</span>
+            <span class="bloc-feat">Dashboard temps réel</span>
+          </div>
+        </div>
+        <!-- Bloc 3 -->
+        <div class="bloc-card">
+          <div class="bloc-icon auto">&#9889;</div>
+          <h3>Automatisation & IA</h3>
+          <div class="bloc-features">
+            <span class="bloc-feat">Rappels automatiques</span>
+            <span class="bloc-feat">Confirmations auto</span>
+            <span class="bloc-feat">Relances paiement</span>
+            <span class="bloc-feat">Réponses IA 24h/24</span>
+          </div>
+        </div>
+        <!-- Bloc 4 -->
+        <div class="bloc-card">
+          <div class="bloc-icon comm">&#128172;</div>
+          <h3>Communication Multi-Canal</h3>
+          <div class="bloc-features">
+            <span class="bloc-feat">WhatsApp Business</span>
+            <span class="bloc-feat">Messenger & Instagram</span>
+            <span class="bloc-feat">Inbox centralisée</span>
+            <span class="bloc-feat">Alertes intelligentes</span>
+          </div>
+        </div>
+        <!-- Bloc 5 -->
+        <div class="bloc-card">
+          <div class="bloc-icon accomp">&#127891;</div>
+          <h3>Accompagnement</h3>
+          <div class="bloc-features">
+            <span class="bloc-feat">Appel découverte</span>
+            <span class="bloc-feat">Version 1 en 30 jours</span>
+            <span class="bloc-feat">Formation incluse</span>
+            <span class="bloc-feat">Support continu</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 7: RÉALISATIONS ────────── -->
+  <section class="slide slide-mockups" id="slide-6">
+    <div class="bg-grid"></div>
+    <div class="prices-content" style="display:flex;flex-direction:column;align-items:center;gap:20px;z-index:2;width:100%;max-width:1050px;">
+      <h2 class="section-title">On l'a déjà fait.</h2>
+      <p class="section-subtitle" style="margin-bottom: 12px;">Des systèmes d'automatisation livrés et opérationnels.</p>
+      <div class="mockups-container">
+        <!-- AirCooling -->
+        <div class="mockup-wrapper">
+          <div class="browser-frame">
+            <div class="browser-bar">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">admin.aircooling.be/dashboard</div>
+            </div>
+            <div class="browser-body">
+              <div class="ac-dashboard">
+                <div class="ac-header">
+                  <div class="ac-logo">
+                    <div class="ac-logo-icon">&#10052;</div>
+                    AirCooling
+                  </div>
+                  <div class="ac-nav">
+                    <span class="active">Dashboard</span>
+                    <span>Clients</span>
+                    <span>Devis</span>
+                    <span>Planning</span>
+                  </div>
+                </div>
+                <div class="ac-kpis">
+                  <div class="ac-kpi"><div class="val">&#128197;</div><div class="lbl">Planning</div></div>
+                  <div class="ac-kpi"><div class="val">&#128101;</div><div class="lbl">Clients</div></div>
+                  <div class="ac-kpi"><div class="val">&#128203;</div><div class="lbl">Devis</div></div>
+                  <div class="ac-kpi"><div class="val">&#128276;</div><div class="lbl">Rappels</div></div>
+                </div>
+                <div class="ac-chart">
+                  <div class="ac-bar" style="height:40%"></div>
+                  <div class="ac-bar" style="height:55%"></div>
+                  <div class="ac-bar" style="height:35%"></div>
+                  <div class="ac-bar" style="height:70%"></div>
+                  <div class="ac-bar" style="height:60%"></div>
+                  <div class="ac-bar" style="height:85%"></div>
+                  <div class="ac-bar" style="height:75%"></div>
+                  <div class="ac-bar" style="height:90%"></div>
+                  <div class="ac-bar" style="height:65%"></div>
+                  <div class="ac-bar" style="height:80%"></div>
+                  <div class="ac-bar" style="height:95%"></div>
+                  <div class="ac-bar" style="height:70%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mockup-info">
+            <h4 style="color: #60a5fa;">AirCooling — HVAC & Climatisation</h4>
+            <div class="mockup-features">
+              <span class="mockup-feat">Planning digital</span>
+              <span class="mockup-feat">Rappels entretien auto</span>
+              <span class="mockup-feat">Devis automatisés</span>
+              <span class="mockup-feat">Fiche client complète</span>
+            </div>
+          </div>
+        </div>
+        <!-- VeloDoctor -->
+        <div class="mockup-wrapper">
+          <div class="browser-frame">
+            <div class="browser-bar">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">admin.velodoctor.be/dashboard</div>
+            </div>
+            <div class="browser-body">
+              <div class="vd-dashboard">
+                <div class="vd-header">
+                  <div class="vd-logo">
+                    <div class="vd-logo-icon">&#128690;</div>
+                    VeloDoctor
+                  </div>
+                  <div class="ac-nav">
+                    <span class="active" style="background:rgba(20,184,166,0.2);color:#2dd4bf;">Dashboard</span>
+                    <span>Bookings</span>
+                    <span>Messages</span>
+                    <span>Clients</span>
+                  </div>
+                </div>
+                <div class="vd-kpis">
+                  <div class="vd-kpi"><div class="val">&#128197;</div><div class="lbl">Bookings</div></div>
+                  <div class="vd-kpi"><div class="val">&#128172;</div><div class="lbl">Messages</div></div>
+                  <div class="vd-kpi"><div class="val">&#128203;</div><div class="lbl">Commandes</div></div>
+                  <div class="vd-kpi"><div class="val" style="color:#fb923c;">&#9889;</div><div class="lbl">Automatisé</div></div>
+                </div>
+                <div class="vd-table">
+                  <div class="vd-table-head">
+                    <span>Client</span><span>Service</span><span>Date</span><span>Statut</span>
+                  </div>
+                  <div class="vd-table-row">
+                    <span>Marc D.</span><span>Réparation</span><span>05/02</span><span><span class="vd-status done">Terminé</span></span>
+                  </div>
+                  <div class="vd-table-row">
+                    <span>Sophie L.</span><span>Entretien</span><span>06/02</span><span><span class="vd-status pending">En cours</span></span>
+                  </div>
+                  <div class="vd-table-row">
+                    <span>Jean P.</span><span>Réglage</span><span>06/02</span><span><span class="vd-status done">Terminé</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mockup-info">
+            <h4 style="color: #2dd4bf;">VeloDoctor — Réparation vélos</h4>
+            <div class="mockup-features">
+              <span class="mockup-feat">Booking online 24h/24</span>
+              <span class="mockup-feat">Réponses auto</span>
+              <span class="mockup-feat">Commandes centralisées</span>
+              <span class="mockup-feat">WhatsApp intégré</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 8: POURQUOI NOUS ────────── -->
+  <section class="slide slide-why" id="slide-7">
+    <div class="bg-grid"></div>
+    <div class="prices-content" style="display:flex;flex-direction:column;align-items:center;gap:20px;z-index:2;width:100%;max-width:880px;">
+      <h2 class="section-title">Pourquoi nous ?</h2>
+      <p class="section-subtitle" style="margin-bottom: 8px;">On n'est pas une agence web. On automatise votre quotidien.</p>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">&#129302;</div>
+          <h3>Spécialistes automatisation</h3>
+          <p>On ne fait pas des sites vitrines. On construit des systèmes qui travaillent à votre place — appels, devis, relances, rappels.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">&#128176;</div>
+          <h3>Paiement unique</h3>
+          <p>Pas d'abonnement mensuel. Pas de frais cachés. Vous payez une fois et c'est à vous pour toujours.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">&#9889;</div>
+          <h3>Opérationnel en 30 jours</h3>
+          <p>1ère version livrée en 30 jours. Version finale en 60 jours avec formation incluse. Vous gagnez du temps dès le premier mois.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">&#128273;</div>
+          <h3>Vous êtes propriétaire</h3>
+          <p>Le code source vous appartient. Pas de vendor lock-in. Pas de dépendance. Vous pouvez partir quand vous voulez.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────── SLIDE 9: CLOSING CTA ────────── -->
+  <section class="slide slide-cta" id="slide-8">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="cta-content">
+      <div class="logo xl">
+        <div class="logo-dots">
+          <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+          <span class="dot d4"></span><span class="dot d5"></span><span class="dot d6"></span>
+          <span class="dot d7"></span><span class="dot d8"></span><span class="dot d9"></span>
+        </div>
+        <div class="logo-text">
+          <span class="mon">mon</span><span class="app">application</span><span class="be">.be</span>
+        </div>
+      </div>
+      <div class="cover-divider"></div>
+      <h2 class="cta-title">Prêt à automatiser<br>votre admin ?</h2>
+      <p class="cta-subtitle">Un diagnostic gratuit de 15 minutes. On analyse votre quotidien et on vous montre exactement ce qu'on peut automatiser.</p>
+      <a href="mailto:info@monapplication.be" class="cta-button">
+        Planifiez votre diagnostic gratuit &#8594;
+      </a>
+      <div class="cta-contact">
+        <div class="cta-contact-item">
+          <span class="ci-icon">&#9993;</span>
+          info@monapplication.be
+        </div>
+        <div class="cta-contact-item">
+          <span class="ci-icon">&#128222;</span>
+          +32 460 24 24 27
+        </div>
+        <div class="cta-contact-item">
+          <span class="ci-icon">&#127760;</span>
+          www.monapplication.be
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /.deck -->
+
+<script>
+(function() {
+  const TOTAL_SLIDES = 9;
+  let currentSlide = 0;
+  const deck = document.getElementById('deck');
+  const navDotsContainer = document.getElementById('navDots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const counter = document.getElementById('slideCounter');
+
+  // Build nav dots
+  for (let i = 0; i < TOTAL_SLIDES; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+    dot.addEventListener('click', function() { goSlide(i); });
+    navDotsContainer.appendChild(dot);
+  }
+
+  function goSlide(index) {
+    if (index < 0 || index >= TOTAL_SLIDES) return;
+    currentSlide = index;
+    deck.style.transform = 'translateX(-' + (index * 100) + 'vw)';
+    updateUI();
+  }
+
+  function updateUI() {
+    var dots = navDotsContainer.querySelectorAll('.nav-dot');
+    dots.forEach(function(d, i) { d.classList.toggle('active', i === currentSlide); });
+    prevBtn.classList.toggle('hidden', currentSlide === 0);
+    nextBtn.classList.toggle('hidden', currentSlide === TOTAL_SLIDES - 1);
+    counter.innerHTML = '<span>' + (currentSlide + 1) + '</span> / ' + TOTAL_SLIDES;
+  }
+
+  // Arrow button clicks
+  prevBtn.addEventListener('click', function() { goSlide(currentSlide - 1); });
+  nextBtn.addEventListener('click', function() { goSlide(currentSlide + 1); });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      goSlide(currentSlide + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goSlide(currentSlide - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goSlide(TOTAL_SLIDES - 1);
+    }
+  });
+
+  // Touch swipe support
+  var touchStartX = 0;
+  var touchStartY = 0;
+  deck.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  deck.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) goSlide(currentSlide + 1);
+      else goSlide(currentSlide - 1);
+    }
+  }, { passive: true });
+
+  // Initial state
+  updateUI();
+})();
+</script>
+
+</body>
+</html>
