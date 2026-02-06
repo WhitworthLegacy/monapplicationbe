@@ -1,22 +1,22 @@
 import { google } from "googleapis";
 
-const SCOPES = ["https://www.googleapis.com/auth/calendar"];
 const TIMEZONE = "Europe/Brussels";
 const SLOT_DURATION = 30; // minutes
 const BUSINESS_START = 9; // 9h
 const BUSINESS_END = 18; // 18h
 
 function getCalendarClient() {
-  const keyJson = JSON.parse(
-    Buffer.from(process.env.GOOGLE_SERVICE_ACCOUNT_KEY || "", "base64").toString()
+  const oauth2Client = new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    "https://developers.google.com/oauthplayground"
   );
 
-  const auth = new google.auth.GoogleAuth({
-    credentials: keyJson,
-    scopes: SCOPES,
+  oauth2Client.setCredentials({
+    refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
   });
 
-  return google.calendar({ version: "v3", auth });
+  return google.calendar({ version: "v3", auth: oauth2Client });
 }
 
 export interface TimeSlot {
