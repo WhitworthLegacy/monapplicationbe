@@ -111,7 +111,7 @@ export function Hero() {
               </div>
               <p className="text-gray-400 text-sm">
                 Gagnez <span className="text-white font-medium">+15h/semaine</span>. Fini l&apos;admin le soir.
-                L&apos;automatisation travaille pendant que vous dormez.
+                L&apos;automatisation travaille pendant que vous développez vos affaires.
               </p>
             </div>
             <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4 text-left">
