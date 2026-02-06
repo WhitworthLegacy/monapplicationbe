@@ -8,7 +8,7 @@ interface ConfirmationEmailParams {
 }
 
 export function getConfirmationEmailHTML({ name, calendlyLink }: ConfirmationEmailParams): string {
-  const calLink = calendlyLink || 'https://calendly.com/monapplication'; // TODO: Replace with actual Calendly link
+  const calLink = calendlyLink || 'https://monapplication.be/diagnostic';
 
   return `
 <!DOCTYPE html>

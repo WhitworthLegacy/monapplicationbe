@@ -69,10 +69,10 @@ export function CTA() {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link
-              href="/contact"
+              href="/diagnostic"
               className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all hover:shadow-xl hover:shadow-accent/30 hover:scale-105"
             >
-              Demander une démo gratuite
+              Faire mon diagnostic gratuit
               <ArrowRight size={20} />
             </Link>
             <Link

@@ -64,10 +64,10 @@ export function Header() {
               </Link>
             ))}
             <Link
-              href="/contact"
+              href="/diagnostic"
               className="bg-accent hover:bg-accent-light text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:shadow-lg hover:shadow-accent/20"
             >
-              Demander une démo
+              Diagnostic gratuit
             </Link>
           </nav>
 
@@ -103,11 +103,11 @@ export function Header() {
                 </Link>
               ))}
               <Link
-                href="/contact"
+                href="/diagnostic"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="bg-accent hover:bg-accent-light text-white px-5 py-3 rounded-lg text-sm font-semibold text-center mt-2 transition-all"
               >
-                Demander une démo
+                Diagnostic gratuit
               </Link>
             </nav>
           </motion.div>
