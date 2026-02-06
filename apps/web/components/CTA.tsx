@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer, viewportOnce } from "@/lib/animations";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Clock, EuroIcon, Bot } from "lucide-react";
 
 export function CTA() {
   return (
@@ -32,18 +32,38 @@ export function CTA() {
             variants={fadeInUp}
             className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6"
           >
-            Arrêtez de jouer
+            Arrêtez de perdre du
             <br />
-            <span className="text-accent">à la secrétaire.</span>
+            <span className="text-accent">temps et de l&apos;argent.</span>
           </motion.h2>
           <motion.p
             variants={fadeInUp}
-            className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto"
+            className="text-lg md:text-xl text-gray-300 mb-6 max-w-2xl mx-auto"
           >
-            Concentrez-vous sur votre métier.
+            Votre secrétaire digitale IA est prête à prendre le relais.
             <br />
-            On s'occupe du reste.
+            Concentrez-vous sur votre métier — on s&apos;occupe du reste.
           </motion.p>
+
+          {/* Quick value reminder */}
+          <motion.div
+            variants={fadeInUp}
+            className="flex flex-wrap justify-center gap-4 mb-10"
+          >
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-white/80">
+              <Clock size={16} className="text-accent" />
+              +15h/semaine récupérées
+            </div>
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-white/80">
+              <EuroIcon size={16} className="text-accent" />
+              30 000€/an économisés
+            </div>
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-white/80">
+              <Bot size={16} className="text-accent" />
+              1ère version en 30 jours
+            </div>
+          </motion.div>
+
           <motion.div
             variants={fadeInUp}
             className="flex flex-col sm:flex-row gap-4 justify-center"

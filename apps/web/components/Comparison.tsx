@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer, viewportOnce } from "@/lib/animations";
-import { Check, X } from "lucide-react";
+import { Check, X, AlertTriangle } from "lucide-react";
 
 const comparisonData = [
   {
@@ -12,16 +12,16 @@ const comparisonData = [
     highlight: true,
   },
   {
-    feature: "Coût première année",
-    secretary: "~30 000€/an minimum",
+    feature: "Coût 1ère année",
+    secretary: "~30 000€ minimum",
     digital: "Investissement unique",
     highlight: true,
   },
   {
-    feature: "Mise en place",
-    secretary: "Formation + adaptation",
-    digital: "30 jours clé en main",
-    highlight: false,
+    feature: "Erreurs humaines",
+    secretary: "Oublis, retards, fautes",
+    digital: "Zéro oubli, zéro erreur",
+    highlight: true,
   },
   {
     feature: "Disponibilité",
@@ -30,16 +30,40 @@ const comparisonData = [
     highlight: false,
   },
   {
-    feature: "Canaux",
-    secretary: "Téléphone, email",
-    digital: "WhatsApp, Messenger, Instagram",
+    feature: "Congés / Maladie",
+    secretary: "5 semaines + arrêts",
+    digital: "Jamais absente",
     highlight: false,
   },
   {
-    feature: "Congés / Maladie",
-    secretary: "5 semaines + arrêts",
-    digital: "Jamais",
+    feature: "Risque de démission",
+    secretary: "À tout moment",
+    digital: "Aucun risque",
     highlight: false,
+  },
+  {
+    feature: "Canaux gérés",
+    secretary: "Téléphone, email",
+    digital: "WhatsApp, Messenger, Instagram, email",
+    highlight: false,
+  },
+  {
+    feature: "Rapidité de réponse",
+    secretary: "Variable selon la charge",
+    digital: "Instantanée, 30 secondes",
+    highlight: false,
+  },
+  {
+    feature: "Mise en place",
+    secretary: "Recrutement + formation",
+    digital: "1ère version en 30 jours",
+    highlight: false,
+  },
+  {
+    feature: "Charges sociales",
+    secretary: "~35% en plus du brut",
+    digital: "Aucune",
+    highlight: true,
   },
 ];
 
@@ -58,7 +82,7 @@ export function Comparison() {
             variants={fadeInUp}
             className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4"
           >
-            Comparaison
+            Le vrai calcul
           </motion.span>
           <motion.h2
             variants={fadeInUp}
@@ -68,6 +92,14 @@ export function Comparison() {
             <br />
             <span className="text-accent">vs Secrétaire Digitale</span>
           </motion.h2>
+          <motion.p
+            variants={fadeInUp}
+            className="text-text-muted text-lg max-w-2xl mx-auto"
+          >
+            Un salaire + charges sociales + congés + erreurs humaines + risque de départ...
+            <br />
+            <span className="text-primary font-semibold">Faites le calcul.</span>
+          </motion.p>
         </motion.div>
 
         <motion.div
@@ -83,10 +115,12 @@ export function Comparison() {
               Critère
             </div>
             <div className="p-4 md:p-6 font-medium text-sm md:text-base text-center border-l border-white/10">
-              Secrétaire
+              <span className="hidden md:inline">Secrétaire humaine</span>
+              <span className="md:hidden">Humaine</span>
             </div>
             <div className="p-4 md:p-6 font-medium text-sm md:text-base text-center border-l border-white/10 bg-accent">
-              Secrétaire Digitale
+              <span className="hidden md:inline">Secrétaire Digitale IA</span>
+              <span className="md:hidden">Digitale IA</span>
             </div>
           </div>
 
@@ -96,17 +130,19 @@ export function Comparison() {
               key={index}
               className={`grid grid-cols-3 ${
                 index % 2 === 0 ? "bg-white" : "bg-gray-50"
-              }`}
+              } ${row.highlight ? "font-medium" : ""}`}
             >
               <div className="p-4 md:p-6 text-sm md:text-base text-primary font-medium">
                 {row.feature}
               </div>
               <div className="p-4 md:p-6 text-sm md:text-base text-center text-text-muted border-l border-gray-100">
-                {row.secretary}
+                <span className={row.highlight ? "text-red-500 font-semibold" : ""}>
+                  {row.secretary}
+                </span>
               </div>
               <div
                 className={`p-4 md:p-6 text-sm md:text-base text-center border-l border-gray-100 font-semibold ${
-                  row.highlight ? "text-accent" : "text-primary"
+                  row.highlight ? "text-accent" : "text-green-600"
                 }`}
               >
                 {row.digital}
@@ -117,17 +153,33 @@ export function Comparison() {
 
         {/* Bottom highlight */}
         <motion.div
-          variants={fadeInUp}
+          variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="mt-8 text-center"
+          className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto"
         >
-          <p className="text-text-muted text-lg">
-            <span className="text-primary font-semibold">Économie totale</span>{" "}
-            sur 5 ans :{" "}
-            <span className="text-accent font-bold text-2xl">Considérable</span>
-          </p>
+          <motion.div
+            variants={fadeInUp}
+            className="bg-green-50 border border-green-100 rounded-xl p-4 text-center"
+          >
+            <div className="text-2xl font-bold text-green-600 mb-1">0€</div>
+            <p className="text-xs text-green-700">de charges sociales</p>
+          </motion.div>
+          <motion.div
+            variants={fadeInUp}
+            className="bg-green-50 border border-green-100 rounded-xl p-4 text-center"
+          >
+            <div className="text-2xl font-bold text-green-600 mb-1">0</div>
+            <p className="text-xs text-green-700">erreur d&apos;oubli</p>
+          </motion.div>
+          <motion.div
+            variants={fadeInUp}
+            className="bg-green-50 border border-green-100 rounded-xl p-4 text-center"
+          >
+            <div className="text-2xl font-bold text-green-600 mb-1">24/7</div>
+            <p className="text-xs text-green-700">sans jamais s&apos;arrêter</p>
+          </motion.div>
         </motion.div>
       </div>
     </section>

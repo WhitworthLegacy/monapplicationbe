@@ -2,8 +2,16 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { fadeInUp, staggerContainer, viewportOnce } from "@/lib/animations";
-import { ArrowRight, Clock, Zap, Shield, Globe, ShoppingCart } from "lucide-react";
+import { fadeInUp, staggerContainer } from "@/lib/animations";
+import {
+  ArrowRight,
+  Clock,
+  Zap,
+  BrainCircuit,
+  EuroIcon,
+  AlertTriangle,
+  Bot,
+} from "lucide-react";
 
 export function Hero() {
   return (
@@ -32,9 +40,9 @@ export function Hero() {
         >
           {/* Badge */}
           <motion.div variants={fadeInUp} className="mb-6">
-            <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white/90 px-4 py-2 rounded-full text-sm font-medium border border-white/10">
-              <Zap size={16} className="text-accent" />
-              Site web, E-commerce, SEO &amp; Automatisation
+            <span className="inline-flex items-center gap-2 bg-red-500/20 backdrop-blur-sm text-red-200 px-4 py-2 rounded-full text-sm font-medium border border-red-400/20">
+              <AlertTriangle size={16} className="text-red-400" />
+              Plombier, chauffagiste, mécanicien, artisan... Vous n&apos;êtes pas secrétaire.
             </span>
           </motion.div>
 
@@ -43,23 +51,80 @@ export function Hero() {
             variants={fadeInUp}
             className="text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight"
           >
-            Votre secrétaire digitale.
+            Vous faites plus d&apos;admin
             <br />
-            <span className="text-accent">Disponible 24h/24.</span>
+            <span className="text-accent">que de business.</span>
           </motion.h1>
 
-          {/* Subheadline */}
+          {/* Sub-headline - the problem */}
           <motion.p
             variants={fadeInUp}
-            className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed"
+            className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-6 leading-relaxed"
           >
-            Une secrétaire coûte{" "}
-            <span className="text-white font-semibold">2 500€/mois</span> pour des tâches répétitives.
-            Notre système fait le même travail{" "}
-            <span className="text-accent font-semibold">24h/24, sans congés</span>.{" "}
-            Booking, devis, CRM, notifications — plus site web, e-commerce &amp; SEO.{" "}
-            <span className="text-white font-semibold">Opérationnel en 30 jours.</span>
+            Appels manqués, devis en retard, Excel le soir, mails à 22h, oublis de rappels...
+            <br />
+            <span className="text-white font-medium">Cassons ce cycle.</span>
           </motion.p>
+
+          {/* Pain points - quick hits */}
+          <motion.div
+            variants={fadeInUp}
+            className="flex flex-wrap justify-center gap-3 mb-8"
+          >
+            {[
+              "Appels manqués",
+              "Devis en retard",
+              "Excel le soir",
+              "Oublis de rappels",
+              "Mails à 22h",
+              "Secrétaire trop chère",
+            ].map((pain) => (
+              <span
+                key={pain}
+                className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 text-white/70 px-3 py-1.5 rounded-full text-sm"
+              >
+                <span className="w-1.5 h-1.5 bg-red-400 rounded-full" />
+                {pain}
+              </span>
+            ))}
+          </motion.div>
+
+          {/* The solution */}
+          <motion.p
+            variants={fadeInUp}
+            className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-4 leading-relaxed"
+          >
+            Votre <span className="text-accent font-semibold">secrétaire digitale propulsée par l&apos;IA</span> gère
+            vos appels, devis, rendez-vous, relances et toute votre admin —{" "}
+            <span className="text-white font-semibold">24h/24, sans congés, sans erreurs.</span>
+          </motion.p>
+
+          {/* Value props - time & money */}
+          <motion.div
+            variants={fadeInUp}
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-10 max-w-3xl mx-auto"
+          >
+            <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4 text-left">
+              <div className="flex items-center gap-2 mb-2">
+                <Clock size={18} className="text-accent" />
+                <span className="text-white font-semibold text-sm">Vous faites tout seul ?</span>
+              </div>
+              <p className="text-gray-400 text-sm">
+                Gagnez <span className="text-white font-medium">+15h/semaine</span>. Fini l&apos;admin le soir.
+                L&apos;automatisation travaille pendant que vous dormez.
+              </p>
+            </div>
+            <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4 text-left">
+              <div className="flex items-center gap-2 mb-2">
+                <EuroIcon size={18} className="text-accent" />
+                <span className="text-white font-semibold text-sm">Vous avez une secrétaire ?</span>
+              </div>
+              <p className="text-gray-400 text-sm">
+                Économisez <span className="text-white font-medium">2 500€/mois</span>. Plus de salaire,
+                plus de congés, plus d&apos;erreurs humaines.
+              </p>
+            </div>
+          </motion.div>
 
           {/* CTAs */}
           <motion.div
@@ -67,10 +132,10 @@ export function Hero() {
             className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
           >
             <Link
-              href="#fonctionnalites"
+              href="#problemes"
               className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all hover:shadow-xl hover:shadow-accent/30 hover:scale-105"
             >
-              Découvrir comment
+              Voir ce qu&apos;on résout
               <ArrowRight size={20} />
             </Link>
             <Link
@@ -81,26 +146,26 @@ export function Hero() {
             </Link>
           </motion.div>
 
-          {/* Trust Indicators */}
+          {/* Trust Indicators - automation/IA focused */}
           <motion.div
             variants={fadeInUp}
             className="flex flex-wrap justify-center gap-6 md:gap-12"
           >
             <div className="flex items-center gap-2 text-gray-400">
-              <Globe size={20} className="text-accent" />
-              <span className="text-sm">Sites web &amp; E-commerce</span>
-            </div>
-            <div className="flex items-center gap-2 text-gray-400">
-              <Shield size={20} className="text-accent" />
-              <span className="text-sm">SEO &amp; Référencement</span>
+              <Bot size={20} className="text-accent" />
+              <span className="text-sm">Secrétaire Digitale IA</span>
             </div>
             <div className="flex items-center gap-2 text-gray-400">
               <Zap size={20} className="text-accent" />
               <span className="text-sm">Automatisation complète</span>
             </div>
             <div className="flex items-center gap-2 text-gray-400">
+              <BrainCircuit size={20} className="text-accent" />
+              <span className="text-sm">Intelligence Artificielle</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-400">
               <Clock size={20} className="text-accent" />
-              <span className="text-sm">Opérationnel en 30 jours</span>
+              <span className="text-sm">1ère version en 30 jours</span>
             </div>
           </motion.div>
         </motion.div>

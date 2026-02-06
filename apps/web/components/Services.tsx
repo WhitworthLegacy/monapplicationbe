@@ -98,24 +98,25 @@ export function Services() {
         >
           <motion.span
             variants={fadeInUp}
-            className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4"
+            className="inline-flex items-center gap-2 bg-accent/10 text-accent font-semibold text-sm uppercase tracking-wider mb-4 px-4 py-1.5 rounded-full"
           >
-            On fait aussi
+            <Sparkles className="w-4 h-4" />
+            Bonus inclus
           </motion.span>
           <motion.h2
             variants={fadeInUp}
             className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-6"
           >
-            Besoin d&apos;un site web ?
+            Et en plus, on vous crée
             <br />
-            <span className="text-accent">D&apos;un e-shop ? De SEO ?</span>
+            <span className="text-accent">votre vitrine digitale.</span>
           </motion.h2>
           <motion.p
             variants={fadeInUp}
             className="text-text-muted text-lg max-w-2xl mx-auto"
           >
-            En plus de votre secrétaire digitale, on s&apos;occupe aussi de votre
-            présence en ligne. Un seul interlocuteur pour tout.
+            Votre secrétaire digitale, c&apos;est le coeur. Mais on va plus loin :
+            site web, e-commerce, SEO, marketing — tout compris, un seul interlocuteur.
           </motion.p>
         </motion.div>
 
