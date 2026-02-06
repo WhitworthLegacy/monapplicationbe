@@ -10,128 +10,233 @@ import {
 import {
   Check,
   ArrowRight,
-  Layers,
-  Bell,
+  Server,
+  Bot,
+  Zap,
   MessageCircle,
-  Globe,
+  GraduationCap,
+  Database,
+  Shield,
+  Mail,
+  Wrench,
   CalendarCheck,
   FileCheck,
   Users,
-  Mail,
-  Bot,
-  Shield,
-  Sparkles,
+  BarChart3,
+  Smartphone,
+  Bell,
+  Clock,
   Phone,
+  EuroIcon,
+  Link2,
+  RefreshCw,
 } from "lucide-react";
 
-const packages = [
+const blocs = [
   {
     id: "fondations",
-    name: "Fondations",
-    icon: Layers,
-    color: "bg-primary",
-    tagline: "Base",
-    description: "Votre secrétaire digitale complète",
-    detailedDescription: "Tout ce qu'il faut pour automatiser votre admin : site web pro optimisé SEO, booking RDV en ligne 24h/24, générateur de devis en 2 clics, CRM clients complet, calendrier intelligent. Plus une formation de 2h et 30 jours de support.",
+    name: "Fondations Techniques",
+    icon: Server,
+    color: "from-slate-600 to-slate-800",
+    tagline: "On pose les bases. Vous ne touchez à rien.",
+    description:
+      "L'infrastructure de votre application admin : hébergement, base de données, sécurité, sauvegardes. On gère tout le technique pour que vous n'ayez jamais à y penser.",
     features: [
-      "Site web professionnel + SEO",
-      "Booking RDV en ligne 24h/24",
-      "Générateur de devis",
-      "CRM clients complet",
-      "Calendrier intelligent",
-      "Formation (2h) + Support 30j",
+      {
+        icon: Server,
+        name: "Hébergement dédié",
+        desc: "Votre application tourne sur un serveur rapide et fiable. Toujours en ligne, toujours accessible.",
+      },
+      {
+        icon: Database,
+        name: "Base de données sécurisée",
+        desc: "Toutes vos données (clients, devis, RDV) stockées et sauvegardées automatiquement chaque jour.",
+      },
+      {
+        icon: Shield,
+        name: "Sécurité & SSL",
+        desc: "Connexion chiffrée, accès protégé par mot de passe. Vos données et celles de vos clients sont en sécurité.",
+      },
+      {
+        icon: RefreshCw,
+        name: "Sauvegardes automatiques",
+        desc: "Backup quotidien de toutes vos données. En cas de problème, on restaure tout en quelques minutes.",
+      },
+      {
+        icon: Wrench,
+        name: "Maintenance & mises à jour",
+        desc: "On garde votre application à jour et fonctionnelle. Aucune intervention de votre part.",
+      },
+      {
+        icon: Link2,
+        name: "Connexion à vos outils existants",
+        desc: "Votre site web, votre agenda Google, vos outils actuels — on raccorde tout ensemble.",
+      },
     ],
   },
   {
-    id: "notifications",
-    name: "Notifications",
-    icon: Bell,
-    color: "bg-green-600",
-    tagline: "Add-on",
-    description: "Zéro oubli, zéro no-show",
-    detailedDescription: "Inclut tout le package Fondations + rappels WhatsApp automatiques avant chaque RDV, emails de confirmation, alertes personnalisées et suivi complet de tous vos envois. Réduisez les no-shows de 80%.",
+    id: "secretaire",
+    name: "Application Admin",
+    icon: Bot,
+    color: "from-primary to-secondary",
+    tagline: "Votre secrétaire digitale. Le coeur du système.",
+    description:
+      "Une application sur mesure pour gérer toute votre activité : clients, RDV, devis, factures. Accessible depuis votre téléphone, entre deux chantiers. Fini Excel, fini les papiers.",
     features: [
-      "Tout Fondations inclus",
-      "Rappels WhatsApp avant RDV",
-      "Emails automatiques",
-      "Alertes personnalisées",
-      "Confirmations auto",
-      "Suivi des envois",
+      {
+        icon: Users,
+        name: "CRM Clients",
+        desc: "Fiche pour chaque client : coordonnées, historique, devis, paiements. Tout centralisé en 1 clic.",
+      },
+      {
+        icon: CalendarCheck,
+        name: "Agenda & Booking 24h/24",
+        desc: "Vos clients réservent eux-mêmes, même à 23h. Synchronisé avec votre agenda existant.",
+      },
+      {
+        icon: FileCheck,
+        name: "Générateur de devis",
+        desc: "Créez un devis en 2 clics depuis votre téléphone. Templates prêts, calcul automatique.",
+      },
+      {
+        icon: EuroIcon,
+        name: "Factures automatiques",
+        desc: "Générées à partir des devis validés. Envoyées automatiquement au client.",
+      },
+      {
+        icon: BarChart3,
+        name: "Tableau de bord",
+        desc: "Vue d'ensemble en temps réel : RDV du jour, devis en attente, chiffre d'affaires, clients actifs.",
+      },
+      {
+        icon: Smartphone,
+        name: "100% mobile",
+        desc: "Interface pensée pour le terrain. Gérez tout depuis votre smartphone, pas besoin d'un PC.",
+      },
     ],
   },
   {
-    id: "marketing",
-    name: "Marketing",
+    id: "automatisation",
+    name: "Automatisation & IA",
+    icon: Zap,
+    color: "from-green-600 to-green-800",
+    tagline: "Zéro oubli. Zéro tâche répétitive. Zéro erreur.",
+    description:
+      "Le système fait le travail à votre place : rappels, confirmations, relances, réponses automatiques. Vous n'avez plus rien à penser — tout se déclenche au bon moment.",
+    features: [
+      {
+        icon: Bell,
+        name: "Rappels automatiques",
+        desc: "WhatsApp, SMS ou email envoyés 24h et 1h avant chaque RDV. Résultat : -80% de no-shows.",
+      },
+      {
+        icon: Check,
+        name: "Confirmations automatiques",
+        desc: "RDV confirmé ? Le client reçoit un message instantanément. Zéro effort de votre part.",
+      },
+      {
+        icon: EuroIcon,
+        name: "Relances de paiement",
+        desc: "Facture impayée ? Le système relance poliment à 7, 14 et 30 jours. Sans que vous y pensiez.",
+      },
+      {
+        icon: Bot,
+        name: "Réponses IA",
+        desc: "Un prospect vous contacte à 22h ? L'IA répond immédiatement, de façon personnalisée.",
+      },
+      {
+        icon: Mail,
+        name: "Emails automatiques",
+        desc: "Bienvenue, merci, suivi, rappel... Tout part tout seul au bon moment.",
+      },
+      {
+        icon: Clock,
+        name: "Workflows intelligents",
+        desc: "Enchaînements automatiques : nouveau client → bienvenue → rappel RDV → suivi post-prestation.",
+      },
+    ],
+  },
+  {
+    id: "communication",
+    name: "Communication Multi-Canal",
     icon: MessageCircle,
-    color: "bg-accent",
-    tagline: "Add-on",
-    description: "Automatisation 24h/24 sur tous les canaux",
-    detailedDescription: "Inclut tout le package Fondations + Notifications. Soyez disponible partout, tout le temps : WhatsApp Business, Messenger et Instagram DM intégrés avec réponses automatisées. Disponible 24h/24.",
+    color: "from-accent to-yellow-700",
+    tagline: "Soyez partout, sans y être.",
+    description:
+      "Vos clients vous contactent par WhatsApp, Messenger, Instagram, email... Le système centralise tout au même endroit et peut répondre automatiquement.",
     features: [
-      "Tout Fondations + Notifications inclus",
-      "WhatsApp Business intégré",
-      "Messenger automatisé",
-      "Instagram DM",
-      "Réponses automatisées",
-      "Disponible 24h/24",
+      {
+        icon: Phone,
+        name: "WhatsApp Business",
+        desc: "Le système répond sur WhatsApp, prend les RDV et envoie les rappels. Automatiquement.",
+      },
+      {
+        icon: MessageCircle,
+        name: "Messenger",
+        desc: "Facebook Messenger intégré. Réponses instantanées 24h/24 sans intervention.",
+      },
+      {
+        icon: MessageCircle,
+        name: "Instagram DM",
+        desc: "Vos messages Instagram sont gérés automatiquement. Aucun message ignoré.",
+      },
+      {
+        icon: Mail,
+        name: "Inbox centralisée",
+        desc: "Tous vos messages — peu importe le canal — au même endroit dans votre application admin.",
+      },
+      {
+        icon: Bell,
+        name: "Alertes intelligentes",
+        desc: "Notification sur votre téléphone uniquement quand c'est vraiment important.",
+      },
+      {
+        icon: Bot,
+        name: "Réponses personnalisées",
+        desc: "L'IA apprend votre métier et répond comme vous le feriez. Professionnel et naturel.",
+      },
     ],
   },
-];
-
-const packs = [
   {
-    name: "FONDATIONS",
-    popular: false,
-    description: "Votre secrétaire digitale",
-    features: {
-      fondations: true,
-      notifications: false,
-      marketing: false,
-    },
-  },
-  {
-    name: "PRO",
-    popular: true,
-    description: "Le plus populaire",
-    features: {
-      fondations: true,
-      notifications: true,
-      marketing: false,
-    },
-  },
-  {
-    name: "FULL",
-    popular: false,
-    description: "Tout automatisé",
-    badge: "COMPLET",
-    features: {
-      fondations: true,
-      notifications: true,
-      marketing: true,
-    },
-  },
-];
-
-const advantages = [
-  {
-    icon: Shield,
-    title: "Paiement unique",
-    description: "Pas d'abonnement. Vous payez une fois, vous utilisez pour toujours.",
-  },
-  {
-    icon: Sparkles,
-    title: "Clé en main",
-    description: "On s'occupe de tout. Opérationnel en 30 jours.",
-  },
-  {
-    icon: Users,
-    title: "Vous êtes propriétaire",
-    description: "Le système vous appartient. Aucune dépendance.",
-  },
-  {
-    icon: Phone,
-    title: "Support inclus",
-    description: "Formation de 2h + 30 jours de support après mise en ligne.",
+    id: "accompagnement",
+    name: "Accompagnement",
+    icon: GraduationCap,
+    color: "from-purple-600 to-purple-800",
+    tagline: "On ne vous lâche pas.",
+    description:
+      "De l'appel découverte à la mise en production, on est là. Formation, support, évolutions — vous n'êtes jamais seul face au système.",
+    features: [
+      {
+        icon: Phone,
+        name: "Appel découverte",
+        desc: "15 minutes pour comprendre votre métier, vos outils actuels et vos besoins. Gratuit.",
+      },
+      {
+        icon: FileCheck,
+        name: "Devis sur mesure",
+        desc: "Proposition claire et adaptée. Pas de package imposé, pas de surprise.",
+      },
+      {
+        icon: Clock,
+        name: "1ère version en 30 jours",
+        desc: "Votre application admin est opérationnelle. Vous commencez à gagner du temps immédiatement.",
+      },
+      {
+        icon: GraduationCap,
+        name: "Version finale en 60 jours",
+        desc: "Système complet + formation incluse. Vous êtes 100% autonome.",
+      },
+      {
+        icon: Wrench,
+        name: "Support continu",
+        desc: "Questions, ajustements, nouvelles fonctionnalités — on reste disponible.",
+      },
+      {
+        icon: Link2,
+        name: "Évolutions sur demande",
+        desc: "Votre business évolue ? On adapte votre application. Un seul interlocuteur.",
+      },
+    ],
   },
 ];
 
@@ -151,23 +256,40 @@ export default function TarifsPage() {
               variants={fadeInUp}
               className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4"
             >
-              Nos formules
+              Spécialistes en automatisation
             </motion.span>
             <motion.h1
               variants={fadeInUp}
               className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6"
             >
-              Un système sur mesure,
+              Tout ce qu&apos;on fait pour vous.
               <br />
-              <span className="text-accent">adapté à votre métier.</span>
+              <span className="text-accent">Bloc par bloc.</span>
             </motion.h1>
             <motion.p
               variants={fadeInUp}
               className="text-lg text-gray-300 max-w-2xl mx-auto mb-8"
             >
-              Choisissez les packages dont vous avez besoin. On construit
-              votre solution ensemble. Opérationnel en 30 jours.
+              On crée votre application admin sur mesure et on la raccorde
+              à vos outils existants. Chaque bloc est un ensemble de services concrets.
             </motion.p>
+            <motion.div
+              variants={fadeInUp}
+              className="flex flex-wrap justify-center gap-4 mb-8"
+            >
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-white/80">
+                <Shield size={16} className="text-accent" />
+                Paiement unique
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-white/80">
+                <Clock size={16} className="text-accent" />
+                1ère version en 30 jours
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-white/80">
+                <Link2 size={16} className="text-accent" />
+                Compatible avec vos outils
+              </div>
+            </motion.div>
             <motion.div variants={fadeInUp}>
               <Link
                 href="/contact"
@@ -181,155 +303,103 @@ export default function TarifsPage() {
         </div>
       </section>
 
-      {/* Packages Grid */}
-      <section className="py-16 md:py-24 bg-background -mt-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOnce}
-            className="text-center mb-12"
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-2xl md:text-3xl font-bold text-primary mb-4"
-            >
-              Les 3 packages
-            </motion.h2>
-            <motion.p variants={fadeInUp} className="text-text-muted">
-              Combinez-les selon vos besoins
-            </motion.p>
-          </motion.div>
-
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOnce}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
-          >
-            {packages.map((pkg) => (
-              <motion.div
-                key={pkg.id}
-                variants={fadeInUp}
-                className="bg-surface rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow"
-              >
-                <div className={`${pkg.color} p-4 flex items-center gap-3`}>
-                  <pkg.icon className="w-6 h-6 text-white" />
-                  <div>
-                    <h3 className="font-bold text-white">{pkg.name}</h3>
-                    <span className="text-white/80 text-sm">{pkg.tagline}</span>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <p className="text-text-muted text-sm mb-4">
-                    {pkg.description}
-                  </p>
-                  <ul className="space-y-2">
-                    {pkg.features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm">
-                        <Check className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
-                        <span className="text-text-muted">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Détail des packages */}
-      <section className="py-16 md:py-24 bg-surface">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOnce}
-            className="text-center mb-12"
-          >
-            <motion.h2
-              variants={fadeInUp}
-              className="text-2xl md:text-3xl font-bold text-primary mb-4"
-            >
-              Que contient chaque package ?
-            </motion.h2>
-            <motion.p variants={fadeInUp} className="text-text-muted">
-              Chaque bloc apporte des fonctionnalités complémentaires
-            </motion.p>
-          </motion.div>
-
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOnce}
-            className="space-y-6"
-          >
-            {packages.map((pkg) => (
-              <motion.div
-                key={pkg.id}
-                variants={fadeInUp}
-                className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
-              >
-                <div className="grid md:grid-cols-3 gap-0">
-                  <div className={`${pkg.color} p-6 flex flex-col justify-center`}>
-                    <div className="flex items-center gap-3 mb-2">
-                      <pkg.icon className="w-8 h-8 text-white" />
-                      <div>
-                        <h3 className="text-xl font-bold text-white">{pkg.name}</h3>
-                        <span className="text-white/80 text-sm">{pkg.tagline}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="md:col-span-2 p-6">
-                    <p className="text-text-muted mb-4 leading-relaxed">
-                      {pkg.detailedDescription}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {pkg.features.map((feature, i) => (
-                        <span
-                          key={i}
-                          className={`inline-flex items-center gap-1 text-sm px-3 py-1 rounded-full ${
-                            feature.startsWith("Tout")
-                              ? "bg-primary/10 text-primary font-semibold"
-                              : "bg-gray-100 text-text-muted"
-                          }`}
-                        >
-                          <Check className={`w-3 h-3 ${feature.startsWith("Tout") ? "text-primary" : "text-green-500"}`} />
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Choisissez votre formule */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-primary/5 to-secondary/5">
+      {/* Blocs */}
+      <section className="py-16 md:py-24 bg-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={viewportOnce}
+            className="text-center mb-16"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-2xl md:text-3xl font-bold text-primary mb-4"
+            >
+              5 blocs. Votre système complet.
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-text-muted max-w-xl mx-auto">
+              De l&apos;infrastructure à l&apos;accompagnement — on construit votre
+              application admin et on automatise votre quotidien.
+            </motion.p>
+          </motion.div>
+
+          <div className="space-y-12">
+            {blocs.map((bloc) => (
+              <motion.div
+                key={bloc.id}
+                variants={fadeInUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportOnce}
+                className="bg-surface rounded-3xl border border-gray-100 overflow-hidden shadow-lg shadow-gray-100/50"
+              >
+                {/* Bloc Header */}
+                <div className={`bg-gradient-to-r ${bloc.color} p-6 md:p-8`}>
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                      <bloc.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl md:text-2xl font-bold text-white">
+                        {bloc.name}
+                      </h3>
+                      <p className="text-white/70 text-sm">{bloc.tagline}</p>
+                    </div>
+                  </div>
+                  <p className="text-white/80 text-sm md:text-base max-w-2xl">
+                    {bloc.description}
+                  </p>
+                </div>
+
+                {/* Features Grid */}
+                <div className="p-6 md:p-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {bloc.features.map((feature, i) => (
+                      <div
+                        key={i}
+                        className="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
+                      >
+                        <div className="w-9 h-9 bg-accent/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                          <feature.icon className="w-4 h-4 text-accent" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-primary text-sm mb-1">
+                            {feature.name}
+                          </h4>
+                          <p className="text-text-muted text-xs leading-relaxed">
+                            {feature.desc}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="py-16 md:py-24 bg-surface">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
             className="text-center mb-12"
           >
             <motion.h2
               variants={fadeInUp}
               className="text-2xl md:text-3xl font-bold text-primary mb-4"
             >
-              Choisissez votre formule
+              Comment ça se passe ?
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-text-muted">
-              Paiement unique. Pas d&apos;abonnement. Opérationnel en 30 jours.
+            <motion.p variants={fadeInUp} className="text-text-muted max-w-xl mx-auto">
+              On construit votre solution sur mesure. Pas de formule imposée.
             </motion.p>
           </motion.div>
 
@@ -338,148 +408,60 @@ export default function TarifsPage() {
             initial="hidden"
             whileInView="visible"
             viewport={viewportOnce}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
           >
-            {packs.map((pack) => (
-              <motion.div
-                key={pack.name}
-                variants={fadeInUp}
-                className={`relative bg-white rounded-2xl border-2 overflow-hidden ${
-                  pack.popular
-                    ? "border-accent shadow-xl shadow-accent/10"
-                    : pack.badge
-                    ? "border-green-500 shadow-xl shadow-green-500/10"
-                    : "border-gray-100"
-                }`}
-              >
-                {pack.popular && (
-                  <div className="absolute top-0 right-0 bg-accent text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-                    POPULAIRE
-                  </div>
-                )}
-                {pack.badge && (
-                  <div className="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-                    {pack.badge}
-                  </div>
-                )}
-                <div className="p-6 text-center">
-                  <h3 className="text-xl font-bold text-primary mb-2">
-                    {pack.name}
-                  </h3>
-                  <p className="text-text-muted text-sm mb-4">
-                    {pack.description}
-                  </p>
-                  <div className="mb-6">
-                    <span className="text-2xl font-bold text-accent">
-                      Devis sur mesure
-                    </span>
-                  </div>
-                  <div className="space-y-2 mb-6">
-                    <div className="flex items-center justify-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-500" />
-                      <span className="text-text-muted">Fondations</span>
-                    </div>
-                    <div className="flex items-center justify-center gap-2 text-sm">
-                      {pack.features.notifications ? (
-                        <Check className="w-4 h-4 text-green-500" />
-                      ) : (
-                        <span className="w-4 h-4 text-gray-300 text-center">—</span>
-                      )}
-                      <span className={pack.features.notifications ? "text-text-muted" : "text-gray-400"}>Notifications</span>
-                    </div>
-                    <div className="flex items-center justify-center gap-2 text-sm">
-                      {pack.features.marketing ? (
-                        <Check className="w-4 h-4 text-green-500" />
-                      ) : (
-                        <span className="w-4 h-4 text-gray-300 text-center">—</span>
-                      )}
-                      <span className={pack.features.marketing ? "text-text-muted" : "text-gray-400"}>Marketing</span>
-                    </div>
-                  </div>
-                  <Link
-                    href="/contact"
-                    className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${
-                      pack.popular
-                        ? "bg-accent hover:bg-accent-light text-white"
-                        : pack.badge
-                        ? "bg-green-500 hover:bg-green-600 text-white"
-                        : "bg-primary/10 hover:bg-primary/20 text-primary"
-                    }`}
-                  >
-                    Demander un devis
-                    <ArrowRight size={18} />
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Avantages */}
-      <section className="py-16 md:py-24 bg-background">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOnce}
-            className="text-center mb-12"
-          >
-            <motion.h2
+            <motion.div
               variants={fadeInUp}
-              className="text-2xl md:text-3xl font-bold text-primary mb-4"
+              className="bg-white rounded-2xl border border-gray-100 p-6 text-center"
             >
-              Pourquoi nous choisir ?
-            </motion.h2>
+              <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Phone className="w-6 h-6 text-accent" />
+              </div>
+              <h3 className="font-bold text-primary mb-2">1. Appel découverte</h3>
+              <p className="text-text-muted text-sm">
+                15 min pour comprendre votre métier et vos outils actuels. On identifie ce dont vous avez besoin.
+              </p>
+            </motion.div>
+            <motion.div
+              variants={fadeInUp}
+              className="bg-white rounded-2xl border-2 border-accent p-6 text-center shadow-lg shadow-accent/10"
+            >
+              <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <FileCheck className="w-6 h-6 text-accent" />
+              </div>
+              <h3 className="font-bold text-primary mb-2">2. Devis sur mesure</h3>
+              <p className="text-text-muted text-sm">
+                Paiement unique. Pas d&apos;abonnement. Vous savez exactement ce que vous payez et recevez.
+              </p>
+            </motion.div>
+            <motion.div
+              variants={fadeInUp}
+              className="bg-white rounded-2xl border border-gray-100 p-6 text-center"
+            >
+              <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-6 h-6 text-accent" />
+              </div>
+              <h3 className="font-bold text-primary mb-2">3. On construit</h3>
+              <p className="text-text-muted text-sm">
+                1ère version en 30 jours. Version finale en 60 jours. Formation incluse.
+              </p>
+            </motion.div>
           </motion.div>
 
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOnce}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            {advantages.map((item, index) => (
-              <motion.div
-                key={index}
-                variants={fadeInUp}
-                className="bg-white rounded-2xl border border-gray-100 p-6 text-center hover:shadow-lg transition-shadow"
-              >
-                <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <item.icon className="w-6 h-6 text-accent" />
-                </div>
-                <h3 className="font-semibold text-primary mb-2">{item.title}</h3>
-                <p className="text-text-muted text-sm">{item.description}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Infrastructure */}
-      <section className="py-16 md:py-24 bg-surface">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Infrastructure note */}
           <motion.div
             variants={fadeInUp}
             initial="hidden"
             whileInView="visible"
             viewport={viewportOnce}
-            className="bg-primary/5 rounded-2xl p-6 md:p-8"
+            className="mt-8 bg-green-50 border border-green-100 rounded-2xl p-6 text-center"
           >
-            <h3 className="font-semibold text-primary mb-3">
-              Frais d&apos;infrastructure (payés directement aux fournisseurs)
-            </h3>
-            <p className="text-text-muted mb-2">
-              <span className="font-medium">Hébergement :</span> ~20-50€/mois
-              (Vercel + Supabase)
+            <p className="text-green-800 font-medium mb-1">
+              Infrastructure : 50€/mois — 1ère année offerte
             </p>
-            <p className="text-sm text-text-muted">
-              <em>
-                Pas d&apos;abonnement vers monapplication.be — vous êtes
-                propriétaire de votre système.
-              </em>
+            <p className="text-green-700 text-sm">
+              On gère l&apos;hébergement, la base de données, la sécurité et les mises à jour.
+              Vous n&apos;avez rien à gérer côté technique.
             </p>
           </motion.div>
         </div>

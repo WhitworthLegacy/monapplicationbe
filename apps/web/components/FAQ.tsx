@@ -37,9 +37,9 @@ const faqs = [
       "Pas du tout. Tout est conçu pour être utilisable depuis votre smartphone, entre deux chantiers. Si vous savez envoyer un WhatsApp, vous saurez tout gérer. Et on vous forme pour que vous soyez à l'aise dès le premier jour.",
   },
   {
-    question: "Et le site web, e-commerce, SEO — c'est inclus ?",
+    question: "Qu'est-ce qui est inclus dans le système ?",
     answer:
-      "C'est du bonus. Le coeur de notre offre, c'est votre secrétaire digitale et l'automatisation. Mais on va plus loin : site web professionnel, boutique en ligne, référencement Google avec des articles générés par IA (1/jour). Un seul interlocuteur pour tout.",
+      "Tout ce dont vous avez besoin pour ne plus jamais jouer à la secrétaire : CRM clients, agenda en ligne 24h/24, générateur de devis, factures, rappels automatiques WhatsApp, réponses automatisées sur tous vos canaux, tableau de bord, et gestion depuis votre téléphone. On s'adapte à votre métier.",
   },
   {
     question: "Y a-t-il des frais cachés ?",

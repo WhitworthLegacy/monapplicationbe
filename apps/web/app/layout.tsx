@@ -13,24 +13,26 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "monapplication.be | Votre Secrétaire Digitale",
   description:
-    "Votre secrétaire digitale : booking, devis, CRM, notifications 24h/24. Plus site web, e-commerce & SEO. Opérationnel en 30 jours. Demandez votre devis gratuit.",
+    "Spécialistes en automatisation pour entrepreneurs. Votre secrétaire digitale IA gère booking, devis, CRM, rappels et notifications 24h/24. Opérationnel en 30 jours.",
   keywords: [
     "secrétaire digitale",
-    "ERP",
     "automatisation",
+    "IA",
+    "intelligence artificielle",
+    "ERP",
     "CRM",
     "booking",
-    "création site web",
-    "e-commerce",
-    "SEO",
-    "référencement",
+    "devis automatique",
+    "gestion clients",
+    "artisan",
+    "entrepreneur",
     "Belgique",
     "Bruxelles",
   ],
   openGraph: {
     title: "monapplication.be | Votre Secrétaire Digitale",
     description:
-      "Booking, devis, CRM, notifications 24h/24 + site web, e-commerce & SEO. Demandez votre devis gratuit.",
+      "Spécialistes en automatisation. Secrétaire digitale IA : booking, devis, CRM, notifications 24h/24. Demandez votre devis gratuit.",
     type: "website",
     locale: "fr_BE",
     images: [

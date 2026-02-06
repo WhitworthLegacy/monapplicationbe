@@ -27,8 +27,8 @@ export function Footer() {
               </div>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-md">
-              Votre secrétaire digitale. Booking, devis, CRM, notifications
-              automatisées 24h/24. Plus site web, e-commerce &amp; SEO.
+              Spécialistes en automatisation pour entrepreneurs. Votre secrétaire
+              digitale gère booking, devis, CRM et notifications 24h/24.
             </p>
           </div>
 
@@ -38,10 +38,10 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/#services"
+                  href="/#problemes"
                   className="text-gray-400 hover:text-accent transition-colors text-sm"
                 >
-                  Services
+                  Le problème
                 </Link>
               </li>
               <li>
@@ -49,7 +49,7 @@ export function Footer() {
                   href="/#fonctionnalites"
                   className="text-gray-400 hover:text-accent transition-colors text-sm"
                 >
-                  Fonctionnalités
+                  La solution
                 </Link>
               </li>
               <li>

@@ -14,10 +14,10 @@ import {
   Users,
   MessageCircle,
   Bot,
-  Globe,
   BarChart3,
   Bell,
   Smartphone,
+  EuroIcon,
 } from "lucide-react";
 
 const solutions = [
@@ -57,11 +57,11 @@ const solutions = [
     result: "Vie pro/perso",
   },
   {
-    icon: Globe,
-    title: "Visible sur Google",
-    before: "Pas de site web, les clients ne vous trouvent pas en ligne.",
-    after: "Site pro inclus + SEO. Quand on cherche \"plombier Bruxelles\", vous apparaissez.",
-    result: "Nouveaux clients",
+    icon: EuroIcon,
+    title: "Relances de paiement automatiques",
+    before: "Vous oubliez de relancer. Le client ne paie pas. Vous perdez de l'argent.",
+    after: "Le système relance poliment à votre place : 7 jours, 14 jours, 30 jours. Sans effort.",
+    result: "Trésorerie saine",
   },
   {
     icon: Bell,
