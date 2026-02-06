@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer, viewportOnce } from "@/lib/animations";
-import { ArrowRight, Clock, Zap, Shield } from "lucide-react";
+import { ArrowRight, Clock, Zap, Shield, Globe, ShoppingCart } from "lucide-react";
 
 export function Hero() {
   return (
@@ -34,7 +34,7 @@ export function Hero() {
           <motion.div variants={fadeInUp} className="mb-6">
             <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white/90 px-4 py-2 rounded-full text-sm font-medium border border-white/10">
               <Zap size={16} className="text-accent" />
-              Système ERP automatisé
+              Site web, E-commerce, SEO &amp; Automatisation
             </span>
           </motion.div>
 
@@ -54,9 +54,10 @@ export function Hero() {
             className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed"
           >
             Une secrétaire coûte{" "}
-            <span className="text-white font-semibold">2 400€ brut/mois</span>. Notre
-            système fait le même travail à partir de{" "}
-            <span className="text-accent font-semibold">5 000€</span>.{" "}
+            <span className="text-white font-semibold">2 500€/mois</span> pour des tâches répétitives.
+            Notre système fait le même travail{" "}
+            <span className="text-accent font-semibold">24h/24, sans congés</span>.{" "}
+            Booking, devis, CRM, notifications — plus site web, e-commerce &amp; SEO.{" "}
             <span className="text-white font-semibold">Opérationnel en 30 jours.</span>
           </motion.p>
 
@@ -76,7 +77,7 @@ export function Hero() {
               href="/contact"
               className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-xl text-lg font-semibold backdrop-blur-sm border border-white/20 transition-all hover:scale-105"
             >
-              Demander une démo
+              Demander un devis gratuit
             </Link>
           </motion.div>
 
@@ -86,16 +87,20 @@ export function Hero() {
             className="flex flex-wrap justify-center gap-6 md:gap-12"
           >
             <div className="flex items-center gap-2 text-gray-400">
-              <Clock size={20} className="text-accent" />
-              <span className="text-sm">Opérationnel en 30 jours</span>
+              <Globe size={20} className="text-accent" />
+              <span className="text-sm">Sites web &amp; E-commerce</span>
             </div>
             <div className="flex items-center gap-2 text-gray-400">
               <Shield size={20} className="text-accent" />
-              <span className="text-sm">Pas d&apos;abonnement</span>
+              <span className="text-sm">SEO &amp; Référencement</span>
             </div>
             <div className="flex items-center gap-2 text-gray-400">
               <Zap size={20} className="text-accent" />
-              <span className="text-sm">WhatsApp, Messenger, Auto</span>
+              <span className="text-sm">Automatisation complète</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-400">
+              <Clock size={20} className="text-accent" />
+              <span className="text-sm">Opérationnel en 30 jours</span>
             </div>
           </motion.div>
         </motion.div>

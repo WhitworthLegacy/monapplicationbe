@@ -13,9 +13,11 @@ import {
   FileCheck,
   Users,
   MessageCircle,
-  LayoutDashboard,
   Bot,
   Globe,
+  BarChart3,
+  Bell,
+  Smartphone,
 } from "lucide-react";
 
 const solutions = [
@@ -60,6 +62,27 @@ const solutions = [
     before: "Pas de site web, les clients ne vous trouvent pas en ligne.",
     after: "Site pro inclus + SEO. Quand on cherche \"plombier Bruxelles\", vous apparaissez.",
     result: "Nouveaux clients",
+  },
+  {
+    icon: Bell,
+    title: "Rappels automatiques",
+    before: "Le client oublie son RDV. Vous avez un trou dans le planning et vous perdez du temps.",
+    after: "Rappels WhatsApp envoyés automatiquement 24h et 1h avant chaque RDV. Fini les no-shows.",
+    result: "-80% de no-shows",
+  },
+  {
+    icon: BarChart3,
+    title: "Tableau de bord complet",
+    before: "Aucune visibilité sur votre activité. Vous ne savez pas combien de devis sont en attente.",
+    after: "Dashboard en temps réel : RDV du jour, devis en cours, chiffre d'affaires, clients actifs.",
+    result: "Vision claire",
+  },
+  {
+    icon: Smartphone,
+    title: "Tout depuis votre téléphone",
+    before: "Pour gérer l'admin, vous devez être devant un PC. Donc le soir, chez vous.",
+    after: "Interface mobile-first. Gérez tout depuis votre smartphone, entre deux chantiers.",
+    result: "Zéro contrainte",
   },
 ];
 

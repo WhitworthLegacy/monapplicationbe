@@ -9,20 +9,19 @@ import {
 } from "@/lib/animations";
 import {
   Check,
-  X,
   ArrowRight,
   Layers,
-  Zap,
   Bell,
   MessageCircle,
   Globe,
-  LayoutDashboard,
-  GraduationCap,
   CalendarCheck,
   FileCheck,
   Users,
   Mail,
   Bot,
+  Shield,
+  Sparkles,
+  Phone,
 } from "lucide-react";
 
 const packages = [
@@ -31,8 +30,7 @@ const packages = [
     name: "Fondations",
     icon: Layers,
     color: "bg-primary",
-    price: "5 000€ HT",
-    priceNote: "Base",
+    tagline: "Base",
     description: "Votre secrétaire digitale complète",
     detailedDescription: "Tout ce qu'il faut pour automatiser votre admin : site web pro optimisé SEO, booking RDV en ligne 24h/24, générateur de devis en 2 clics, CRM clients complet, calendrier intelligent. Plus une formation de 2h et 30 jours de support.",
     features: [
@@ -49,8 +47,7 @@ const packages = [
     name: "Notifications",
     icon: Bell,
     color: "bg-green-600",
-    price: "+1 500€ HT",
-    priceNote: "Add-on",
+    tagline: "Add-on",
     description: "Zéro oubli, zéro no-show",
     detailedDescription: "Inclut tout le package Fondations + rappels WhatsApp automatiques avant chaque RDV, emails de confirmation, alertes personnalisées et suivi complet de tous vos envois. Réduisez les no-shows de 80%.",
     features: [
@@ -67,8 +64,7 @@ const packages = [
     name: "Marketing",
     icon: MessageCircle,
     color: "bg-accent",
-    price: "+2 500€ HT",
-    priceNote: "Add-on",
+    tagline: "Add-on",
     description: "Automatisation 24h/24 sur tous les canaux",
     detailedDescription: "Inclut tout le package Fondations + Notifications. Soyez disponible partout, tout le temps : WhatsApp Business, Messenger et Instagram DM intégrés avec réponses automatisées. Disponible 24h/24.",
     features: [
@@ -85,11 +81,8 @@ const packages = [
 const packs = [
   {
     name: "FONDATIONS",
-    price: "5 000€ HT",
-    originalPrice: null,
     popular: false,
     description: "Votre secrétaire digitale",
-    savings: null,
     features: {
       fondations: true,
       notifications: false,
@@ -98,11 +91,8 @@ const packs = [
   },
   {
     name: "PRO",
-    price: "6 500€ HT",
-    originalPrice: null,
     popular: true,
     description: "Le plus populaire",
-    savings: null,
     features: {
       fondations: true,
       notifications: true,
@@ -111,11 +101,9 @@ const packs = [
   },
   {
     name: "FULL",
-    price: "8 000€ HT",
-    originalPrice: "9 000€ HT",
     popular: false,
     description: "Tout automatisé",
-    savings: "Économisez 1 000€",
+    badge: "COMPLET",
     features: {
       fondations: true,
       notifications: true,
@@ -124,31 +112,26 @@ const packs = [
   },
 ];
 
-const comparisonData = [
+const advantages = [
   {
-    feature: "Coût mensuel",
-    secretary: "~2 400€ brut",
-    digital: "0€/mois",
+    icon: Shield,
+    title: "Paiement unique",
+    description: "Pas d'abonnement. Vous payez une fois, vous utilisez pour toujours.",
   },
   {
-    feature: "Coût première année",
-    secretary: "~29 000€",
-    digital: "À partir de 5 000€ HT",
+    icon: Sparkles,
+    title: "Clé en main",
+    description: "On s'occupe de tout. Opérationnel en 30 jours.",
   },
   {
-    feature: "Mise en place",
-    secretary: "Formation + adaptation",
-    digital: "30 jours clé en main",
+    icon: Users,
+    title: "Vous êtes propriétaire",
+    description: "Le système vous appartient. Aucune dépendance.",
   },
   {
-    feature: "Disponibilité",
-    secretary: "8h - 17h",
-    digital: "24h/24, 7j/7",
-  },
-  {
-    feature: "Canaux",
-    secretary: "Téléphone, email",
-    digital: "WhatsApp, Messenger, Instagram",
+    icon: Phone,
+    title: "Support inclus",
+    description: "Formation de 2h + 30 jours de support après mise en ligne.",
   },
 ];
 
@@ -168,23 +151,32 @@ export default function TarifsPage() {
               variants={fadeInUp}
               className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4"
             >
-              Tarifs
+              Nos formules
             </motion.span>
             <motion.h1
               variants={fadeInUp}
               className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6"
             >
-              Construisez votre système
+              Un système sur mesure,
               <br />
-              <span className="text-accent">bloc par bloc.</span>
+              <span className="text-accent">adapté à votre métier.</span>
             </motion.h1>
             <motion.p
               variants={fadeInUp}
-              className="text-lg text-gray-300 max-w-2xl mx-auto"
+              className="text-lg text-gray-300 max-w-2xl mx-auto mb-8"
             >
-              Choisissez les packages dont vous avez besoin. Payez une fois,
-              utilisez pour toujours. Opérationnel en 30 jours.
+              Choisissez les packages dont vous avez besoin. On construit
+              votre solution ensemble. Opérationnel en 30 jours.
             </motion.p>
+            <motion.div variants={fadeInUp}>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all hover:shadow-xl hover:shadow-accent/30"
+              >
+                Demander un devis gratuit
+                <ArrowRight size={20} />
+              </Link>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -227,7 +219,7 @@ export default function TarifsPage() {
                   <pkg.icon className="w-6 h-6 text-white" />
                   <div>
                     <h3 className="font-bold text-white">{pkg.name}</h3>
-                    <span className="text-white/80 text-sm">{pkg.price}</span>
+                    <span className="text-white/80 text-sm">{pkg.tagline}</span>
                   </div>
                 </div>
                 <div className="p-6">
@@ -277,7 +269,7 @@ export default function TarifsPage() {
             viewport={viewportOnce}
             className="space-y-6"
           >
-            {packages.map((pkg, index) => (
+            {packages.map((pkg) => (
               <motion.div
                 key={pkg.id}
                 variants={fadeInUp}
@@ -289,7 +281,7 @@ export default function TarifsPage() {
                       <pkg.icon className="w-8 h-8 text-white" />
                       <div>
                         <h3 className="text-xl font-bold text-white">{pkg.name}</h3>
-                        <span className="text-white/80 text-sm">{pkg.price}</span>
+                        <span className="text-white/80 text-sm">{pkg.tagline}</span>
                       </div>
                     </div>
                   </div>
@@ -320,7 +312,7 @@ export default function TarifsPage() {
         </div>
       </section>
 
-      {/* Packs recommandés */}
+      {/* Choisissez votre formule */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-primary/5 to-secondary/5">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -337,7 +329,7 @@ export default function TarifsPage() {
               Choisissez votre formule
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-text-muted">
-              Prix one-shot. Pas d&apos;abonnement. Opérationnel en 30 jours.
+              Paiement unique. Pas d&apos;abonnement. Opérationnel en 30 jours.
             </motion.p>
           </motion.div>
 
@@ -355,7 +347,7 @@ export default function TarifsPage() {
                 className={`relative bg-white rounded-2xl border-2 overflow-hidden ${
                   pack.popular
                     ? "border-accent shadow-xl shadow-accent/10"
-                    : pack.name === "FULL"
+                    : pack.badge
                     ? "border-green-500 shadow-xl shadow-green-500/10"
                     : "border-gray-100"
                 }`}
@@ -365,9 +357,9 @@ export default function TarifsPage() {
                     POPULAIRE
                   </div>
                 )}
-                {pack.savings && (
+                {pack.badge && (
                   <div className="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-                    MEILLEURE OFFRE
+                    {pack.badge}
                   </div>
                 )}
                 <div className="p-6 text-center">
@@ -377,36 +369,21 @@ export default function TarifsPage() {
                   <p className="text-text-muted text-sm mb-4">
                     {pack.description}
                   </p>
-                  <div className="mb-2">
-                    {pack.originalPrice && (
-                      <span className="text-xl text-text-muted line-through mr-2">
-                        {pack.originalPrice}
-                      </span>
-                    )}
-                    <span className={`text-3xl font-bold ${pack.savings ? "text-green-600" : "text-accent"}`}>
-                      {pack.price}
+                  <div className="mb-6">
+                    <span className="text-2xl font-bold text-accent">
+                      Devis sur mesure
                     </span>
                   </div>
-                  {pack.savings && (
-                    <p className="text-green-600 text-sm font-semibold mb-4">
-                      {pack.savings}
-                    </p>
-                  )}
-                  {!pack.savings && <div className="mb-4" />}
                   <div className="space-y-2 mb-6">
                     <div className="flex items-center justify-center gap-2 text-sm">
-                      {pack.features.fondations ? (
-                        <Check className="w-4 h-4 text-green-500" />
-                      ) : (
-                        <X className="w-4 h-4 text-red-400" />
-                      )}
-                      <span className={pack.features.fondations ? "text-text-muted" : "text-gray-400"}>Fondations</span>
+                      <Check className="w-4 h-4 text-green-500" />
+                      <span className="text-text-muted">Fondations</span>
                     </div>
                     <div className="flex items-center justify-center gap-2 text-sm">
                       {pack.features.notifications ? (
                         <Check className="w-4 h-4 text-green-500" />
                       ) : (
-                        <X className="w-4 h-4 text-red-400" />
+                        <span className="w-4 h-4 text-gray-300 text-center">—</span>
                       )}
                       <span className={pack.features.notifications ? "text-text-muted" : "text-gray-400"}>Notifications</span>
                     </div>
@@ -414,7 +391,7 @@ export default function TarifsPage() {
                       {pack.features.marketing ? (
                         <Check className="w-4 h-4 text-green-500" />
                       ) : (
-                        <X className="w-4 h-4 text-red-400" />
+                        <span className="w-4 h-4 text-gray-300 text-center">—</span>
                       )}
                       <span className={pack.features.marketing ? "text-text-muted" : "text-gray-400"}>Marketing</span>
                     </div>
@@ -424,12 +401,12 @@ export default function TarifsPage() {
                     className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${
                       pack.popular
                         ? "bg-accent hover:bg-accent-light text-white"
-                        : pack.savings
+                        : pack.badge
                         ? "bg-green-500 hover:bg-green-600 text-white"
                         : "bg-primary/10 hover:bg-primary/20 text-primary"
                     }`}
                   >
-                    Choisir ce pack
+                    Demander un devis
                     <ArrowRight size={18} />
                   </Link>
                 </div>
@@ -439,9 +416,9 @@ export default function TarifsPage() {
         </div>
       </section>
 
-      {/* Comparison */}
+      {/* Avantages */}
       <section className="py-16 md:py-24 bg-background">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             variants={staggerContainer}
             initial="hidden"
@@ -453,61 +430,31 @@ export default function TarifsPage() {
               variants={fadeInUp}
               className="text-2xl md:text-3xl font-bold text-primary mb-4"
             >
-              Comparez les coûts
+              Pourquoi nous choisir ?
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-text-muted">
-              Secrétaire classique (2 400€/mois) vs Secrétaire Digitale
-            </motion.p>
           </motion.div>
 
           <motion.div
-            variants={fadeInUp}
+            variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={viewportOnce}
-            className="bg-white rounded-2xl overflow-hidden border border-gray-100"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
           >
-            <div className="grid grid-cols-3 bg-primary text-white text-sm md:text-base">
-              <div className="p-4 md:p-6 font-medium">Critère</div>
-              <div className="p-4 md:p-6 font-medium text-center border-l border-white/10">
-                Secrétaire
-              </div>
-              <div className="p-4 md:p-6 font-medium text-center border-l border-white/10 bg-accent">
-                Digitale
-              </div>
-            </div>
-            {comparisonData.map((row, index) => (
-              <div
+            {advantages.map((item, index) => (
+              <motion.div
                 key={index}
-                className={`grid grid-cols-3 text-sm md:text-base ${
-                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                }`}
+                variants={fadeInUp}
+                className="bg-white rounded-2xl border border-gray-100 p-6 text-center hover:shadow-lg transition-shadow"
               >
-                <div className="p-4 md:p-6 text-primary font-medium">
-                  {row.feature}
+                <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <item.icon className="w-6 h-6 text-accent" />
                 </div>
-                <div className="p-4 md:p-6 text-center text-text-muted border-l border-gray-100">
-                  {row.secretary}
-                </div>
-                <div className="p-4 md:p-6 text-center border-l border-gray-100 font-semibold text-accent">
-                  {row.digital}
-                </div>
-              </div>
+                <h3 className="font-semibold text-primary mb-2">{item.title}</h3>
+                <p className="text-text-muted text-sm">{item.description}</p>
+              </motion.div>
             ))}
           </motion.div>
-
-          <motion.p
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOnce}
-            className="text-center mt-8 text-text-muted"
-          >
-            <span className="text-primary font-semibold">
-              Économie sur 5 ans :
-            </span>{" "}
-            <span className="text-accent font-bold text-xl">+120 000€</span>
-          </motion.p>
         </div>
       </section>
 
@@ -557,7 +504,7 @@ export default function TarifsPage() {
               variants={fadeInUp}
               className="text-gray-300 mb-8 max-w-xl mx-auto"
             >
-              Appelez-nous ou demandez une démo gratuite. On vous rappelle sous
+              Appelez-nous ou demandez un devis gratuit. On vous rappelle sous
               24h.
             </motion.p>
             <motion.div
@@ -568,7 +515,7 @@ export default function TarifsPage() {
                 href="/contact"
                 className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all hover:shadow-xl hover:shadow-accent/30"
               >
-                Demander une démo
+                Demander un devis gratuit
                 <ArrowRight size={20} />
               </Link>
               <a

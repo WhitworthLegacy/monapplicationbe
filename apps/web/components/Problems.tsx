@@ -31,7 +31,7 @@ const problems = [
     title: "3 appels manqués = 3 clients perdus",
     description:
       "Vous êtes sur un toit, les mains dans le plâtre, sous une voiture... Le téléphone sonne. Vous rappelez 2h plus tard : trop tard, ils ont trouvé quelqu'un d'autre.",
-    stat: "~500€/client perdu",
+    stat: "Clients perdus",
   },
   {
     icon: Clock,
@@ -56,10 +56,10 @@ const problems = [
   },
   {
     icon: Wallet,
-    title: "2 400€/mois pour une secrétaire ?",
+    title: "2 500€/mois pour du copier-coller ?",
     description:
-      "Vous savez qu'il vous faut de l'aide. Mais entre les charges, les congés, la formation... C'est 30 000€/an minimum. Impossible pour l'instant.",
-    stat: "Budget trop serré",
+      "Une secrétaire à 2 500€ brut/mois pour encoder des lignes, envoyer des mails de confirmation et répondre au téléphone. Des tâches répétitives qu'un système fait mieux, plus vite, et sans congés.",
+    stat: "Budget mieux investi",
   },
 ];
 

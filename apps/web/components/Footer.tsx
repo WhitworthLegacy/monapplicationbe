@@ -27,8 +27,8 @@ export function Footer() {
               </div>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-md">
-              Votre secrétaire digitale. Un système ERP automatique qui gère vos
-              RDV, devis, clients et notifications. Disponible 24h/24, 7j/7.
+              Votre secrétaire digitale. Booking, devis, CRM, notifications
+              automatisées 24h/24. Plus site web, e-commerce &amp; SEO.
             </p>
           </div>
 
@@ -36,6 +36,14 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">Navigation</h3>
             <ul className="space-y-3">
+              <li>
+                <Link
+                  href="/#services"
+                  className="text-gray-400 hover:text-accent transition-colors text-sm"
+                >
+                  Services
+                </Link>
+              </li>
               <li>
                 <Link
                   href="/#fonctionnalites"
@@ -65,7 +73,7 @@ export function Footer() {
                   href="/tarifs"
                   className="text-gray-400 hover:text-accent transition-colors text-sm"
                 >
-                  Tarifs
+                  Formules
                 </Link>
               </li>
               <li>

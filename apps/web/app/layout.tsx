@@ -13,24 +13,34 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "monapplication.be | Votre Secrétaire Digitale",
   description:
-    "Une secrétaire coûte minimum 24 000€/an. Notre système fait le même travail à partir de 5 000€. Une seule fois. Booking, devis, CRM, notifications — tout automatisé.",
+    "Votre secrétaire digitale : booking, devis, CRM, notifications 24h/24. Plus site web, e-commerce & SEO. Opérationnel en 30 jours. Demandez votre devis gratuit.",
   keywords: [
     "secrétaire digitale",
     "ERP",
     "automatisation",
-    "BTP",
-    "bâtiment",
-    "transport",
-    "devis automatique",
     "CRM",
     "booking",
+    "création site web",
+    "e-commerce",
+    "SEO",
+    "référencement",
+    "Belgique",
+    "Bruxelles",
   ],
   openGraph: {
     title: "monapplication.be | Votre Secrétaire Digitale",
     description:
-      "Une secrétaire coûte minimum 24 000€/an. Notre système fait le même travail à partir de 5 000€.",
+      "Booking, devis, CRM, notifications 24h/24 + site web, e-commerce & SEO. Demandez votre devis gratuit.",
     type: "website",
     locale: "fr_BE",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "monapplication.be - Votre Secrétaire Digitale",
+      },
+    ],
   },
 };
 

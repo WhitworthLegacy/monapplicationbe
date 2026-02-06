@@ -59,7 +59,7 @@ export function CTA() {
               href="/tarifs"
               className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-xl text-lg font-semibold backdrop-blur-sm border border-white/20 transition-all hover:scale-105"
             >
-              Voir les tarifs
+              Voir nos formules
             </Link>
           </motion.div>
         </motion.div>

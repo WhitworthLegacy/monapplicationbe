@@ -7,14 +7,14 @@ import { Check, X } from "lucide-react";
 const comparisonData = [
   {
     feature: "Coût mensuel",
-    secretary: "~2 400€ brut/mois",
-    digital: "0€/mois",
+    secretary: "~2 500€ brut/mois",
+    digital: "Paiement unique",
     highlight: true,
   },
   {
     feature: "Coût première année",
-    secretary: "~29 000€",
-    digital: "À partir de 5 000€",
+    secretary: "~30 000€/an minimum",
+    digital: "Investissement unique",
     highlight: true,
   },
   {
@@ -126,7 +126,7 @@ export function Comparison() {
           <p className="text-text-muted text-lg">
             <span className="text-primary font-semibold">Économie totale</span>{" "}
             sur 5 ans :{" "}
-            <span className="text-accent font-bold text-2xl">+120 000€</span>
+            <span className="text-accent font-bold text-2xl">Considérable</span>
           </p>
         </motion.div>
       </div>

@@ -1,4 +1,5 @@
 import { Hero } from "@/components/Hero";
+import { Services } from "@/components/Services";
 import { Problems } from "@/components/Problems";
 import { Solutions } from "@/components/Solutions";
 import { Realisations } from "@/components/Realisations";
@@ -11,6 +12,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <Services />
       <Problems />
       <Solutions />
       <Realisations />
