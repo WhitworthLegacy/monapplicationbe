@@ -44,7 +44,7 @@ const faqs = [
   {
     question: "Y a-t-il des frais cachés ?",
     answer:
-      "Non. Le devis est clair et tout compris. Les seuls frais récurrents sont l'hébergement (~20-50€/mois) payé directement aux fournisseurs, pas à nous. Pas d'abonnement mensuel chez monapplication.be. C'est un investissement unique.",
+      "Non. Le devis est clair et tout compris. On gère votre base de données et l'hébergement pour 50€/mois — et la 1ère année est gratuite. Pas de surprise, pas de petites lignes.",
   },
 ];
 
