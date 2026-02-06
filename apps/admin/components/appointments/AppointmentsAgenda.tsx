@@ -10,6 +10,9 @@ import {
   Search,
   User,
   Copy,
+  Zap,
+  Mail,
+  Phone,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -229,9 +232,17 @@ export default function AppointmentsAgenda() {
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">
-                            <h4 className="text-base font-semibold text-[#0f172a]">
-                              {apt.title}
-                            </h4>
+                            <div className="flex items-center gap-2">
+                              <h4 className="text-base font-semibold text-[#0f172a]">
+                                {apt.title}
+                              </h4>
+                              {apt.source === 'funnel' && (
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                                  <Zap className="w-3 h-3" />
+                                  Funnel
+                                </span>
+                              )}
+                            </div>
                             {getStatusBadge(apt.status)}
                           </div>
 
@@ -313,10 +324,98 @@ export default function AppointmentsAgenda() {
           size="lg"
         >
           <div className="space-y-4">
-            <p className="text-[#64748b]">Détails du rendez-vous (TODO: Compléter)</p>
-            <pre className="text-xs bg-[#f1f5f9] p-4 rounded-lg overflow-auto">
-              {JSON.stringify(selectedAppointment, null, 2)}
-            </pre>
+            {/* Source badge */}
+            {selectedAppointment.source === 'funnel' && (
+              <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                <Zap className="w-4 h-4 text-amber-600" />
+                <span className="text-sm font-medium text-amber-800">
+                  Pris via le diagnostic en ligne
+                </span>
+              </div>
+            )}
+
+            {/* Status + Date */}
+            <div className="flex items-center gap-3">
+              {getStatusBadge(selectedAppointment.status)}
+              <div className="flex items-center gap-2 text-sm text-[#64748b]">
+                <Calendar className="w-4 h-4" />
+                {formatAppointmentDate(selectedAppointment.scheduled_at)}
+              </div>
+              <div className="flex items-center gap-2 text-sm text-[#64748b]">
+                <Clock className="w-4 h-4" />
+                {formatAppointmentTime(selectedAppointment.scheduled_at)} ({formatDuration(selectedAppointment.duration_minutes)})
+              </div>
+            </div>
+
+            {/* Contact info */}
+            <div className="bg-[#f1f5f9] rounded-lg p-4 space-y-2">
+              <h4 className="text-sm font-semibold text-[#0f172a]">Contact</h4>
+              {selectedAppointment.client_name && (
+                <div className="flex items-center gap-2 text-sm">
+                  <User className="w-4 h-4 text-[#64748b]" />
+                  <span>{selectedAppointment.client_name}</span>
+                  {selectedAppointment.client_company && (
+                    <span className="text-[#64748b]">({selectedAppointment.client_company})</span>
+                  )}
+                </div>
+              )}
+              {selectedAppointment.client_email && (
+                <div className="flex items-center gap-2 text-sm">
+                  <Mail className="w-4 h-4 text-[#64748b]" />
+                  <a href={`mailto:${selectedAppointment.client_email}`} className="text-[#1e3a8a] hover:underline">
+                    {selectedAppointment.client_email}
+                  </a>
+                </div>
+              )}
+              {selectedAppointment.client_phone && (
+                <div className="flex items-center gap-2 text-sm">
+                  <Phone className="w-4 h-4 text-[#64748b]" />
+                  <a href={`tel:${selectedAppointment.client_phone}`} className="text-[#1e3a8a] hover:underline">
+                    {selectedAppointment.client_phone}
+                  </a>
+                </div>
+              )}
+            </div>
+
+            {/* Video link */}
+            {selectedAppointment.video_link && (
+              <div className="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <Video className="w-5 h-5 text-green-600" />
+                <a
+                  href={selectedAppointment.video_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium text-green-800 hover:underline"
+                >
+                  Rejoindre Google Meet
+                </a>
+                <button
+                  onClick={() => copyVideoLink(selectedAppointment.video_link!)}
+                  className="ml-auto text-green-600 hover:text-green-800"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            {/* Description / Funnel data */}
+            {selectedAppointment.description && (
+              <div className="space-y-1">
+                <h4 className="text-sm font-semibold text-[#0f172a]">
+                  {selectedAppointment.source === 'funnel' ? 'Diagnostic' : 'Description'}
+                </h4>
+                <p className="text-sm text-[#64748b] whitespace-pre-line">
+                  {selectedAppointment.description}
+                </p>
+              </div>
+            )}
+
+            {selectedAppointment.notes && (
+              <div className="space-y-1">
+                <h4 className="text-sm font-semibold text-[#0f172a]">Notes</h4>
+                <p className="text-sm text-[#64748b]">{selectedAppointment.notes}</p>
+              </div>
+            )}
           </div>
         </Modal>
       )}

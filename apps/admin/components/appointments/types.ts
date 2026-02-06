@@ -62,6 +62,9 @@ export interface Appointment {
   send_reminder_24h?: boolean;
   send_reminder_1h?: boolean;
 
+  // Source: 'admin' (manual) or 'funnel' (diagnostic)
+  source?: 'admin' | 'funnel';
+
   // Timestamps
   created_at?: string;
   updated_at?: string;
