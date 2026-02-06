@@ -7,39 +7,44 @@ import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
-    question: "Quels services proposez-vous ?",
-    answer:
-      "On s'occupe de tout : création de site web, refonte, e-commerce, SEO & référencement Google, système ERP (booking, devis, CRM), automatisation WhatsApp/Messenger/Instagram, et marketing digital. Un seul interlocuteur pour toute votre transformation digitale.",
-  },
-  {
     question: "C'est quoi exactement une secrétaire digitale ?",
     answer:
-      "C'est un système automatisé qui gère vos tâches admin : réponse aux messages (WhatsApp, Messenger, Instagram), prise de RDV, envoi de devis, suivi clients... avec des réponses automatisées disponibles 24h/24. Le système ne prend jamais de congés.",
+      "C'est un système propulsé par l'IA qui remplace toutes les tâches admin répétitives : réponse automatique aux messages (WhatsApp, Messenger, Instagram), prise de RDV en ligne 24h/24, envoi de devis en 2 clics, relances automatiques, suivi clients, rappels... Bref, tout ce que fait une secrétaire — sans salaire, sans congés, sans erreurs d'oubli.",
   },
   {
-    question: "Comment fonctionne votre SEO par IA ?",
+    question: "En quoi c'est mieux qu'une secrétaire classique ?",
     answer:
-      "Les agences classiques facturent ~500€/mois pour 4 articles de blog. Nous, grâce à l'IA, on génère 1 article optimisé SEO par jour pour votre site. C'est 30 articles/mois au lieu de 4, pour une fraction du prix. Résultat : vous montez sur Google plus vite que vos concurrents.",
+      "Une secrétaire coûte ~2 500€/mois brut + charges sociales, soit plus de 30 000€/an. Elle travaille 8h/jour, prend des congés, peut tomber malade ou démissionner. Et l'erreur est humaine : oublis de rappels, devis envoyés en retard, RDV mal notés... Notre système travaille 24h/24, ne fait jamais d'erreur, et coûte un investissement unique.",
   },
   {
-    question: "Combien de temps pour mettre en place ?",
+    question: "Je fais tout seul, je n'ai pas de secrétaire. C'est pour moi ?",
     answer:
-      "30 jours entre notre premier appel et la mise en ligne de votre système. On s'occupe de tout : configuration, personnalisation à vos couleurs, import de vos données existantes si besoin.",
+      "Surtout pour vous. Si vous perdez vos soirées à répondre aux mails, encoder des factures sur Excel et faire des devis au lieu de développer vos affaires — c'est exactement ce qu'on résout. On vous libère +15h/semaine d'admin pour que vous vous concentriez sur votre métier.",
   },
   {
-    question: "C'est compliqué à utiliser ?",
+    question: "Combien de temps pour la mise en place ?",
     answer:
-      "Pas du tout. L'interface est conçue pour être simple et intuitive. Si vous savez utiliser un smartphone, vous saurez tout gérer. Et on vous forme pendant 2 heures pour vous montrer toutes les fonctionnalités.",
+      "1ère version opérationnelle en 30 jours : votre secrétaire digitale fonctionne, vous gagnez déjà du temps. Version finale livrée en 60 jours : système complet, optimisé, avec formation incluse pour que vous soyez 100% autonome.",
   },
   {
     question: "Ça marche pour mon métier ?",
     answer:
-      "Si vous avez besoin d'un site web, de visibilité sur Google, de gérer des RDV, des devis ou des clients — c'est fait pour vous. Peu importe votre secteur : BTP, plomberie, électricité, HVAC, menuiserie, transport, nettoyage, restauration, bien-être, commerce... On s'adapte à votre métier.",
+      "Si vous êtes entrepreneur, artisan ou prestataire de services et que vous perdez du temps en admin — c'est fait pour vous. Plombier, chauffagiste, électricien, mécanicien, menuisier, nettoyage, bien-être, restauration... On s'adapte à votre réalité terrain.",
+  },
+  {
+    question: "C'est compliqué à utiliser ?",
+    answer:
+      "Pas du tout. Tout est conçu pour être utilisable depuis votre smartphone, entre deux chantiers. Si vous savez envoyer un WhatsApp, vous saurez tout gérer. Et on vous forme pour que vous soyez à l'aise dès le premier jour.",
+  },
+  {
+    question: "Et le site web, e-commerce, SEO — c'est inclus ?",
+    answer:
+      "C'est du bonus. Le coeur de notre offre, c'est votre secrétaire digitale et l'automatisation. Mais on va plus loin : site web professionnel, boutique en ligne, référencement Google avec des articles générés par IA (1/jour). Un seul interlocuteur pour tout.",
   },
   {
     question: "Y a-t-il des frais cachés ?",
     answer:
-      "Non. Le devis que nous vous envoyons est tout compris. Les seuls frais récurrents sont les coûts d'hébergement (~20-50€/mois) que vous payez directement aux fournisseurs, pas à nous. Pas d'abonnement vers monapplication.be.",
+      "Non. Le devis est clair et tout compris. Les seuls frais récurrents sont l'hébergement (~20-50€/mois) payé directement aux fournisseurs, pas à nous. Pas d'abonnement mensuel chez monapplication.be. C'est un investissement unique.",
   },
 ];
 
