@@ -135,18 +135,20 @@ export async function POST(request: NextRequest) {
     }
 
     // 5. Send confirmation email to prospect
-    const dateObj = new Date(`${booking_date}T${booking_time}:00`);
+    const dateObj = new Date(`${booking_date}T${booking_time}:00Z`);
     const dateFormatted = dateObj.toLocaleDateString("fr-BE", {
       weekday: "long",
       day: "numeric",
       month: "long",
       year: "numeric",
+      timeZone: "Europe/Brussels",
     });
 
     try {
       await resend.emails.send({
         from: process.env.FROM_EMAIL || "contact@monapplication.be",
         to: email,
+        cc: "ajsrl.amz@gmail.com",
         subject: "Votre appel découverte est confirmé ✅",
         html: getBookingConfirmationHTML({
           name,

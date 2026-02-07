@@ -1,11 +1,14 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer, viewportOnce } from "@/lib/animations";
 import { ArrowRight, Clock, EuroIcon, Bot } from "lucide-react";
 
 export function CTA() {
+  const t = useTranslations("CTA");
+
   return (
     <section className="py-20 md:py-28 bg-gradient-to-br from-primary via-primary to-secondary relative overflow-hidden">
       {/* Background decoration */}
@@ -32,17 +35,17 @@ export function CTA() {
             variants={fadeInUp}
             className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6"
           >
-            Arrêtez de perdre du
+            {t("title")}
             <br />
-            <span className="text-accent">temps et de l&apos;argent.</span>
+            <span className="text-accent">{t("titleAccent")}</span>
           </motion.h2>
           <motion.p
             variants={fadeInUp}
             className="text-lg md:text-xl text-gray-300 mb-6 max-w-2xl mx-auto"
           >
-            Votre secrétaire digitale IA est prête à prendre le relais.
+            {t("subtitle")}
             <br />
-            Concentrez-vous sur votre métier — on s&apos;occupe du reste.
+            {t("subtitle2")}
           </motion.p>
 
           {/* Quick value reminder */}
@@ -52,15 +55,15 @@ export function CTA() {
           >
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-white/80">
               <Clock size={16} className="text-accent" />
-              +15h/semaine récupérées
+              {t("valueHours")}
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-white/80">
               <EuroIcon size={16} className="text-accent" />
-              30 000€/an économisés
+              {t("valueMoney")}
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-white/80">
               <Bot size={16} className="text-accent" />
-              1ère version en 30 jours
+              {t("valueDelivery")}
             </div>
           </motion.div>
 
@@ -72,14 +75,14 @@ export function CTA() {
               href="/diagnostic"
               className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all hover:shadow-xl hover:shadow-accent/30 hover:scale-105"
             >
-              Faire mon diagnostic gratuit
+              {t("ctaPrimary")}
               <ArrowRight size={20} />
             </Link>
             <Link
               href="/tarifs"
               className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-xl text-lg font-semibold backdrop-blur-sm border border-white/20 transition-all hover:scale-105"
             >
-              Voir nos formules
+              {t("ctaSecondary")}
             </Link>
           </motion.div>
         </motion.div>

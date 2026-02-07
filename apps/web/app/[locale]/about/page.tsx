@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import {
   fadeInUp,
@@ -16,37 +17,18 @@ import {
   Award,
   MapPin,
 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 
-const valeurs = [
-  {
-    icon: Lightbulb,
-    title: "Innovation",
-    description:
-      "Nous utilisons les dernières technologies pour créer des solutions qui simplifient vraiment votre quotidien.",
-  },
-  {
-    icon: Heart,
-    title: "Proximité",
-    description:
-      "Chaque client est unique. Nous prenons le temps de comprendre vos besoins spécifiques.",
-  },
-  {
-    icon: Target,
-    title: "Efficacité",
-    description:
-      "Des solutions concrètes qui fonctionnent. Pas de gadgets inutiles, juste ce dont vous avez besoin.",
-  },
-  {
-    icon: Rocket,
-    title: "Accompagnement",
-    description:
-      "Nous vous guidons à chaque étape, de la mise en place jusqu'à l'autonomie complète.",
-  },
-];
+const valeurIcons = [Lightbulb, Heart, Target, Rocket];
 
 export default function AboutPage() {
+  const t = useTranslations("About");
+  const values = t.raw("values") as {
+    title: string;
+    description: string;
+  }[];
+
   return (
     <main className="pt-20 md:pt-24">
       {/* Hero Section */}
@@ -62,22 +44,21 @@ export default function AboutPage() {
               variants={fadeInUp}
               className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4"
             >
-              Qui sommes-nous ?
+              {t("tagline")}
             </motion.span>
             <motion.h1
               variants={fadeInUp}
               className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
             >
-              L'humain derrière
+              {t("title")}
               <br />
-              <span className="text-accent">la technologie</span>
+              <span className="text-accent">{t("titleAccent")}</span>
             </motion.h1>
             <motion.p
               variants={fadeInUp}
               className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto"
             >
-              Une passion pour l'automatisation au service des artisans et
-              entrepreneurs belges.
+              {t("subtitle")}
             </motion.p>
           </motion.div>
         </div>
@@ -98,7 +79,7 @@ export default function AboutPage() {
               <div className="relative aspect-square max-w-md mx-auto">
                 <Image
                   src="/fondateur.jpg"
-                  alt="Fondateur de monapplication.be"
+                  alt={t("founderAlt")}
                   fill
                   className="object-cover rounded-3xl"
                 />
@@ -111,34 +92,22 @@ export default function AboutPage() {
             {/* Content */}
             <motion.div variants={fadeInRight}>
               <span className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4">
-                Le fondateur
+                {t("founderTagline")}
               </span>
               <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">
-                Une vision née du terrain
+                {t("founderTitle")}
               </h2>
               <div className="space-y-4 text-text-muted leading-relaxed">
+                <p>{t("founderP1")}</p>
                 <p>
-                  Passionné par la technologie et l'entrepreneuriat, j'ai constaté
-                  un problème récurrent: les artisans et PME passent un temps fou
-                  sur des tâches administratives au lieu de faire ce qu'ils aiment
-                  – leur métier.
+                  {t("founderP2")}
                 </p>
-                <p>
-                  C'est de cette observation qu'est née <strong className="text-primary">monapplication.be</strong>.
-                  L'idée était simple : créer une "secrétaire digitale" accessible
-                  qui gère tout l'administratif automatiquement.
-                </p>
-                <p>
-                  Aujourd'hui, nous accompagnons des plombiers, électriciens,
-                  réparateurs vélo, climaticiens et bien d'autres professionnels
-                  en Belgique. Chaque jour, notre système répond à leurs clients,
-                  envoie des devis et organise leurs plannings.
-                </p>
+                <p>{t("founderP3")}</p>
               </div>
 
               <div className="flex items-center gap-2 mt-6 text-sm text-text-muted">
                 <MapPin className="w-4 h-4 text-accent" />
-                <span>Basé en Belgique</span>
+                <span>{t("founderLocation")}</span>
               </div>
             </motion.div>
           </motion.div>
@@ -159,13 +128,13 @@ export default function AboutPage() {
               variants={fadeInUp}
               className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4"
             >
-              Nos valeurs
+              {t("valuesTagline")}
             </motion.span>
             <motion.h2
               variants={fadeInUp}
               className="text-3xl md:text-4xl font-bold text-primary mb-6"
             >
-              Ce qui nous guide
+              {t("valuesTitle")}
             </motion.h2>
           </motion.div>
 
@@ -176,23 +145,26 @@ export default function AboutPage() {
             viewport={viewportOnce}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           >
-            {valeurs.map((valeur, index) => (
-              <motion.div
-                key={valeur.title}
-                variants={fadeInUp}
-                className="bg-white rounded-2xl p-6 text-center hover:shadow-lg transition-shadow"
-              >
-                <div className="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <valeur.icon className="w-7 h-7 text-accent" />
-                </div>
-                <h3 className="text-lg font-bold text-primary mb-2">
-                  {valeur.title}
-                </h3>
-                <p className="text-text-muted text-sm leading-relaxed">
-                  {valeur.description}
-                </p>
-              </motion.div>
-            ))}
+            {values.map((valeur, index) => {
+              const Icon = valeurIcons[index] || Lightbulb;
+              return (
+                <motion.div
+                  key={index}
+                  variants={fadeInUp}
+                  className="bg-white rounded-2xl p-6 text-center hover:shadow-lg transition-shadow"
+                >
+                  <div className="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <Icon className="w-7 h-7 text-accent" />
+                  </div>
+                  <h3 className="text-lg font-bold text-primary mb-2">
+                    {valeur.title}
+                  </h3>
+                  <p className="text-text-muted text-sm leading-relaxed">
+                    {valeur.description}
+                  </p>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>
@@ -217,23 +189,20 @@ export default function AboutPage() {
               variants={fadeInUp}
               className="text-3xl md:text-4xl font-bold text-primary mb-6"
             >
-              Notre mission
+              {t("missionTitle")}
             </motion.h2>
             <motion.p
               variants={fadeInUp}
               className="text-xl text-text-muted leading-relaxed mb-8"
             >
-              Permettre à chaque artisan et entrepreneur de se concentrer sur son
-              métier en automatisant toutes les tâches administratives répétitives.
-              Parce que votre temps est précieux et que vous méritez de le consacrer
-              à ce que vous faites de mieux.
+              {t("missionText")}
             </motion.p>
             <motion.div variants={fadeInUp}>
               <Link
                 href="/contact"
                 className="inline-flex items-center gap-2 bg-accent hover:bg-accent-light text-white px-8 py-4 rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-accent/20"
               >
-                Travaillons ensemble
+                {t("missionCta")}
                 <Rocket className="w-5 h-5" />
               </Link>
             </motion.div>

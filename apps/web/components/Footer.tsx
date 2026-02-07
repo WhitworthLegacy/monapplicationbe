@@ -1,7 +1,12 @@
-import Link from "next/link";
+"use client";
+
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { Mail, Phone, MapPin } from "lucide-react";
 
 export function Footer() {
+  const t = useTranslations("Footer");
+
   return (
     <footer className="bg-primary text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
@@ -27,21 +32,20 @@ export function Footer() {
               </div>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-md">
-              Spécialistes en automatisation pour entrepreneurs. Votre secrétaire
-              digitale gère booking, devis, CRM et notifications 24h/24.
+              {t("description")}
             </p>
           </div>
 
           {/* Links */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Navigation</h3>
+            <h3 className="font-semibold text-white mb-4">{t("navigation")}</h3>
             <ul className="space-y-3">
               <li>
                 <Link
                   href="/#problemes"
                   className="text-gray-400 hover:text-accent transition-colors text-sm"
                 >
-                  Le problème
+                  {t("problem")}
                 </Link>
               </li>
               <li>
@@ -49,7 +53,7 @@ export function Footer() {
                   href="/#fonctionnalites"
                   className="text-gray-400 hover:text-accent transition-colors text-sm"
                 >
-                  La solution
+                  {t("solution")}
                 </Link>
               </li>
               <li>
@@ -57,7 +61,7 @@ export function Footer() {
                   href="/#realisations"
                   className="text-gray-400 hover:text-accent transition-colors text-sm"
                 >
-                  Réalisations
+                  {t("realisations")}
                 </Link>
               </li>
               <li>
@@ -65,7 +69,7 @@ export function Footer() {
                   href="/about"
                   className="text-gray-400 hover:text-accent transition-colors text-sm"
                 >
-                  Qui sommes-nous
+                  {t("about")}
                 </Link>
               </li>
               <li>
@@ -73,7 +77,7 @@ export function Footer() {
                   href="/tarifs"
                   className="text-gray-400 hover:text-accent transition-colors text-sm"
                 >
-                  Formules
+                  {t("pricing")}
                 </Link>
               </li>
               <li>
@@ -81,7 +85,7 @@ export function Footer() {
                   href="/blog"
                   className="text-gray-400 hover:text-accent transition-colors text-sm"
                 >
-                  Blog
+                  {t("blog")}
                 </Link>
               </li>
               <li>
@@ -89,7 +93,7 @@ export function Footer() {
                   href="/contact"
                   className="text-gray-400 hover:text-accent transition-colors text-sm"
                 >
-                  Contact
+                  {t("contact")}
                 </Link>
               </li>
             </ul>
@@ -97,7 +101,7 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Contact</h3>
+            <h3 className="font-semibold text-white mb-4">{t("contactTitle")}</h3>
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-gray-400 text-sm">
                 <Mail size={16} className="text-accent" />
@@ -119,7 +123,7 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-2 text-gray-400 text-sm">
                 <MapPin size={16} className="text-accent mt-0.5" />
-                <span>Belgique</span>
+                <span>{t("location")}</span>
               </li>
             </ul>
           </div>
@@ -128,21 +132,20 @@ export function Footer() {
         {/* Bottom */}
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} monapplication.be. Tous droits
-            réservés.
+            {t("copyright", { year: new Date().getFullYear() })}
           </p>
           <div className="flex gap-6">
             <Link
               href="/mentions-legales"
               className="text-gray-500 hover:text-accent transition-colors text-sm"
             >
-              Mentions légales
+              {t("legal")}
             </Link>
             <Link
               href="/confidentialite"
               className="text-gray-500 hover:text-accent transition-colors text-sm"
             >
-              Confidentialité
+              {t("privacy")}
             </Link>
           </div>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import {
   fadeInUp,
@@ -8,10 +9,11 @@ import {
   viewportOnce,
 } from "@/lib/animations";
 import { seoPages } from "@/content/seo";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ArrowLeft, ArrowRight, Clock, BookOpen } from "lucide-react";
 
 export default function BlogArticlePage() {
+  const t = useTranslations("Blog");
   const params = useParams();
   const slug = params.slug as string;
 
@@ -25,17 +27,17 @@ export default function BlogArticlePage() {
         <section className="py-24 bg-surface">
           <div className="max-w-3xl mx-auto px-4 text-center">
             <h1 className="text-3xl font-bold text-primary mb-4">
-              Article introuvable
+              {t("notFoundTitle")}
             </h1>
             <p className="text-text-muted mb-8">
-              Cet article n'existe pas ou a été déplacé.
+              {t("notFoundMessage")}
             </p>
             <Link
               href="/blog"
               className="inline-flex items-center gap-2 text-accent hover:text-accent-light font-semibold transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              Retour au blog
+              {t("backToBlog")}
             </Link>
           </div>
         </section>
@@ -59,7 +61,7 @@ export default function BlogArticlePage() {
                 className="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Retour au blog
+                {t("backToBlog")}
               </Link>
             </motion.div>
 
@@ -69,11 +71,11 @@ export default function BlogArticlePage() {
             >
               <span className="inline-flex items-center gap-1 text-xs font-medium text-accent bg-white/10 px-2.5 py-1 rounded-full">
                 <BookOpen className="w-3 h-3" />
-                Article
+                {t("article")}
               </span>
               <span className="inline-flex items-center gap-1 text-xs text-white/60">
                 <Clock className="w-3 h-3" />
-                {article.sections.length} min de lecture
+                {t("readTime", { count: article.sections.length })}
               </span>
             </motion.div>
 
@@ -128,21 +130,20 @@ export default function BlogArticlePage() {
               variants={fadeInUp}
               className="text-2xl font-bold text-white mb-4"
             >
-              Prêt à automatiser votre gestion ?
+              {t("articleCtaTitle")}
             </motion.h3>
             <motion.p
               variants={fadeInUp}
               className="text-white/80 mb-6 max-w-lg mx-auto"
             >
-              Découvrez comment notre secrétaire digitale peut remplacer vos
-              tâches admin et vous faire gagner +15h par semaine.
+              {t("articleCtaSubtitle")}
             </motion.p>
             <motion.div variants={fadeInUp}>
               <Link
                 href="/contact"
                 className="inline-flex items-center gap-2 bg-accent hover:bg-accent-light text-white px-8 py-4 rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-accent/20"
               >
-                Demander une démo gratuite
+                {t("articleCtaButton")}
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </motion.div>

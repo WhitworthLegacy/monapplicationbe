@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import {
   fadeInUp,
@@ -18,71 +19,28 @@ import {
   Sparkles,
 } from "lucide-react";
 
-const services = [
-  {
-    icon: Globe,
-    title: "Création de site web",
-    description:
-      "Site vitrine professionnel, landing page, site multi-pages — design moderne, responsive, optimisé pour convertir vos visiteurs en clients.",
-    highlights: ["Design sur mesure", "Mobile-first", "Rapide & sécurisé"],
-    color: "from-blue-500 to-blue-700",
-    marketPrice: "~1 500€",
-    marketLabel: "Prix du marché",
-  },
-  {
-    icon: Palette,
-    title: "Refonte de site web",
-    description:
-      "Votre site est daté ou ne convertit pas ? On le refait de A à Z avec un design moderne, du contenu optimisé et une vraie stratégie digitale.",
-    highlights: ["Audit complet", "Nouveau design", "Migration incluse"],
-    color: "from-purple-500 to-purple-700",
-    marketPrice: "~2 000€",
-    marketLabel: "Prix du marché",
-  },
-  {
-    icon: ShoppingCart,
-    title: "E-commerce",
-    description:
-      "Boutique en ligne complète : catalogue produits, panier, paiement sécurisé, gestion des commandes, suivi livraison. Prêt à vendre.",
-    highlights: ["Paiement sécurisé", "Gestion stock", "Suivi commandes"],
-    color: "from-green-500 to-green-700",
-    marketPrice: "~3 000€",
-    marketLabel: "Prix du marché",
-  },
-  {
-    icon: Search,
-    title: "SEO & Référencement",
-    description:
-      "Soyez trouvé sur Google. Optimisation technique, contenu SEO, stratégie de mots-clés. Les agences facturent 500€/mois pour 4 articles. Nous, on en génère 1 par jour grâce à l'IA.",
-    highlights: ["1 article/jour par IA", "Audit SEO", "Résultats mesurables"],
-    color: "from-orange-500 to-orange-700",
-    marketPrice: "~500€/mois",
-    marketLabel: "Agences : 4 articles/mois",
-    badge: "IA",
-  },
-  {
-    icon: Bot,
-    title: "Automatisation & ERP",
-    description:
-      "Booking, devis, CRM, notifications WhatsApp, réponses automatiques — votre secrétaire digitale gère l'admin 24h/24 pendant que vous travaillez.",
-    highlights: ["CRM intégré", "WhatsApp auto", "Devis en 2 clics"],
-    color: "from-primary to-secondary",
-    marketPrice: "~2 500€/mois",
-    marketLabel: "Coût d'une secrétaire",
-  },
-  {
-    icon: TrendingUp,
-    title: "Marketing digital",
-    description:
-      "Réseaux sociaux, campagnes publicitaires, email marketing, automatisation — on met en place la machine qui génère des leads en continu.",
-    highlights: ["Réseaux sociaux", "Publicité ciblée", "Leads qualifiés"],
-    color: "from-red-500 to-red-700",
-    marketPrice: "~1 000€/mois",
-    marketLabel: "Agences marketing",
-  },
+const iconMap = [Globe, Palette, ShoppingCart, Search, Bot, TrendingUp];
+const colorMap = [
+  "from-blue-500 to-blue-700",
+  "from-purple-500 to-purple-700",
+  "from-green-500 to-green-700",
+  "from-orange-500 to-orange-700",
+  "from-primary to-secondary",
+  "from-red-500 to-red-700",
 ];
 
 export function Services() {
+  const t = useTranslations("Services");
+
+  const items = t.raw("items") as Array<{
+    title: string;
+    description: string;
+    highlights: string[];
+    marketPrice: string;
+    marketLabel: string;
+    badge?: string;
+  }>;
+
   return (
     <section
       id="services"
@@ -101,22 +59,21 @@ export function Services() {
             className="inline-flex items-center gap-2 bg-accent/10 text-accent font-semibold text-sm uppercase tracking-wider mb-4 px-4 py-1.5 rounded-full"
           >
             <Sparkles className="w-4 h-4" />
-            Bonus inclus
+            {t("tagline")}
           </motion.span>
           <motion.h2
             variants={fadeInUp}
             className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-6"
           >
-            Et en plus, on vous crée
+            {t("title")}
             <br />
-            <span className="text-accent">votre vitrine digitale.</span>
+            <span className="text-accent">{t("titleAccent")}</span>
           </motion.h2>
           <motion.p
             variants={fadeInUp}
             className="text-text-muted text-lg max-w-2xl mx-auto"
           >
-            Votre secrétaire digitale, c&apos;est le coeur. Mais on va plus loin :
-            site web, e-commerce, SEO, marketing — tout compris, un seul interlocuteur.
+            {t("subtitle")}
           </motion.p>
         </motion.div>
 
@@ -127,56 +84,60 @@ export function Services() {
           viewport={viewportOnce}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {services.map((service, index) => (
-            <motion.div
-              key={index}
-              variants={fadeInUp}
-              className="group relative bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
-            >
-              {service.badge && (
-                <div className="absolute top-4 right-4 z-10 bg-accent text-white text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" />
-                  {service.badge}
-                </div>
-              )}
-              <div
-                className={`bg-gradient-to-r ${service.color} p-5 flex items-center gap-4`}
+          {items.map((service, index) => {
+            const Icon = iconMap[index];
+            const color = colorMap[index];
+            return (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="group relative bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                  <service.icon className="w-6 h-6 text-white" />
+                {service.badge && (
+                  <div className="absolute top-4 right-4 z-10 bg-accent text-white text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <Sparkles className="w-3 h-3" />
+                    {service.badge}
+                  </div>
+                )}
+                <div
+                  className={`bg-gradient-to-r ${color} p-5 flex items-center gap-4`}
+                >
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">
+                    {service.title}
+                  </h3>
                 </div>
-                <h3 className="text-xl font-bold text-white">
-                  {service.title}
-                </h3>
-              </div>
-              <div className="p-6">
-                <p className="text-text-muted text-sm leading-relaxed mb-4">
-                  {service.description}
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {service.highlights.map((highlight, i) => (
-                    <span
-                      key={i}
-                      className="text-xs font-medium bg-primary/5 text-primary px-3 py-1 rounded-full"
-                    >
-                      {highlight}
-                    </span>
-                  ))}
-                </div>
-                {/* Prix du marché */}
-                <div className="pt-4 border-t border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-text-muted">
-                      {service.marketLabel}
-                    </span>
-                    <span className="text-sm font-bold text-red-500 line-through">
-                      {service.marketPrice}
-                    </span>
+                <div className="p-6">
+                  <p className="text-text-muted text-sm leading-relaxed mb-4">
+                    {service.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {service.highlights.map((highlight, i) => (
+                      <span
+                        key={i}
+                        className="text-xs font-medium bg-primary/5 text-primary px-3 py-1 rounded-full"
+                      >
+                        {highlight}
+                      </span>
+                    ))}
+                  </div>
+                  {/* Prix du marche */}
+                  <div className="pt-4 border-t border-gray-100">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-text-muted">
+                        {service.marketLabel}
+                      </span>
+                      <span className="text-sm font-bold text-red-500 line-through">
+                        {service.marketPrice}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </motion.div>
 
         {/* Bottom message */}
@@ -190,7 +151,7 @@ export function Services() {
           <div className="inline-flex items-center gap-2 bg-accent/10 text-accent px-6 py-3 rounded-full mb-8">
             <Sparkles className="w-5 h-5" />
             <span className="font-semibold">
-              On fait tout ça sans exploser votre portefeuille.
+              {t("bottomMessage")}
             </span>
           </div>
           <div className="block">
@@ -198,7 +159,7 @@ export function Services() {
               href="/contact"
               className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all hover:shadow-xl hover:shadow-accent/30"
             >
-              Demandez votre devis gratuit
+              {t("bottomCta")}
               <ArrowRight size={20} />
             </Link>
           </div>

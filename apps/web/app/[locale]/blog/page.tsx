@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import {
   fadeInUp,
@@ -7,10 +8,12 @@ import {
   viewportOnce,
 } from "@/lib/animations";
 import { seoPages } from "@/content/seo";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ArrowRight, Clock, BookOpen } from "lucide-react";
 
 export default function BlogPage() {
+  const t = useTranslations("Blog");
+
   return (
     <main className="pt-20 md:pt-24">
       {/* Hero */}
@@ -26,23 +29,21 @@ export default function BlogPage() {
               variants={fadeInUp}
               className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4"
             >
-              Blog
+              {t("tagline")}
             </motion.span>
             <motion.h1
               variants={fadeInUp}
               className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
             >
-              Nos articles pour
+              {t("title")}
               <br />
-              <span className="text-accent">entrepreneurs</span>
+              <span className="text-accent">{t("titleAccent")}</span>
             </motion.h1>
             <motion.p
               variants={fadeInUp}
               className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto"
             >
-              Conseils, guides et actualités sur l'automatisation, la gestion
-              d'entreprise et la productivité pour artisans et entrepreneurs
-              belges.
+              {t("subtitle")}
             </motion.p>
           </motion.div>
         </div>
@@ -74,11 +75,11 @@ export default function BlogPage() {
                       <div className="flex items-center gap-3 mb-4">
                         <span className="inline-flex items-center gap-1 text-xs font-medium text-accent bg-accent/10 px-2.5 py-1 rounded-full">
                           <BookOpen className="w-3 h-3" />
-                          Article
+                          {t("article")}
                         </span>
                         <span className="inline-flex items-center gap-1 text-xs text-text-muted">
                           <Clock className="w-3 h-3" />
-                          {article.sections.length} min de lecture
+                          {t("readTime", { count: article.sections.length })}
                         </span>
                       </div>
 
@@ -94,7 +95,7 @@ export default function BlogPage() {
                         href={`/blog/${slug}`}
                         className="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-accent-light transition-colors"
                       >
-                        Lire l'article
+                        {t("readArticle")}
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </Link>
                     </div>
@@ -106,7 +107,7 @@ export default function BlogPage() {
             <div className="text-center py-16">
               <BookOpen className="w-12 h-12 text-text-muted/30 mx-auto mb-4" />
               <p className="text-text-muted text-lg">
-                Nos articles arrivent bientôt. Restez connecté !
+                {t("noArticles")}
               </p>
             </div>
           )}
@@ -126,21 +127,20 @@ export default function BlogPage() {
               variants={fadeInUp}
               className="text-2xl md:text-3xl font-bold text-primary mb-4"
             >
-              Prêt à automatiser votre business ?
+              {t("ctaTitle")}
             </motion.h2>
             <motion.p
               variants={fadeInUp}
               className="text-text-muted mb-8"
             >
-              Découvrez comment notre secrétaire digitale peut vous faire gagner
-              +15h par semaine.
+              {t("ctaSubtitle")}
             </motion.p>
             <motion.div variants={fadeInUp}>
               <Link
                 href="/contact"
                 className="inline-flex items-center gap-2 bg-accent hover:bg-accent-light text-white px-8 py-4 rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-accent/20"
               >
-                Demander une démo
+                {t("ctaButton")}
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </motion.div>

@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer, viewportOnce } from "@/lib/animations";
 import { Mail, Phone, MapPin, Send, CheckCircle, Loader2 } from "lucide-react";
 
 export default function ContactPage() {
+  const t = useTranslations("Contact");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -36,7 +38,7 @@ export default function ContactPage() {
       setIsSubmitted(true);
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert("Une erreur est survenue. Veuillez réessayer.");
+      alert(t("error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -66,20 +68,19 @@ export default function ContactPage() {
               variants={fadeInUp}
               className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4"
             >
-              Contact
+              {t("tagline")}
             </motion.span>
             <motion.h1
               variants={fadeInUp}
               className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6"
             >
-              Parlons de votre projet
+              {t("title")}
             </motion.h1>
             <motion.p
               variants={fadeInUp}
               className="text-lg text-gray-300 max-w-2xl mx-auto"
             >
-              Remplissez le formulaire ci-dessous et on vous recontacte sous 24h
-              pour un appel découverte gratuit.
+              {t("subtitle")}
             </motion.p>
           </motion.div>
         </div>
@@ -99,10 +100,10 @@ export default function ContactPage() {
             >
               <motion.div variants={fadeInUp} className="mb-8">
                 <h2 className="text-2xl font-bold text-primary mb-4">
-                  Informations de contact
+                  {t("infoTitle")}
                 </h2>
                 <p className="text-text-muted">
-                  N'hésitez pas à nous contacter directement si vous préférez.
+                  {t("infoSubtitle")}
                 </p>
               </motion.div>
 
@@ -112,7 +113,7 @@ export default function ContactPage() {
                     <Mail className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-primary mb-1">Email</h3>
+                    <h3 className="font-semibold text-primary mb-1">{t("email")}</h3>
                     <a
                       href="mailto:contact@monapplication.be"
                       className="text-text-muted hover:text-accent transition-colors"
@@ -128,7 +129,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-primary mb-1">
-                      Téléphone
+                      {t("phone")}
                     </h3>
                     <a
                       href="tel:+32460242427"
@@ -145,9 +146,9 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-primary mb-1">
-                      Localisation
+                      {t("locationLabel")}
                     </h3>
-                    <p className="text-text-muted">Belgique</p>
+                    <p className="text-text-muted">{t("location")}</p>
                   </div>
                 </div>
               </motion.div>
@@ -159,9 +160,9 @@ export default function ContactPage() {
               >
                 <p className="text-sm text-text-muted">
                   <span className="font-semibold text-primary">
-                    Réponse garantie
+                    {t("trustBadgeBold")}
                   </span>{" "}
-                  sous 24h ouvrées. On ne vous laissera pas sans nouvelles.
+                  {t("trustBadge")}
                 </p>
               </motion.div>
             </motion.div>
@@ -185,10 +186,10 @@ export default function ContactPage() {
                       <CheckCircle className="w-8 h-8 text-green-600" />
                     </div>
                     <h3 className="text-2xl font-bold text-primary mb-3">
-                      Message envoyé !
+                      {t("successTitle")}
                     </h3>
                     <p className="text-text-muted">
-                      Merci pour votre message. On vous recontacte sous 24h.
+                      {t("successMessage")}
                     </p>
                   </motion.div>
                 ) : (
@@ -199,7 +200,7 @@ export default function ContactPage() {
                           htmlFor="name"
                           className="block text-sm font-medium text-primary mb-2"
                         >
-                          Nom complet *
+                          {t("nameLabel")}
                         </label>
                         <input
                           type="text"
@@ -209,7 +210,7 @@ export default function ContactPage() {
                           value={formData.name}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
-                          placeholder="Jean Dupont"
+                          placeholder={t("namePlaceholder")}
                         />
                       </div>
                       <div>
@@ -217,7 +218,7 @@ export default function ContactPage() {
                           htmlFor="email"
                           className="block text-sm font-medium text-primary mb-2"
                         >
-                          Email *
+                          {t("emailLabel")}
                         </label>
                         <input
                           type="email"
@@ -227,7 +228,7 @@ export default function ContactPage() {
                           value={formData.email}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
-                          placeholder="jean@entreprise.be"
+                          placeholder={t("emailPlaceholder")}
                         />
                       </div>
                     </div>
@@ -238,7 +239,7 @@ export default function ContactPage() {
                           htmlFor="phone"
                           className="block text-sm font-medium text-primary mb-2"
                         >
-                          Téléphone
+                          {t("phoneLabel")}
                         </label>
                         <input
                           type="tel"
@@ -247,7 +248,7 @@ export default function ContactPage() {
                           value={formData.phone}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
-                          placeholder="+32 XXX XX XX XX"
+                          placeholder={t("phonePlaceholder")}
                         />
                       </div>
                       <div>
@@ -255,7 +256,7 @@ export default function ContactPage() {
                           htmlFor="company"
                           className="block text-sm font-medium text-primary mb-2"
                         >
-                          Entreprise / Activité
+                          {t("companyLabel")}
                         </label>
                         <input
                           type="text"
@@ -264,7 +265,7 @@ export default function ContactPage() {
                           value={formData.company}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
-                          placeholder="Dupont Construction SPRL"
+                          placeholder={t("companyPlaceholder")}
                         />
                       </div>
                     </div>
@@ -274,7 +275,7 @@ export default function ContactPage() {
                         htmlFor="message"
                         className="block text-sm font-medium text-primary mb-2"
                       >
-                        Votre message *
+                        {t("messageLabel")}
                       </label>
                       <textarea
                         id="message"
@@ -284,7 +285,7 @@ export default function ContactPage() {
                         value={formData.message}
                         onChange={handleChange}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all resize-none"
-                        placeholder="Décrivez brièvement votre activité et vos besoins..."
+                        placeholder={t("messagePlaceholder")}
                       />
                     </div>
 
@@ -296,19 +297,18 @@ export default function ContactPage() {
                       {isSubmitting ? (
                         <>
                           <Loader2 className="w-5 h-5 animate-spin" />
-                          Envoi en cours...
+                          {t("submitting")}
                         </>
                       ) : (
                         <>
-                          Envoyer le message
+                          {t("submit")}
                           <Send size={20} />
                         </>
                       )}
                     </button>
 
                     <p className="text-sm text-text-muted text-center">
-                      En soumettant ce formulaire, vous acceptez d'être
-                      recontacté par notre équipe.
+                      {t("disclaimer")}
                     </p>
                   </form>
                 )}

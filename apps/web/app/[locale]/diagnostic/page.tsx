@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 import {
@@ -35,160 +36,51 @@ import {
 } from "lucide-react";
 
 // ============================================
-// STEP DATA
+// STEP DATA (icons/emojis/ids only - labels come from translations)
 // ============================================
 
 const TOTAL_STEPS = 8;
 
-const SECTORS = [
-  {
-    id: "artisan",
-    label: "Artisan / Construction",
-    emoji: "🔧",
-    icon: Wrench,
-    metiers: [
-      "Plombier",
-      "Chauffagiste",
-      "Électricien",
-      "Menuisier",
-      "Peintre",
-      "Maçon",
-      "Couvreur",
-      "Autre",
-    ],
-  },
-  {
-    id: "atelier",
-    label: "Atelier / Réparation",
-    emoji: "🔩",
-    icon: Cog,
-    metiers: [
-      "Mécanicien auto",
-      "Réparateur vélo",
-      "Cordonnerie",
-      "Atelier couture",
-      "Autre",
-    ],
-  },
-  {
-    id: "bien_etre",
-    label: "Bien-être / Santé",
-    emoji: "💆",
-    icon: Heart,
-    metiers: [
-      "Dentiste",
-      "Kinésithérapeute",
-      "Coiffeur",
-      "Esthéticienne",
-      "Coach sportif",
-      "Autre",
-    ],
-  },
-  {
-    id: "services",
-    label: "Services / Conseil",
-    emoji: "💼",
-    icon: Briefcase,
-    metiers: [
-      "Agence marketing",
-      "Consultant",
-      "Avocat",
-      "Comptable",
-      "Photographe",
-      "Autre",
-    ],
-  },
-  {
-    id: "restauration",
-    label: "Restauration / Alimentation",
-    emoji: "🍽️",
-    icon: UtensilsCrossed,
-    metiers: ["Restaurant", "Traiteur", "Food truck", "Boulangerie", "Autre"],
-  },
-  {
-    id: "autre",
-    label: "Autre secteur",
-    emoji: "✨",
-    icon: Sparkles,
-    metiers: [],
-  },
+const SECTOR_META = [
+  { id: "artisan", emoji: "\u{1F527}", icon: Wrench, metierKeys: ["Plombier", "Chauffagiste", "\u00c9lectricien", "Menuisier", "Peintre", "Ma\u00e7on", "Couvreur", "Autre"] },
+  { id: "atelier", emoji: "\u{1F529}", icon: Cog, metierKeys: ["M\u00e9canicien auto", "R\u00e9parateur v\u00e9lo", "Cordonnerie", "Atelier couture", "Autre"] },
+  { id: "bien_etre", emoji: "\u{1F486}", icon: Heart, metierKeys: ["Dentiste", "Kin\u00e9sith\u00e9rapeute", "Coiffeur", "Esth\u00e9ticienne", "Coach sportif", "Autre"] },
+  { id: "services", emoji: "\u{1F4BC}", icon: Briefcase, metierKeys: ["Agence marketing", "Consultant", "Avocat", "Comptable", "Photographe", "Autre"] },
+  { id: "restauration", emoji: "\u{1F37D}\u{FE0F}", icon: UtensilsCrossed, metierKeys: ["Restaurant", "Traiteur", "Food truck", "Boulangerie", "Autre"] },
+  { id: "autre", emoji: "\u{2728}", icon: Sparkles, metierKeys: [] },
 ];
 
-const ADMIN_HOURS = [
-  {
-    value: "<5h",
-    label: "Moins de 5h",
-    hours: 5,
-    pain: "Même 5h, c'est 260h/an perdues. Un mois et demi de travail.",
-    yearlyHours: 260,
-  },
-  {
-    value: "5-10h",
-    label: "5 à 10 heures",
-    hours: 7.5,
-    pain: "~400h/an. Un mois entier de travail perdu en paperasse.",
-    yearlyHours: 400,
-  },
-  {
-    value: "10-15h",
-    label: "10 à 15 heures",
-    hours: 12.5,
-    pain: "~650h/an. Presque 2 mois de votre vie passés à faire de l'admin.",
-    yearlyHours: 650,
-  },
-  {
-    value: "15h+",
-    label: "Plus de 15 heures",
-    hours: 17.5,
-    pain: "800h+/an. Vous travaillez plus pour l'admin que pour vos clients.",
-    yearlyHours: 800,
-  },
+const ADMIN_HOURS_VALUES = ["<5h", "5-10h", "10-15h", "15h+"];
+const ADMIN_HOURS_DETAIL = [
+  { value: "<5h", hours: 5, yearlyHours: 260 },
+  { value: "5-10h", hours: 7.5, yearlyHours: 400 },
+  { value: "10-15h", hours: 12.5, yearlyHours: 650 },
+  { value: "15h+", hours: 17.5, yearlyHours: 800 },
 ];
 
-const PAIN_POINTS = [
-  { id: "appels_manques", label: "Appels manqués", icon: Phone },
-  { id: "devis_retard", label: "Devis en retard", icon: FileX },
-  { id: "mails_soir", label: "Mails le soir", icon: Mail },
-  { id: "excel_papier", label: "Excel / papier partout", icon: MonitorX },
-  { id: "oublis_rappels", label: "Oublis de rappels", icon: BellOff },
-  { id: "no_shows", label: "No-shows (RDV oubliés)", icon: UserX },
-  { id: "relances_impayes", label: "Relances d'impayés", icon: Receipt },
-  { id: "pas_suivi", label: "Pas de suivi client", icon: MessageCircle },
+const PAIN_POINT_IDS = [
+  { id: "appels_manques", icon: Phone },
+  { id: "devis_retard", icon: FileX },
+  { id: "mails_soir", icon: Mail },
+  { id: "excel_papier", icon: MonitorX },
+  { id: "oublis_rappels", icon: BellOff },
+  { id: "no_shows", icon: UserX },
+  { id: "relances_impayes", icon: Receipt },
+  { id: "pas_suivi", icon: MessageCircle },
 ];
 
-const TOOLS = [
-  { id: "google_agenda", label: "Google Agenda" },
-  { id: "excel", label: "Excel / Google Sheets" },
-  { id: "whatsapp", label: "WhatsApp Business" },
-  { id: "comptable", label: "Logiciel comptable" },
-  { id: "crm", label: "CRM existant" },
-  { id: "papier", label: "Papier / carnet" },
-  { id: "rien", label: "Rien du tout" },
-  { id: "autre", label: "Autre" },
+const TOOL_IDS = [
+  "google_agenda",
+  "excel",
+  "whatsapp",
+  "comptable",
+  "crm",
+  "papier",
+  "rien",
+  "autre",
 ];
 
-const CLIENTS_PER_MONTH = [
-  {
-    value: "<10",
-    label: "Moins de 10",
-    pain: "Chaque client perdu compte double. Vous ne pouvez pas vous permettre un seul oubli.",
-  },
-  {
-    value: "10-30",
-    label: "10 à 30",
-    pain: "À ce rythme, le suivi manuel devient un cauchemar. Les oublis se multiplient.",
-  },
-  {
-    value: "30-50",
-    label: "30 à 50",
-    pain: "Impossible de tout gérer seul. Des clients passent entre les mailles du filet.",
-  },
-  {
-    value: "50+",
-    label: "Plus de 50",
-    pain: "Vous êtes submergé. Sans automatisation, vous perdez du chiffre d'affaires chaque jour.",
-  },
-];
+const CLIENTS_PER_MONTH_VALUES = ["<10", "10-30", "30-50", "50+"];
 
 // ============================================
 // INTERFACES
@@ -217,6 +109,7 @@ interface FunnelData {
 // ============================================
 
 export default function DiagnosticPage() {
+  const t = useTranslations("Diagnostic");
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1); // 1 = forward, -1 = back
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -249,6 +142,10 @@ export default function DiagnosticPage() {
     setData((prev) => ({ ...prev, ...partial }));
   };
 
+  // Get translated data arrays
+  const adminHoursTranslated = t.raw("adminHours") as { label: string; pain: string }[];
+  const clientsPerMonthTranslated = t.raw("clientsPerMonth") as { label: string; pain: string }[];
+
   // Fetch available slots when date changes
   useEffect(() => {
     if (data.selectedDate && step === 8) {
@@ -269,15 +166,15 @@ export default function DiagnosticPage() {
   // COMPUTED VALUES
   // ============================================
 
-  const selectedAdminHours = ADMIN_HOURS.find(
+  const selectedAdminHoursDetail = ADMIN_HOURS_DETAIL.find(
     (h) => h.value === data.adminHours
   );
-  const hoursLostYear = selectedAdminHours?.yearlyHours || 0;
+  const hoursLostYear = selectedAdminHoursDetail?.yearlyHours || 0;
   const moneyLostYear = data.hasSecretary === true ? 30000 : 0;
   const hourlyRate = 50; // assumed
   const timeCostYear = hoursLostYear * hourlyRate;
 
-  const selectedSector = SECTORS.find((s) => s.id === data.sector);
+  const selectedSectorMeta = SECTOR_META.find((s) => s.id === data.sector);
 
   // ============================================
   // VALIDATION
@@ -364,10 +261,10 @@ export default function DiagnosticPage() {
         setMeetLink(result.data?.meet_link || "");
         setIsBooked(true);
       } else {
-        alert("Une erreur est survenue. Veuillez réessayer.");
+        alert(t("error"));
       }
     } catch {
-      alert("Une erreur est survenue. Veuillez réessayer.");
+      alert(t("error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -443,7 +340,7 @@ export default function DiagnosticPage() {
               transition={{ delay: 0.3 }}
               className="text-3xl md:text-4xl font-bold text-white mb-4"
             >
-              Votre appel est confirmé !
+              {t("successTitle")}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -451,8 +348,7 @@ export default function DiagnosticPage() {
               transition={{ delay: 0.5 }}
               className="text-white/80 text-lg mb-8"
             >
-              Vous allez recevoir un email de confirmation avec le lien Google
-              Meet. On se retrouve le{" "}
+              {t("successMessage")}{" "}
               <strong className="text-accent">
                 {new Date(data.selectedDate).toLocaleDateString("fr-BE", {
                   weekday: "long",
@@ -460,7 +356,7 @@ export default function DiagnosticPage() {
                   month: "long",
                 })}
               </strong>{" "}
-              à <strong className="text-accent">{data.selectedTime}</strong>.
+              {t("successAt")} <strong className="text-accent">{data.selectedTime}</strong>.
             </motion.p>
             {meetLink && (
               <motion.a
@@ -473,7 +369,7 @@ export default function DiagnosticPage() {
                 className="inline-flex items-center gap-2 bg-accent hover:bg-accent-light text-white px-8 py-4 rounded-lg font-semibold transition-all hover:shadow-lg"
               >
                 <Video className="w-5 h-5" />
-                Lien Google Meet
+                {t("meetLink")}
               </motion.a>
             )}
           </div>
@@ -494,7 +390,7 @@ export default function DiagnosticPage() {
           <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-text-muted">
-                Étape {step} sur {TOTAL_STEPS}
+                {t("stepOf", { step, total: TOTAL_STEPS })}
               </span>
               <span className="text-sm font-medium text-accent">
                 {Math.round((step / TOTAL_STEPS) * 100)}%
@@ -526,16 +422,15 @@ export default function DiagnosticPage() {
                 {step === 1 && (
                   <div>
                     <h2 className="text-2xl font-bold text-primary mb-2">
-                      Dans quel secteur travaillez-vous ?
+                      {t("step1Title")}
                     </h2>
                     <p className="text-text-muted mb-6">
-                      Sélectionnez votre domaine d'activité pour que nous
-                      adaptions notre diagnostic.
+                      {t("step1Subtitle")}
                     </p>
 
                     {!data.sector || data.sector === "" ? (
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        {SECTORS.map((sector) => (
+                        {SECTOR_META.map((sector) => (
                           <button
                             key={sector.id}
                             onClick={() =>
@@ -549,7 +444,7 @@ export default function DiagnosticPage() {
                           >
                             <span className="text-2xl">{sector.emoji}</span>
                             <span className="text-sm font-medium text-primary">
-                              {sector.label}
+                              {t(`sectors.${sector.id}`)}
                             </span>
                           </button>
                         ))}
@@ -566,10 +461,10 @@ export default function DiagnosticPage() {
                           }
                           className="text-sm text-accent hover:underline mb-4 inline-flex items-center gap-1"
                         >
-                          <ArrowLeft className="w-3 h-3" /> Changer de secteur
+                          <ArrowLeft className="w-3 h-3" /> {t("changeSector")}
                         </button>
                         <label className="block text-sm font-medium text-primary mb-2">
-                          Décrivez votre activité
+                          {t("describeActivity")}
                         </label>
                         <input
                           type="text"
@@ -577,7 +472,7 @@ export default function DiagnosticPage() {
                           onChange={(e) =>
                             updateData({ metierCustom: e.target.value })
                           }
-                          placeholder="Ex: Coach en développement personnel"
+                          placeholder={t("describeActivityPlaceholder")}
                           className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
                         />
                       </div>
@@ -593,16 +488,16 @@ export default function DiagnosticPage() {
                           }
                           className="text-sm text-accent hover:underline mb-4 inline-flex items-center gap-1"
                         >
-                          <ArrowLeft className="w-3 h-3" /> Changer de secteur
+                          <ArrowLeft className="w-3 h-3" /> {t("changeSector")}
                         </button>
                         <p className="text-sm text-text-muted mb-3">
                           <span className="font-medium text-primary">
-                            {selectedSector?.emoji} {selectedSector?.label}
+                            {selectedSectorMeta?.emoji} {t(`sectors.${selectedSectorMeta?.id}`)}
                           </span>{" "}
-                          — Quel est votre métier ?
+                          {t("whatJob")}
                         </p>
                         <div className="grid grid-cols-2 gap-3">
-                          {selectedSector?.metiers.map((metier) => (
+                          {selectedSectorMeta?.metierKeys.map((metier) => (
                             <button
                               key={metier}
                               onClick={() => updateData({ metier })}
@@ -625,55 +520,57 @@ export default function DiagnosticPage() {
                 {step === 2 && (
                   <div>
                     <h2 className="text-2xl font-bold text-primary mb-2">
-                      Combien d'heures d'admin par semaine ?
+                      {t("step2Title")}
                     </h2>
                     <p className="text-text-muted mb-6">
-                      Soyez honnête. Comptez les mails, devis, factures,
-                      rappels, planning, WhatsApp...
+                      {t("step2Subtitle")}
                     </p>
 
                     <div className="space-y-3">
-                      {ADMIN_HOURS.map((option) => (
-                        <button
-                          key={option.value}
-                          onClick={() =>
-                            updateData({ adminHours: option.value })
-                          }
-                          className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-                            data.adminHours === option.value
-                              ? "border-accent bg-accent/5"
-                              : "border-gray-100 hover:border-accent/50"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <Clock
-                                className={`w-5 h-5 ${
-                                  data.adminHours === option.value
-                                    ? "text-accent"
-                                    : "text-text-muted"
-                                }`}
-                              />
-                              <span className="font-medium text-primary">
-                                {option.label}
-                              </span>
+                      {ADMIN_HOURS_VALUES.map((value, index) => {
+                        const translated = adminHoursTranslated[index];
+                        return (
+                          <button
+                            key={value}
+                            onClick={() =>
+                              updateData({ adminHours: value })
+                            }
+                            className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                              data.adminHours === value
+                                ? "border-accent bg-accent/5"
+                                : "border-gray-100 hover:border-accent/50"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <Clock
+                                  className={`w-5 h-5 ${
+                                    data.adminHours === value
+                                      ? "text-accent"
+                                      : "text-text-muted"
+                                  }`}
+                                />
+                                <span className="font-medium text-primary">
+                                  {translated?.label}
+                                </span>
+                              </div>
+                              {data.adminHours === value && (
+                                <Check className="w-5 h-5 text-accent" />
+                              )}
                             </div>
-                            {data.adminHours === option.value && (
-                              <Check className="w-5 h-5 text-accent" />
+                            {data.adminHours === value && (
+                              <motion.p
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                className="mt-3 text-sm text-red-600 bg-red-50 p-3 rounded-lg"
+                              >
+                                <AlertTriangle className="w-4 h-4 inline mr-1" />
+                                {translated?.pain}
+                              </motion.p>
                             )}
-                          </div>
-                          {data.adminHours === option.value && (
-                            <motion.p
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
-                              className="mt-3 text-sm text-red-600 bg-red-50 p-3 rounded-lg"
-                            >
-                              <AlertTriangle className="w-4 h-4 inline mr-1" />
-                              {option.pain}
-                            </motion.p>
-                          )}
-                        </button>
-                      ))}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -682,10 +579,10 @@ export default function DiagnosticPage() {
                 {step === 3 && (
                   <div>
                     <h2 className="text-2xl font-bold text-primary mb-2">
-                      Avez-vous une secrétaire ?
+                      {t("step3Title")}
                     </h2>
                     <p className="text-text-muted mb-6">
-                      Cela nous aide à calculer vos coûts réels.
+                      {t("step3Subtitle")}
                     </p>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -705,7 +602,7 @@ export default function DiagnosticPage() {
                           }`}
                         />
                         <span className="font-semibold text-primary block">
-                          Oui
+                          {t("yes")}
                         </span>
                       </button>
                       <button
@@ -724,7 +621,7 @@ export default function DiagnosticPage() {
                           }`}
                         />
                         <span className="font-semibold text-primary block">
-                          Non
+                          {t("no")}
                         </span>
                       </button>
                     </div>
@@ -742,29 +639,21 @@ export default function DiagnosticPage() {
                         {data.hasSecretary ? (
                           <div>
                             <p className="font-semibold text-red-700 mb-1">
-                              ~30 000€/an
+                              {t("secretaryCost")}
                             </p>
                             <p className="text-sm text-red-600">
-                              C'est le coût moyen d'une secrétaire en Belgique :
-                              salaire + charges sociales + congés + risque de
-                              démission. Et l'erreur est humaine.
+                              {t("secretaryCostDesc")}
                             </p>
                           </div>
                         ) : (
                           <div>
                             <p className="font-semibold text-amber-700 mb-1">
                               {hoursLostYear > 0
-                                ? `~${hoursLostYear}h/an perdues`
-                                : "~15h/semaine perdues"}
+                                ? t("hoursLostYear", { hours: hoursLostYear })
+                                : t("hoursLostDefault")}
                             </p>
                             <p className="text-sm text-amber-600">
-                              Vous perdez votre temps le plus précieux sur des
-                              tâches répétitives. À{" "}
-                              {hourlyRate}€/h, c'est{" "}
-                              {hoursLostYear > 0
-                                ? `${(hoursLostYear * hourlyRate).toLocaleString("fr-BE")}€`
-                                : "des milliers d'euros"}{" "}
-                              de manque à gagner par an.
+                              {t("hoursLostDesc")}
                             </p>
                           </div>
                         )}
@@ -777,15 +666,16 @@ export default function DiagnosticPage() {
                 {step === 4 && (
                   <div>
                     <h2 className="text-2xl font-bold text-primary mb-2">
-                      Quelles sont vos plus grosses douleurs ?
+                      {t("step4Title")}
                     </h2>
                     <p className="text-text-muted mb-6">
-                      Sélectionnez tout ce qui vous parle.
+                      {t("step4Subtitle")}
                     </p>
 
                     <div className="grid grid-cols-2 gap-3 mb-6">
-                      {PAIN_POINTS.map((pain) => {
+                      {PAIN_POINT_IDS.map((pain) => {
                         const selected = data.painPoints.includes(pain.id);
+                        const PainIcon = pain.icon;
                         return (
                           <button
                             key={pain.id}
@@ -796,12 +686,12 @@ export default function DiagnosticPage() {
                                 : "border-gray-100 hover:border-red-200 text-primary"
                             }`}
                           >
-                            <pain.icon
+                            <PainIcon
                               className={`w-4 h-4 shrink-0 ${
                                 selected ? "text-red-500" : "text-text-muted"
                               }`}
                             />
-                            <span className="font-medium">{pain.label}</span>
+                            <span className="font-medium">{t(`painPoints.${pain.id}`)}</span>
                             {selected && (
                               <Check className="w-4 h-4 text-red-500 ml-auto shrink-0" />
                             )}
@@ -813,20 +703,19 @@ export default function DiagnosticPage() {
                     <div>
                       <label className="block text-sm font-medium text-primary mb-2">
                         <PenLine className="w-4 h-4 inline mr-1" />
-                        Décrivez un moment douloureux que vous avez vécu
+                        {t("storyLabel")}
                       </label>
                       <textarea
                         value={data.painStory}
                         onChange={(e) =>
                           updateData({ painStory: e.target.value })
                         }
-                        placeholder="Ex: Un client m'a appelé pendant un chantier, j'ai rappelé 2h plus tard, il avait déjà réservé ailleurs..."
+                        placeholder={t("storyPlaceholder")}
                         rows={3}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all resize-none text-sm"
                       />
                       <p className="text-xs text-text-muted mt-1">
-                        Optionnel, mais ça nous aide à personnaliser votre
-                        solution.
+                        {t("storyHint")}
                       </p>
                     </div>
                   </div>
@@ -836,20 +725,19 @@ export default function DiagnosticPage() {
                 {step === 5 && (
                   <div>
                     <h2 className="text-2xl font-bold text-primary mb-2">
-                      Quels outils utilisez-vous ?
+                      {t("step5Title")}
                     </h2>
                     <p className="text-text-muted mb-6">
-                      On se connecte à vos outils existants. Dites-nous ce que
-                      vous utilisez déjà.
+                      {t("step5Subtitle")}
                     </p>
 
                     <div className="grid grid-cols-2 gap-3">
-                      {TOOLS.map((tool) => {
-                        const selected = data.currentTools.includes(tool.id);
+                      {TOOL_IDS.map((toolId) => {
+                        const selected = data.currentTools.includes(toolId);
                         return (
                           <button
-                            key={tool.id}
-                            onClick={() => toggleTool(tool.id)}
+                            key={toolId}
+                            onClick={() => toggleTool(toolId)}
                             className={`flex items-center gap-2 p-3 rounded-xl border-2 text-sm font-medium transition-all ${
                               selected
                                 ? "border-accent bg-accent/10 text-accent"
@@ -861,7 +749,7 @@ export default function DiagnosticPage() {
                             ) : (
                               <div className="w-4 h-4 rounded border border-gray-300 shrink-0" />
                             )}
-                            {tool.label}
+                            {t(`tools.${toolId}`)}
                           </button>
                         );
                       })}
@@ -873,44 +761,47 @@ export default function DiagnosticPage() {
                 {step === 6 && (
                   <div>
                     <h2 className="text-2xl font-bold text-primary mb-2">
-                      Combien de clients par mois ?
+                      {t("step6Title")}
                     </h2>
                     <p className="text-text-muted mb-6">
-                      Plus vous avez de clients, plus l'admin vous coûte cher.
+                      {t("step6Subtitle")}
                     </p>
 
                     <div className="space-y-3">
-                      {CLIENTS_PER_MONTH.map((option) => (
-                        <button
-                          key={option.value}
-                          onClick={() =>
-                            updateData({ clientsPerMonth: option.value })
-                          }
-                          className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-                            data.clientsPerMonth === option.value
-                              ? "border-accent bg-accent/5"
-                              : "border-gray-100 hover:border-accent/50"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="font-medium text-primary">
-                              {option.label}
-                            </span>
-                            {data.clientsPerMonth === option.value && (
-                              <Check className="w-5 h-5 text-accent" />
+                      {CLIENTS_PER_MONTH_VALUES.map((value, index) => {
+                        const translated = clientsPerMonthTranslated[index];
+                        return (
+                          <button
+                            key={value}
+                            onClick={() =>
+                              updateData({ clientsPerMonth: value })
+                            }
+                            className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                              data.clientsPerMonth === value
+                                ? "border-accent bg-accent/5"
+                                : "border-gray-100 hover:border-accent/50"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium text-primary">
+                                {translated?.label}
+                              </span>
+                              {data.clientsPerMonth === value && (
+                                <Check className="w-5 h-5 text-accent" />
+                              )}
+                            </div>
+                            {data.clientsPerMonth === value && (
+                              <motion.p
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                className="mt-2 text-sm text-text-muted"
+                              >
+                                {translated?.pain}
+                              </motion.p>
                             )}
-                          </div>
-                          {data.clientsPerMonth === option.value && (
-                            <motion.p
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
-                              className="mt-2 text-sm text-text-muted"
-                            >
-                              {option.pain}
-                            </motion.p>
-                          )}
-                        </button>
-                      ))}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -919,10 +810,10 @@ export default function DiagnosticPage() {
                 {step === 7 && (
                   <div>
                     <h2 className="text-2xl font-bold text-primary mb-2">
-                      Votre diagnostic
+                      {t("step7Title")}
                     </h2>
                     <p className="text-text-muted mb-6">
-                      Voici ce que l'admin vous coûte réellement.
+                      {t("step7Subtitle")}
                     </p>
 
                     {/* Big stats */}
@@ -932,7 +823,7 @@ export default function DiagnosticPage() {
                         <p className="text-2xl font-bold text-red-600">
                           {hoursLostYear}h
                         </p>
-                        <p className="text-xs text-red-500">perdues par an</p>
+                        <p className="text-xs text-red-500">{t("lostPerYear")}</p>
                       </div>
                       <div className="bg-red-50 rounded-xl p-4 text-center border border-red-100">
                         <EuroIcon className="w-6 h-6 text-red-500 mx-auto mb-1" />
@@ -941,12 +832,12 @@ export default function DiagnosticPage() {
                             ? 30000
                             : timeCostYear
                           ).toLocaleString("fr-BE")}
-                          €
+                          &euro;
                         </p>
                         <p className="text-xs text-red-500">
                           {data.hasSecretary
-                            ? "coût secrétaire/an"
-                            : "manque à gagner/an"}
+                            ? t("secretaryCostPerYear")
+                            : t("opportunityCostPerYear")}
                         </p>
                       </div>
                     </div>
@@ -954,22 +845,21 @@ export default function DiagnosticPage() {
                     {/* Pain points solved */}
                     <div className="bg-green-50 rounded-xl p-5 border border-green-100 mb-6">
                       <h3 className="font-semibold text-green-800 mb-3">
-                        Ce qu'on résout pour vous :
+                        {t("solvedTitle")}
                       </h3>
                       <div className="space-y-2">
                         {data.painPoints.map((id) => {
-                          const pain = PAIN_POINTS.find((p) => p.id === id);
-                          return pain ? (
+                          return (
                             <div
                               key={id}
                               className="flex items-center gap-2 text-sm text-green-700"
                             >
                               <Check className="w-4 h-4 text-green-500 shrink-0" />
-                              <span>{pain.label}</span>
+                              <span>{t(`painPoints.${id}`)}</span>
                               <ArrowRight className="w-3 h-3 text-green-400" />
-                              <span className="font-medium">Automatisé</span>
+                              <span className="font-medium">{t("automated")}</span>
                             </div>
-                          ) : null;
+                          );
                         })}
                       </div>
                     </div>
@@ -977,12 +867,10 @@ export default function DiagnosticPage() {
                     {/* Promise */}
                     <div className="bg-gradient-to-r from-primary to-secondary rounded-xl p-5 text-white">
                       <p className="font-semibold mb-2">
-                        Votre secrétaire digitale peut résoudre tout ça.
+                        {t("promiseTitle")}
                       </p>
                       <p className="text-sm text-white/80">
-                        1ère version opérationnelle en 30 jours. Paiement
-                        unique. Pas d'abonnement. Compatible avec vos outils
-                        existants.
+                        {t("promiseText")}
                       </p>
                     </div>
                   </div>
@@ -992,11 +880,10 @@ export default function DiagnosticPage() {
                 {step === 8 && (
                   <div>
                     <h2 className="text-2xl font-bold text-primary mb-2">
-                      Réservez votre appel découverte
+                      {t("step8Title")}
                     </h2>
                     <p className="text-text-muted mb-6">
-                      15 minutes, gratuit, sans engagement. On regarde ensemble
-                      comment automatiser votre admin.
+                      {t("step8Subtitle")}
                     </p>
 
                     {/* Contact fields */}
@@ -1004,13 +891,13 @@ export default function DiagnosticPage() {
                       <div>
                         <label className="block text-sm font-medium text-primary mb-1">
                           <User className="w-3.5 h-3.5 inline mr-1" />
-                          Nom complet *
+                          {t("nameLabel")}
                         </label>
                         <input
                           type="text"
                           value={data.name}
                           onChange={(e) => updateData({ name: e.target.value })}
-                          placeholder="Jean Dupont"
+                          placeholder={t("namePlaceholder")}
                           required
                           className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all text-sm"
                         />
@@ -1018,7 +905,7 @@ export default function DiagnosticPage() {
                       <div>
                         <label className="block text-sm font-medium text-primary mb-1">
                           <Building2 className="w-3.5 h-3.5 inline mr-1" />
-                          Entreprise
+                          {t("companyLabel")}
                         </label>
                         <input
                           type="text"
@@ -1026,14 +913,14 @@ export default function DiagnosticPage() {
                           onChange={(e) =>
                             updateData({ company: e.target.value })
                           }
-                          placeholder="Ma Société SRL"
+                          placeholder={t("companyPlaceholder")}
                           className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all text-sm"
                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-primary mb-1">
                           <Mail className="w-3.5 h-3.5 inline mr-1" />
-                          Email *
+                          {t("emailLabel")}
                         </label>
                         <input
                           type="email"
@@ -1041,7 +928,7 @@ export default function DiagnosticPage() {
                           onChange={(e) =>
                             updateData({ email: e.target.value })
                           }
-                          placeholder="jean@entreprise.be"
+                          placeholder={t("emailPlaceholder")}
                           required
                           className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all text-sm"
                         />
@@ -1049,7 +936,7 @@ export default function DiagnosticPage() {
                       <div>
                         <label className="block text-sm font-medium text-primary mb-1">
                           <Phone className="w-3.5 h-3.5 inline mr-1" />
-                          Téléphone *
+                          {t("phoneLabel")}
                         </label>
                         <input
                           type="tel"
@@ -1057,7 +944,7 @@ export default function DiagnosticPage() {
                           onChange={(e) =>
                             updateData({ phone: e.target.value })
                           }
-                          placeholder="+32 4XX XX XX XX"
+                          placeholder={t("phonePlaceholder")}
                           required
                           className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all text-sm"
                         />
@@ -1068,7 +955,7 @@ export default function DiagnosticPage() {
                     <div className="mb-4">
                       <label className="block text-sm font-medium text-primary mb-1">
                         <Calendar className="w-3.5 h-3.5 inline mr-1" />
-                        Choisissez une date *
+                        {t("dateLabel")}
                       </label>
                       <input
                         type="date"
@@ -1086,13 +973,13 @@ export default function DiagnosticPage() {
                       <div className="mb-4">
                         <label className="block text-sm font-medium text-primary mb-2">
                           <CalendarCheck className="w-3.5 h-3.5 inline mr-1" />
-                          Créneaux disponibles
+                          {t("slotsLabel")}
                         </label>
 
                         {loadingSlots ? (
                           <div className="flex items-center gap-2 text-text-muted text-sm py-4">
                             <Loader2 className="w-4 h-4 animate-spin" />
-                            Chargement des disponibilités...
+                            {t("loadingSlots")}
                           </div>
                         ) : availableSlots.length > 0 ? (
                           <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
@@ -1114,8 +1001,7 @@ export default function DiagnosticPage() {
                           </div>
                         ) : (
                           <p className="text-sm text-text-muted py-2">
-                            Aucun créneau disponible ce jour. Essayez une autre
-                            date.
+                            {t("noSlots")}
                           </p>
                         )}
                       </div>
@@ -1134,7 +1020,7 @@ export default function DiagnosticPage() {
                 className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors text-sm font-medium"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Retour
+                {t("back")}
               </button>
             ) : (
               <div />
@@ -1150,7 +1036,7 @@ export default function DiagnosticPage() {
                     : "bg-gray-200 text-gray-400 cursor-not-allowed"
                 }`}
               >
-                Continuer
+                {t("continue")}
                 <ArrowRight className="w-4 h-4" />
               </button>
             ) : step === 7 ? (
@@ -1158,7 +1044,7 @@ export default function DiagnosticPage() {
                 onClick={next}
                 className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm bg-green-600 hover:bg-green-700 text-white hover:shadow-lg transition-all"
               >
-                Réserver mon appel gratuit
+                {t("bookCall")}
                 <CalendarCheck className="w-4 h-4" />
               </button>
             ) : (
@@ -1174,11 +1060,11 @@ export default function DiagnosticPage() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Réservation en cours...
+                    {t("submitting")}
                   </>
                 ) : (
                   <>
-                    Confirmer mon appel
+                    {t("confirm")}
                     <Check className="w-4 h-4" />
                   </>
                 )}
@@ -1188,12 +1074,9 @@ export default function DiagnosticPage() {
 
           {/* Reassurance */}
           <p className="text-center text-xs text-text-muted mt-6">
-            {step <= 6 &&
-              "Diagnostic 100% gratuit et confidentiel. Aucun engagement."}
-            {step === 7 &&
-              "Nous avons aidé des dizaines d'entrepreneurs à automatiser leur admin."}
-            {step === 8 &&
-              "15 minutes. Gratuit. Sans engagement. On regarde ensemble votre situation."}
+            {step <= 6 && t("reassurance1")}
+            {step === 7 && t("reassurance2")}
+            {step === 8 && t("reassurance3")}
           </p>
         </div>
       </section>

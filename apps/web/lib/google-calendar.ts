@@ -1,9 +1,30 @@
 import { google } from "googleapis";
 
 const TIMEZONE = "Europe/Brussels";
-const SLOT_DURATION = 30; // minutes
-const BUSINESS_START = 9; // 9h
-const BUSINESS_END = 18; // 18h
+const SLOT_DURATION = 60; // minutes
+const BUSINESS_START = 11; // 11h
+const BUSINESS_END = 15; // 15h (last slot: 14:00-15:00)
+
+/**
+ * Get the UTC offset for Brussels on a given date (handles DST)
+ * Returns e.g. "+01:00" (winter) or "+02:00" (summer)
+ */
+function getBrusselsOffset(dateStr: string): string {
+  const d = new Date(`${dateStr}T12:00:00Z`);
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: TIMEZONE,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(d);
+  const h = parseInt(parts.find((p) => p.type === "hour")!.value);
+  const m = parseInt(parts.find((p) => p.type === "minute")!.value);
+  const diffMin = h * 60 + m - 12 * 60;
+  const sign = diffMin >= 0 ? "+" : "-";
+  const absH = Math.floor(Math.abs(diffMin) / 60);
+  const absM = Math.abs(diffMin) % 60;
+  return `${sign}${String(absH).padStart(2, "0")}:${String(absM).padStart(2, "0")}`;
+}
 
 function getCalendarClient() {
   const oauth2Client = new google.auth.OAuth2(
@@ -34,21 +55,19 @@ export async function getAvailableSlots(date: string): Promise<TimeSlot[]> {
 
   if (!calendarId) throw new Error("GOOGLE_CALENDAR_ID not configured");
 
-  // Build time range for the day
-  const dayStart = new Date(`${date}T00:00:00`);
-  const dayEnd = new Date(`${date}T23:59:59`);
+  const offset = getBrusselsOffset(date);
 
-  // Check if weekend
-  const dayOfWeek = dayStart.getDay();
-  if (dayOfWeek === 0 || dayOfWeek === 6) {
+  // Only allow Monday (1) to Thursday (4)
+  const dayOfWeek = new Date(`${date}T12:00:00Z`).getUTCDay();
+  if (dayOfWeek === 0 || dayOfWeek >= 5) {
     return [];
   }
 
   // Fetch busy times
   const freeBusy = await calendar.freebusy.query({
     requestBody: {
-      timeMin: dayStart.toISOString(),
-      timeMax: dayEnd.toISOString(),
+      timeMin: new Date(`${date}T00:00:00${offset}`).toISOString(),
+      timeMax: new Date(`${date}T23:59:59${offset}`).toISOString(),
       timeZone: TIMEZONE,
       items: [{ id: calendarId }],
     },
@@ -56,32 +75,30 @@ export async function getAvailableSlots(date: string): Promise<TimeSlot[]> {
 
   const busySlots = freeBusy.data.calendars?.[calendarId]?.busy || [];
 
-  // Generate all possible slots
+  // Generate slots using Brussels timezone offset
   const slots: TimeSlot[] = [];
   const now = new Date();
 
   for (let hour = BUSINESS_START; hour < BUSINESS_END; hour++) {
-    for (let min = 0; min < 60; min += SLOT_DURATION) {
-      const timeStr = `${String(hour).padStart(2, "0")}:${String(min).padStart(2, "0")}`;
-      const slotStart = new Date(`${date}T${timeStr}:00`);
-      const slotEnd = new Date(slotStart.getTime() + SLOT_DURATION * 60 * 1000);
+    const timeStr = `${String(hour).padStart(2, "0")}:00`;
+    const slotStart = new Date(`${date}T${timeStr}:00${offset}`);
+    const slotEnd = new Date(slotStart.getTime() + SLOT_DURATION * 60 * 1000);
 
-      // Skip past times
-      if (slotStart <= now) continue;
+    // Skip past times
+    if (slotStart <= now) continue;
 
-      // Check against busy slots
-      const isBusy = busySlots.some((busy) => {
-        const busyStart = new Date(busy.start!);
-        const busyEnd = new Date(busy.end!);
-        return slotStart < busyEnd && slotEnd > busyStart;
-      });
+    // Check against busy slots (both in UTC)
+    const isBusy = busySlots.some((busy) => {
+      const busyStart = new Date(busy.start!);
+      const busyEnd = new Date(busy.end!);
+      return slotStart < busyEnd && slotEnd > busyStart;
+    });
 
-      slots.push({
-        time: timeStr,
-        datetime: slotStart.toISOString(),
-        available: !isBusy,
-      });
-    }
+    slots.push({
+      time: timeStr,
+      datetime: slotStart.toISOString(),
+      available: !isBusy,
+    });
   }
 
   return slots.filter((s) => s.available);
@@ -114,9 +131,13 @@ export async function createCalendarBooking(
 
   if (!calendarId) throw new Error("GOOGLE_CALENDAR_ID not configured");
 
+  // Build start/end datetime strings in local time (no UTC conversion)
   const startDateTime = `${params.date}T${params.time}:00`;
-  const startDate = new Date(startDateTime);
-  const endDate = new Date(startDate.getTime() + SLOT_DURATION * 60 * 1000);
+  const [h, m] = params.time.split(":").map(Number);
+  const endMinutes = h * 60 + m + SLOT_DURATION;
+  const endH = Math.floor(endMinutes / 60);
+  const endM = endMinutes % 60;
+  const endDateTime = `${params.date}T${String(endH).padStart(2, "0")}:${String(endM).padStart(2, "0")}:00`;
 
   const companyStr = params.company ? ` (${params.company})` : "";
   const phoneStr = params.phone ? `\nTéléphone: ${params.phone}` : "";
@@ -128,11 +149,11 @@ export async function createCalendarBooking(
       summary: `Appel découverte — ${params.name}${companyStr}`,
       description: `Appel découverte avec ${params.name}${companyStr}${phoneStr}\nEmail: ${params.email}\n\n${params.description || ""}`,
       start: {
-        dateTime: startDate.toISOString(),
+        dateTime: startDateTime,
         timeZone: TIMEZONE,
       },
       end: {
-        dateTime: endDate.toISOString(),
+        dateTime: endDateTime,
         timeZone: TIMEZONE,
       },
       attendees: [{ email: params.email }],

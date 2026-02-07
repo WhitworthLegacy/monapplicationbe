@@ -1,9 +1,12 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer, viewportOnce } from "@/lib/animations";
 
 export default function MentionsLegalesPage() {
+  const t = useTranslations("MentionsLegales");
+
   return (
     <main className="pt-20 md:pt-24">
       <section className="py-16 md:py-24 bg-gradient-to-br from-primary via-secondary to-primary">
@@ -18,13 +21,13 @@ export default function MentionsLegalesPage() {
               variants={fadeInUp}
               className="text-3xl md:text-5xl font-bold text-white mb-6"
             >
-              Mentions légales
+              {t("title")}
             </motion.h1>
             <motion.p
               variants={fadeInUp}
               className="text-white/80 text-lg max-w-2xl mx-auto"
             >
-              Informations légales relatives au site monapplication.be
+              {t("subtitle")}
             </motion.p>
           </motion.div>
         </div>
@@ -41,11 +44,11 @@ export default function MentionsLegalesPage() {
           >
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                1. Éditeur du site
+                {t("s1Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-2">
                 <p>
-                  Le site <strong className="text-primary">monapplication.be</strong> est édité par :
+                  {t("s1Intro")}
                 </p>
                 <ul className="list-none space-y-1 mt-4">
                   <li><strong className="text-primary">AJ SRL</strong></li>
@@ -75,10 +78,10 @@ export default function MentionsLegalesPage() {
 
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                2. Hébergement
+                {t("s2Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-2">
-                <p>Le site est hébergé par :</p>
+                <p>{t("s2Intro")}</p>
                 <ul className="list-none space-y-1 mt-4">
                   <li><strong className="text-primary">Vercel Inc.</strong></li>
                   <li>440 N Barranca Ave #4133, Covina, CA 91723, USA</li>
@@ -99,80 +102,49 @@ export default function MentionsLegalesPage() {
 
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                3. Propriété intellectuelle
+                {t("s3Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-4">
-                <p>
-                  L'ensemble du contenu du site monapplication.be (textes,
-                  images, graphismes, logo, icônes, logiciels, etc.) est la
-                  propriété exclusive d'AJ SRL ou de ses partenaires et est
-                  protégé par les lois belges et internationales relatives à la
-                  propriété intellectuelle.
-                </p>
-                <p>
-                  Toute reproduction, représentation, modification, publication
-                  ou adaptation de tout ou partie des éléments du site, quel que
-                  soit le moyen ou le procédé utilisé, est interdite sans
-                  l'autorisation écrite préalable d'AJ SRL.
-                </p>
+                <p>{t("s3P1")}</p>
+                <p>{t("s3P2")}</p>
               </div>
             </motion.div>
 
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                4. Limitation de responsabilité
+                {t("s4Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-4">
-                <p>
-                  AJ SRL s'efforce de fournir sur le site monapplication.be des
-                  informations aussi précises que possible. Toutefois, elle ne
-                  pourra être tenue responsable des omissions, des inexactitudes
-                  ou des carences dans la mise à jour, qu'elles soient de son
-                  fait ou du fait de tiers.
-                </p>
-                <p>
-                  Les informations présentes sur le site sont fournies à titre
-                  indicatif et sont susceptibles d'être modifiées à tout moment
-                  sans préavis.
-                </p>
+                <p>{t("s4P1")}</p>
+                <p>{t("s4P2")}</p>
               </div>
             </motion.div>
 
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                5. Liens hypertextes
+                {t("s5Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-4">
-                <p>
-                  Le site monapplication.be peut contenir des liens vers d'autres
-                  sites. AJ SRL n'exerce aucun contrôle sur ces sites et décline
-                  toute responsabilité quant à leur contenu ou leurs pratiques en
-                  matière de protection des données personnelles.
-                </p>
+                <p>{t("s5Text")}</p>
               </div>
             </motion.div>
 
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                6. Droit applicable
+                {t("s6Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-4">
-                <p>
-                  Les présentes mentions légales sont régies par le droit belge.
-                  En cas de litige, les tribunaux de Bruxelles seront seuls
-                  compétents.
-                </p>
+                <p>{t("s6Text")}</p>
               </div>
             </motion.div>
 
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                7. Contact
+                {t("s7Title")}
               </h2>
               <div className="text-text-muted leading-relaxed">
                 <p>
-                  Pour toute question relative aux présentes mentions légales,
-                  vous pouvez nous contacter à{" "}
+                  {t("s7Text")}{" "}
                   <a
                     href="mailto:contact@monapplication.be"
                     className="text-accent hover:underline"

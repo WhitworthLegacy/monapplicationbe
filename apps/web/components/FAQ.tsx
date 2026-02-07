@@ -1,54 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeInUp, staggerContainer, viewportOnce } from "@/lib/animations";
 import { ChevronDown } from "lucide-react";
 
-const faqs = [
-  {
-    question: "C'est quoi exactement une secrétaire digitale ?",
-    answer:
-      "C'est un système propulsé par l'IA qui remplace toutes les tâches admin répétitives : réponse automatique aux messages (WhatsApp, Messenger, Instagram), prise de RDV en ligne 24h/24, envoi de devis en 2 clics, relances automatiques, suivi clients, rappels... Bref, tout ce que fait une secrétaire — sans salaire, sans congés, sans erreurs d'oubli.",
-  },
-  {
-    question: "En quoi c'est mieux qu'une secrétaire classique ?",
-    answer:
-      "Une secrétaire coûte ~2 500€/mois brut + charges sociales, soit plus de 30 000€/an. Elle travaille 8h/jour, prend des congés, peut tomber malade ou démissionner. Et l'erreur est humaine : oublis de rappels, devis envoyés en retard, RDV mal notés... Notre système travaille 24h/24, ne fait jamais d'erreur, et coûte un investissement unique.",
-  },
-  {
-    question: "Je fais tout seul, je n'ai pas de secrétaire. C'est pour moi ?",
-    answer:
-      "Surtout pour vous. Si vous perdez vos soirées à répondre aux mails, encoder des factures sur Excel et faire des devis au lieu de développer vos affaires — c'est exactement ce qu'on résout. On vous libère +15h/semaine d'admin pour que vous vous concentriez sur votre métier.",
-  },
-  {
-    question: "Combien de temps pour la mise en place ?",
-    answer:
-      "1ère version opérationnelle en 30 jours : votre secrétaire digitale fonctionne, vous gagnez déjà du temps. Version finale livrée en 60 jours : système complet, optimisé, avec formation incluse pour que vous soyez 100% autonome.",
-  },
-  {
-    question: "Ça marche pour mon métier ?",
-    answer:
-      "Si vous êtes entrepreneur, artisan ou prestataire de services et que vous perdez du temps en admin — c'est fait pour vous. Plombier, chauffagiste, électricien, mécanicien, menuisier, nettoyage, bien-être, restauration... On s'adapte à votre réalité terrain.",
-  },
-  {
-    question: "C'est compliqué à utiliser ?",
-    answer:
-      "Pas du tout. Tout est conçu pour être utilisable depuis votre smartphone, entre deux chantiers. Si vous savez envoyer un WhatsApp, vous saurez tout gérer. Et on vous forme pour que vous soyez à l'aise dès le premier jour.",
-  },
-  {
-    question: "Qu'est-ce qui est inclus dans le système ?",
-    answer:
-      "Tout ce dont vous avez besoin pour ne plus jamais jouer à la secrétaire : CRM clients, agenda en ligne 24h/24, générateur de devis, factures, rappels automatiques WhatsApp, réponses automatisées sur tous vos canaux, tableau de bord, et gestion depuis votre téléphone. On s'adapte à votre métier.",
-  },
-  {
-    question: "Y a-t-il des frais cachés ?",
-    answer:
-      "Non. Votre application admin est un paiement unique — pas d'abonnement. Le seul coût récurrent, c'est la maintenance de l'infrastructure (serveur, base de données, sécurité, sauvegardes) à 50€/mois, et on vous offre la 1ère année. Le devis est clair, pas de petites lignes.",
-  },
-];
-
 export function FAQ() {
+  const t = useTranslations("FAQ");
+  const faqs = t.raw("items") as Array<{ question: string; answer: string }>;
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
@@ -65,13 +25,13 @@ export function FAQ() {
             variants={fadeInUp}
             className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4"
           >
-            FAQ
+            {t("tagline")}
           </motion.span>
           <motion.h2
             variants={fadeInUp}
             className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-6"
           >
-            Questions fréquentes
+            {t("title")}
           </motion.h2>
         </motion.div>
 

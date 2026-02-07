@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 import {
@@ -14,6 +15,9 @@ import {
 } from "lucide-react";
 
 export function Hero() {
+  const t = useTranslations("Hero");
+  const painPoints = t.raw("painPoints") as string[];
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary via-primary to-secondary">
       {/* Background Pattern */}
@@ -42,7 +46,7 @@ export function Hero() {
           <motion.div variants={fadeInUp} className="mb-6">
             <span className="inline-flex items-center gap-2 bg-red-500/20 backdrop-blur-sm text-red-200 px-4 py-2 rounded-full text-sm font-medium border border-red-400/20">
               <AlertTriangle size={16} className="text-red-400" />
-              Plombier, chauffagiste, mécanicien, artisan... Vous n&apos;êtes pas secrétaire.
+              {t("badge")}
             </span>
           </motion.div>
 
@@ -51,9 +55,9 @@ export function Hero() {
             variants={fadeInUp}
             className="text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight"
           >
-            Vous faites plus d&apos;admin
+            {t("headline")}
             <br />
-            <span className="text-accent">que de business.</span>
+            <span className="text-accent">{t("headlineAccent")}</span>
           </motion.h1>
 
           {/* Sub-headline - the problem */}
@@ -61,9 +65,9 @@ export function Hero() {
             variants={fadeInUp}
             className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-6 leading-relaxed"
           >
-            Appels manqués, devis en retard, Excel le soir, mails à 22h, oublis de rappels...
+            {t("subheadline")}
             <br />
-            <span className="text-white font-medium">Cassons ce cycle.</span>
+            <span className="text-white font-medium">{t("subheadlineHighlight")}</span>
           </motion.p>
 
           {/* Pain points - quick hits */}
@@ -71,14 +75,7 @@ export function Hero() {
             variants={fadeInUp}
             className="flex flex-wrap justify-center gap-3 mb-8"
           >
-            {[
-              "Appels manqués",
-              "Devis en retard",
-              "Excel le soir",
-              "Oublis de rappels",
-              "Mails à 22h",
-              "Secrétaire trop chère",
-            ].map((pain) => (
+            {painPoints.map((pain) => (
               <span
                 key={pain}
                 className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 text-white/70 px-3 py-1.5 rounded-full text-sm"
@@ -94,9 +91,8 @@ export function Hero() {
             variants={fadeInUp}
             className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-4 leading-relaxed"
           >
-            Votre <span className="text-accent font-semibold">secrétaire digitale propulsée par l&apos;IA</span> gère
-            vos appels, devis, rendez-vous, relances et toute votre admin —{" "}
-            <span className="text-white font-semibold">24h/24, sans congés, sans erreurs.</span>
+            {t("solutionPrefix")}<span className="text-accent font-semibold">{t("solutionAccent")}</span>{t("solutionSuffix")}{" "}
+            <span className="text-white font-semibold">{t("solutionHighlight")}</span>
           </motion.p>
 
           {/* Value props - time & money */}
@@ -107,21 +103,19 @@ export function Hero() {
             <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4 text-left">
               <div className="flex items-center gap-2 mb-2">
                 <Clock size={18} className="text-accent" />
-                <span className="text-white font-semibold text-sm">Vous faites tout seul ?</span>
+                <span className="text-white font-semibold text-sm">{t("aloneTitle")}</span>
               </div>
               <p className="text-gray-400 text-sm">
-                Gagnez <span className="text-white font-medium">+15h/semaine</span>. Fini l&apos;admin le soir.
-                L&apos;automatisation travaille pendant que vous développez vos affaires.
+                {t("aloneText")}
               </p>
             </div>
             <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4 text-left">
               <div className="flex items-center gap-2 mb-2">
                 <EuroIcon size={18} className="text-accent" />
-                <span className="text-white font-semibold text-sm">Vous avez une secrétaire ?</span>
+                <span className="text-white font-semibold text-sm">{t("secretaryTitle")}</span>
               </div>
               <p className="text-gray-400 text-sm">
-                Économisez <span className="text-white font-medium">2 500€/mois</span>. Plus de salaire,
-                plus de congés, plus d&apos;erreurs humaines.
+                {t("secretaryText")}
               </p>
             </div>
           </motion.div>
@@ -135,14 +129,14 @@ export function Hero() {
               href="#problemes"
               className="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all hover:shadow-xl hover:shadow-accent/30 hover:scale-105"
             >
-              Voir ce qu&apos;on résout
+              {t("ctaPrimary")}
               <ArrowRight size={20} />
             </Link>
             <Link
               href="/diagnostic"
               className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-xl text-lg font-semibold backdrop-blur-sm border border-white/20 transition-all hover:scale-105"
             >
-              Diagnostic gratuit (2 min)
+              {t("ctaSecondary")}
             </Link>
           </motion.div>
 
@@ -153,19 +147,19 @@ export function Hero() {
           >
             <div className="flex items-center gap-2 text-gray-400">
               <Bot size={20} className="text-accent" />
-              <span className="text-sm">Secrétaire Digitale IA</span>
+              <span className="text-sm">{t("trustAI")}</span>
             </div>
             <div className="flex items-center gap-2 text-gray-400">
               <Zap size={20} className="text-accent" />
-              <span className="text-sm">Automatisation complète</span>
+              <span className="text-sm">{t("trustAutomation")}</span>
             </div>
             <div className="flex items-center gap-2 text-gray-400">
               <BrainCircuit size={20} className="text-accent" />
-              <span className="text-sm">Intelligence Artificielle</span>
+              <span className="text-sm">{t("trustIntelligence")}</span>
             </div>
             <div className="flex items-center gap-2 text-gray-400">
               <Clock size={20} className="text-accent" />
-              <span className="text-sm">1ère version en 30 jours</span>
+              <span className="text-sm">{t("trustDelivery")}</span>
             </div>
           </motion.div>
         </motion.div>

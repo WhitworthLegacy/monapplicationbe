@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import {
   fadeInUp,
@@ -20,73 +21,18 @@ import {
   EuroIcon,
 } from "lucide-react";
 
-const solutions = [
-  {
-    icon: Bot,
-    title: "Plus jamais d'appel manqué",
-    before: "Vous êtes sur un chantier, le téléphone sonne, vous rappelez trop tard.",
-    after: "Le système répond instantanément sur WhatsApp, Messenger, Instagram. Le client est pris en charge en 30 secondes.",
-    result: "0 client perdu",
-  },
-  {
-    icon: FileCheck,
-    title: "Devis envoyé en 2 minutes",
-    before: "Le devis traîne 3 jours. Le client a signé ailleurs.",
-    after: "Templates prêts, calcul auto, envoi en 2 clics depuis votre téléphone entre 2 chantiers.",
-    result: "Devis le jour même",
-  },
-  {
-    icon: CalendarCheck,
-    title: "RDV qui se gèrent tout seuls",
-    before: "Coups de fil, SMS, \"je vous rappelle\", post-it perdus...",
-    after: "Les clients réservent en ligne 24h/24. Rappels WhatsApp automatiques. Zéro no-show.",
-    result: "Planning rempli",
-  },
-  {
-    icon: Users,
-    title: "Fini les infos éparpillées",
-    before: "Notes sur papier, Excel, WhatsApp... Vous cherchez 10 minutes l'adresse du client.",
-    after: "Tout au même endroit : coordonnées, historique, devis, paiements. En 1 clic.",
-    result: "Tout centralisé",
-  },
-  {
-    icon: MessageCircle,
-    title: "Réponses pro 24h/24",
-    before: "21h, vous répondez encore aux mails au lieu d'être avec votre famille.",
-    after: "L'automatisation répond à votre place. Vos soirées sont à vous.",
-    result: "Vie pro/perso",
-  },
-  {
-    icon: EuroIcon,
-    title: "Relances de paiement automatiques",
-    before: "Vous oubliez de relancer. Le client ne paie pas. Vous perdez de l'argent.",
-    after: "Le système relance poliment à votre place : 7 jours, 14 jours, 30 jours. Sans effort.",
-    result: "Trésorerie saine",
-  },
-  {
-    icon: Bell,
-    title: "Rappels automatiques",
-    before: "Le client oublie son RDV. Vous avez un trou dans le planning et vous perdez du temps.",
-    after: "Rappels WhatsApp envoyés automatiquement 24h et 1h avant chaque RDV. Fini les no-shows.",
-    result: "-80% de no-shows",
-  },
-  {
-    icon: BarChart3,
-    title: "Tableau de bord complet",
-    before: "Aucune visibilité sur votre activité. Vous ne savez pas combien de devis sont en attente.",
-    after: "Dashboard en temps réel : RDV du jour, devis en cours, chiffre d'affaires, clients actifs.",
-    result: "Vision claire",
-  },
-  {
-    icon: Smartphone,
-    title: "Tout depuis votre téléphone",
-    before: "Pour gérer l'admin, vous devez être devant un PC. Donc le soir, chez vous.",
-    after: "Interface mobile-first. Gérez tout depuis votre smartphone, entre deux chantiers.",
-    result: "Zéro contrainte",
-  },
-];
+const icons = [Bot, FileCheck, CalendarCheck, Users, MessageCircle, EuroIcon, Bell, BarChart3, Smartphone];
 
 export function Solutions() {
+  const t = useTranslations("Solutions");
+
+  const items = t.raw("items") as Array<{
+    title: string;
+    before: string;
+    after: string;
+    result: string;
+  }>;
+
   return (
     <section
       id="fonctionnalites"
@@ -104,22 +50,21 @@ export function Solutions() {
             variants={fadeInUp}
             className="inline-block text-green-600 font-semibold text-sm uppercase tracking-wider mb-4"
           >
-            La solution
+            {t("tagline")}
           </motion.span>
           <motion.h2
             variants={fadeInUp}
             className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-6"
           >
-            Elle gère tout.
+            {t("title")}
             <br />
-            <span className="text-accent">Vous, vous bossez.</span>
+            <span className="text-accent">{t("titleAccent")}</span>
           </motion.h2>
           <motion.p
             variants={fadeInUp}
             className="text-text-muted text-lg max-w-2xl mx-auto"
           >
-            Votre secrétaire digitale s'occupe de l'administratif pendant que
-            vous êtes sur le terrain. Voyez la différence.
+            {t("subtitle")}
           </motion.p>
         </motion.div>
 
@@ -130,54 +75,57 @@ export function Solutions() {
           viewport={viewportOnce}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {solutions.map((solution, index) => (
-            <motion.div
-              key={index}
-              variants={index % 2 === 0 ? fadeInLeft : fadeInRight}
-              className="group relative bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:shadow-green-500/5 transition-all duration-300"
-            >
-              {/* Header */}
-              <div className="bg-gradient-to-r from-primary to-secondary p-4 flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                  <solution.icon className="w-5 h-5 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-white">
-                  {solution.title}
-                </h3>
-              </div>
-
-              {/* Content */}
-              <div className="p-6">
-                {/* Before */}
-                <div className="mb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded">AVANT</span>
+          {items.map((solution, index) => {
+            const Icon = icons[index];
+            return (
+              <motion.div
+                key={index}
+                variants={index % 2 === 0 ? fadeInLeft : fadeInRight}
+                className="group relative bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:shadow-green-500/5 transition-all duration-300"
+              >
+                {/* Header */}
+                <div className="bg-gradient-to-r from-primary to-secondary p-4 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                    <Icon className="w-5 h-5 text-white" />
                   </div>
-                  <p className="text-text-muted text-sm leading-relaxed">
-                    {solution.before}
-                  </p>
+                  <h3 className="text-lg font-bold text-white">
+                    {solution.title}
+                  </h3>
                 </div>
 
-                {/* After */}
-                <div className="mb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded">APRÈS</span>
+                {/* Content */}
+                <div className="p-6">
+                  {/* Before */}
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded">{t("beforeLabel")}</span>
+                    </div>
+                    <p className="text-text-muted text-sm leading-relaxed">
+                      {solution.before}
+                    </p>
                   </div>
-                  <p className="text-primary text-sm leading-relaxed font-medium">
-                    {solution.after}
-                  </p>
-                </div>
 
-                {/* Result badge */}
-                <div className="pt-4 border-t border-gray-100">
-                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-accent">
-                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                    {solution.result}
-                  </span>
+                  {/* After */}
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded">{t("afterLabel")}</span>
+                    </div>
+                    <p className="text-primary text-sm leading-relaxed font-medium">
+                      {solution.after}
+                    </p>
+                  </div>
+
+                  {/* Result badge */}
+                  <div className="pt-4 border-t border-gray-100">
+                    <span className="inline-flex items-center gap-1 text-sm font-semibold text-accent">
+                      <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                      {solution.result}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -62,6 +63,7 @@ const airCoolingTabs: TabConfig[] = [
 
 export function DemoModal({ isOpen, onClose, projectName, projectColor }: DemoModalProps) {
   const [activeTab, setActiveTab] = useState<TabType>("dashboard");
+  const t = useTranslations("DemoModal");
 
   const isVeloDoctor = projectName === "VeloDoctor";
   const tabs = isVeloDoctor ? veloDocterTabs : airCoolingTabs;
@@ -96,7 +98,7 @@ export function DemoModal({ isOpen, onClose, projectName, projectColor }: DemoMo
           <div className={`bg-gradient-to-r ${projectColor} px-6 py-4 flex items-center justify-between`}>
             <div>
               <h3 className="text-xl font-bold text-white">{projectName}</h3>
-              <p className="text-white/80 text-sm">Aperçu de l'interface admin</p>
+              <p className="text-white/80 text-sm">{t("adminPreview")}</p>
             </div>
             <button
               onClick={onClose}
@@ -128,14 +130,14 @@ export function DemoModal({ isOpen, onClose, projectName, projectColor }: DemoMo
 
           {/* Content Area */}
           <div className="p-6 bg-gray-100 min-h-[400px] max-h-[60vh] overflow-y-auto">
-            {activeTab === "dashboard" && <DashboardPreview isVeloDoctor={isVeloDoctor} />}
-            {activeTab === "crm" && <CrmPreview isVeloDoctor={isVeloDoctor} />}
-            {activeTab === "clients" && <ClientsPreview isVeloDoctor={isVeloDoctor} />}
-            {activeTab === "devis" && <DevisPreview isVeloDoctor={isVeloDoctor} />}
-            {activeTab === "finances" && <FinancesPreview isVeloDoctor={isVeloDoctor} />}
-            {activeTab === "atelier" && <AtelierPreview />}
-            {activeTab === "stock" && <StockPreview />}
-            {activeTab === "rdv" && <RdvPreview />}
+            {activeTab === "dashboard" && <DashboardPreview isVeloDoctor={isVeloDoctor} t={t} />}
+            {activeTab === "crm" && <CrmPreview isVeloDoctor={isVeloDoctor} t={t} />}
+            {activeTab === "clients" && <ClientsPreview isVeloDoctor={isVeloDoctor} t={t} />}
+            {activeTab === "devis" && <DevisPreview isVeloDoctor={isVeloDoctor} t={t} />}
+            {activeTab === "finances" && <FinancesPreview isVeloDoctor={isVeloDoctor} t={t} />}
+            {activeTab === "atelier" && <AtelierPreview t={t} />}
+            {activeTab === "stock" && <StockPreview t={t} />}
+            {activeTab === "rdv" && <RdvPreview t={t} />}
           </div>
 
           {/* Footer with benefits */}
@@ -143,15 +145,15 @@ export function DemoModal({ isOpen, onClose, projectName, projectColor }: DemoMo
             <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
               <div className="flex items-center gap-2 text-green-600">
                 <Zap className="w-4 h-4" />
-                <span>Mails automatiques</span>
+                <span>{t("autoEmails")}</span>
               </div>
               <div className="flex items-center gap-2 text-blue-600">
                 <MousePointerClick className="w-4 h-4" />
-                <span>Devis en 2 clics</span>
+                <span>{t("quickQuotes")}</span>
               </div>
               <div className="flex items-center gap-2 text-purple-600">
                 <Clock className="w-4 h-4" />
-                <span>{isVeloDoctor ? "12h" : "8h"} gagnées/semaine</span>
+                <span>{isVeloDoctor ? t("hoursGainedVelo") : t("hoursGainedAir")}</span>
               </div>
             </div>
           </div>
@@ -161,42 +163,44 @@ export function DemoModal({ isOpen, onClose, projectName, projectColor }: DemoMo
   );
 }
 
-function DashboardPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
+type TranslationFn = ReturnType<typeof useTranslations>;
+
+function DashboardPreview({ isVeloDoctor, t }: { isVeloDoctor: boolean; t: TranslationFn }) {
   return (
     <div className="space-y-4">
       {/* KPI Cards - Different values per project */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {isVeloDoctor ? (
           <>
-            <KpiCard icon={Calendar} label="RDV aujourd'hui" value="6" color="blue" />
-            <KpiCard icon={Users} label="Nouveaux clients" value="9" color="green" />
-            <KpiCard icon={Wrench} label="En atelier" value="4" color="orange" />
-            <KpiCard icon={Euro} label="CA ce mois" value="3.8K€" color="purple" />
+            <KpiCard icon={Calendar} label={t("kpiLabels.todayRdv")} value="6" color="blue" />
+            <KpiCard icon={Users} label={t("kpiLabels.newClients")} value="9" color="green" />
+            <KpiCard icon={Wrench} label={t("kpiLabels.inWorkshop")} value="4" color="orange" />
+            <KpiCard icon={Euro} label={t("kpiLabels.monthlyRevenue")} value="3.8K€" color="purple" />
           </>
         ) : (
           <>
-            <KpiCard icon={Calendar} label="RDV aujourd'hui" value="5" color="blue" />
-            <KpiCard icon={Users} label="Nouveaux clients" value="7" color="green" />
-            <KpiCard icon={FileText} label="Devis en attente" value="8" color="orange" />
-            <KpiCard icon={Euro} label="CA ce mois" value="6.2K€" color="purple" />
+            <KpiCard icon={Calendar} label={t("kpiLabels.todayRdv")} value="5" color="blue" />
+            <KpiCard icon={Users} label={t("kpiLabels.newClients")} value="7" color="green" />
+            <KpiCard icon={FileText} label={t("kpiLabels.pendingQuotes")} value="8" color="orange" />
+            <KpiCard icon={Euro} label={t("kpiLabels.monthlyRevenue")} value="6.2K€" color="purple" />
           </>
         )}
       </div>
 
       {/* Quick Actions */}
       <div className="bg-white rounded-xl p-4 shadow-sm">
-        <h4 className="text-sm font-semibold text-gray-700 mb-3">Actions rapides</h4>
+        <h4 className="text-sm font-semibold text-gray-700 mb-3">{t("quickActions")}</h4>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-          <QuickActionButton icon={Plus} label="Nouveau client" />
-          <QuickActionButton icon={FileText} label="Créer un devis" highlight />
-          <QuickActionButton icon={Calendar} label="Planifier RDV" />
-          <QuickActionButton icon={Mail} label="Envoyer rappel" />
+          <QuickActionButton icon={Plus} label={t("newClient")} />
+          <QuickActionButton icon={FileText} label={t("createQuote")} highlight />
+          <QuickActionButton icon={Calendar} label={t("planRdv")} />
+          <QuickActionButton icon={Mail} label={t("sendReminder")} />
         </div>
       </div>
 
       {/* Today's appointments preview */}
       <div className="bg-white rounded-xl p-4 shadow-sm">
-        <h4 className="text-sm font-semibold text-gray-700 mb-3">Prochains RDV</h4>
+        <h4 className="text-sm font-semibold text-gray-700 mb-3">{t("nextRdv")}</h4>
         <div className="space-y-2">
           {isVeloDoctor ? (
             <>
@@ -217,47 +221,47 @@ function DashboardPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
   );
 }
 
-function CrmPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
+function CrmPreview({ isVeloDoctor, t }: { isVeloDoctor: boolean; t: TranslationFn }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-sm font-semibold text-gray-700">Pipeline commercial</h4>
-        <span className="text-xs text-gray-500">Glissez-déposez pour changer le statut</span>
+        <h4 className="text-sm font-semibold text-gray-700">{t("pipeline")}</h4>
+        <span className="text-xs text-gray-500">{t("dragDrop")}</span>
       </div>
 
       {/* Kanban Board Preview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {isVeloDoctor ? (
           <>
-            <KanbanColumn title="Nouveaux" count={3} color="blue">
+            <KanbanColumn title={t("kanbanLabels.new")} count={3} color="blue">
               <KanbanCard name="Claire M." info="Vélo électrique" />
               <KanbanCard name="Antoine R." info="Trottinette" />
             </KanbanColumn>
-            <KanbanColumn title="À rappeler" count={2} color="yellow">
+            <KanbanColumn title={t("kanbanLabels.toCallback")} count={2} color="yellow">
               <KanbanCard name="Julie P." info="Devis envoyé" />
             </KanbanColumn>
-            <KanbanColumn title="En cours" count={4} color="purple">
+            <KanbanColumn title={t("kanbanLabels.inProgress")} count={4} color="purple">
               <KanbanCard name="Marc D." info="En atelier" />
               <KanbanCard name="Sophie B." info="Pièce commandée" />
             </KanbanColumn>
-            <KanbanColumn title="Terminé" count={12} color="green">
+            <KanbanColumn title={t("kanbanLabels.done")} count={12} color="green">
               <KanbanCard name="Luc T." info="Livré ✓" />
             </KanbanColumn>
           </>
         ) : (
           <>
-            <KanbanColumn title="Prospects" count={5} color="blue">
+            <KanbanColumn title={t("kanbanLabels.prospects")} count={5} color="blue">
               <KanbanCard name="Hôtel Bellevue" info="Demande devis" />
               <KanbanCard name="Boulangerie Martin" info="Premier contact" />
             </KanbanColumn>
-            <KanbanColumn title="Visite planifiée" count={3} color="yellow">
+            <KanbanColumn title={t("kanbanLabels.visitPlanned")} count={3} color="yellow">
               <KanbanCard name="Bureau Dupont SA" info="Jeudi 14h" />
             </KanbanColumn>
-            <KanbanColumn title="Devis envoyé" count={6} color="purple">
+            <KanbanColumn title={t("kanbanLabels.quoteSent")} count={6} color="purple">
               <KanbanCard name="Pharmacie Centrale" info="2,400€" />
               <KanbanCard name="Cabinet Avocat" info="1,850€" />
             </KanbanColumn>
-            <KanbanColumn title="Signé" count={9} color="green">
+            <KanbanColumn title={t("kanbanLabels.signed")} count={9} color="green">
               <KanbanCard name="Resto La Terrasse" info="Installation lundi" />
             </KanbanColumn>
           </>
@@ -267,17 +271,17 @@ function CrmPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
   );
 }
 
-function ClientsPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
+function ClientsPreview({ isVeloDoctor, t }: { isVeloDoctor: boolean; t: TranslationFn }) {
   return (
     <div className="space-y-4">
       {/* Search bar */}
       <div className="bg-white rounded-xl p-3 shadow-sm flex items-center gap-3">
         <div className="flex-1 bg-gray-100 rounded-lg px-4 py-2 text-sm text-gray-400">
-          Rechercher un client...
+          {t("searchClient")}
         </div>
         <button className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
           <Plus className="w-4 h-4" />
-          Nouveau
+          {t("new")}
         </button>
       </div>
 
@@ -303,7 +307,7 @@ function ClientsPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
   );
 }
 
-function AtelierPreview() {
+function AtelierPreview({ t }: { t: TranslationFn }) {
   return (
     <div className="space-y-4">
       {/* Stats */}
@@ -311,51 +315,51 @@ function AtelierPreview() {
         <div className="bg-white rounded-xl p-4 shadow-sm text-center">
           <Bike className="w-6 h-6 text-blue-500 mx-auto mb-2" />
           <p className="text-2xl font-bold text-gray-900">4</p>
-          <p className="text-xs text-gray-500">En réparation</p>
+          <p className="text-xs text-gray-500">{t("kpiLabels.inRepair")}</p>
         </div>
         <div className="bg-white rounded-xl p-4 shadow-sm text-center">
           <Timer className="w-6 h-6 text-orange-500 mx-auto mb-2" />
           <p className="text-2xl font-bold text-gray-900">2</p>
-          <p className="text-xs text-gray-500">En attente pièce</p>
+          <p className="text-xs text-gray-500">{t("kpiLabels.waitingPart")}</p>
         </div>
         <div className="bg-white rounded-xl p-4 shadow-sm text-center">
           <CheckCircle2 className="w-6 h-6 text-green-500 mx-auto mb-2" />
           <p className="text-2xl font-bold text-gray-900">3</p>
-          <p className="text-xs text-gray-500">Prêts à livrer</p>
+          <p className="text-xs text-gray-500">{t("kpiLabels.readyDeliver")}</p>
         </div>
         <div className="bg-white rounded-xl p-4 shadow-sm text-center">
           <AlertCircle className="w-6 h-6 text-red-500 mx-auto mb-2" />
           <p className="text-2xl font-bold text-gray-900">1</p>
-          <p className="text-xs text-gray-500">Urgent</p>
+          <p className="text-xs text-gray-500">{t("statusLabels.urgent")}</p>
         </div>
       </div>
 
       {/* Atelier list */}
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-          <h4 className="font-semibold text-gray-700">Vélos en atelier</h4>
-          <button className="text-sm text-primary font-medium">+ Ajouter</button>
+          <h4 className="font-semibold text-gray-700">{t("bikesInWorkshop")}</h4>
+          <button className="text-sm text-primary font-medium">{t("add")}</button>
         </div>
-        <AtelierRow client="Thomas B." bike="VTT Rockrider" status="repair" task="Changement freins" />
-        <AtelierRow client="Marie L." bike="Vélo électrique Decathlon" status="waiting" task="Attente batterie" />
-        <AtelierRow client="Paul D." bike="Trottinette Xiaomi" status="ready" task="Réparation terminée" />
-        <AtelierRow client="Sophie K." bike="Vélo de course Giant" status="repair" task="Révision complète" />
-        <AtelierRow client="Marc R." bike="Vélo cargo Urban Arrow" status="urgent" task="Panne moteur" />
+        <AtelierRow client="Thomas B." bike="VTT Rockrider" status="repair" task="Changement freins" statusLabel={t("statusLabels.repair")} />
+        <AtelierRow client="Marie L." bike="Vélo électrique Decathlon" status="waiting" task="Attente batterie" statusLabel={t("statusLabels.waiting")} />
+        <AtelierRow client="Paul D." bike="Trottinette Xiaomi" status="ready" task="Réparation terminée" statusLabel={t("statusLabels.ready")} />
+        <AtelierRow client="Sophie K." bike="Vélo de course Giant" status="repair" task="Révision complète" statusLabel={t("statusLabels.repair")} />
+        <AtelierRow client="Marc R." bike="Vélo cargo Urban Arrow" status="urgent" task="Panne moteur" statusLabel={t("statusLabels.urgent")} />
       </div>
     </div>
   );
 }
 
-function StockPreview() {
+function StockPreview({ t }: { t: TranslationFn }) {
   return (
     <div className="space-y-4">
       {/* Search and filter */}
       <div className="bg-white rounded-xl p-3 shadow-sm flex items-center gap-3">
         <div className="flex-1 bg-gray-100 rounded-lg px-4 py-2 text-sm text-gray-400">
-          Rechercher une pièce...
+          {t("searchPart")}
         </div>
         <select className="bg-gray-100 rounded-lg px-3 py-2 text-sm text-gray-600 border-0">
-          <option>Toutes catégories</option>
+          <option>{t("allCategories")}</option>
           <option>Freins</option>
           <option>Pneus</option>
           <option>Transmission</option>
@@ -367,7 +371,7 @@ function StockPreview() {
       <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 flex items-center gap-3">
         <AlertCircle className="w-5 h-5 text-orange-500" />
         <div>
-          <p className="text-sm font-medium text-orange-800">3 articles en stock faible</p>
+          <p className="text-sm font-medium text-orange-800">3 {t("lowStockItems")}</p>
           <p className="text-xs text-orange-600">Pneus 26", Chambre à air 700c, Patins de frein V-Brake</p>
         </div>
       </div>
@@ -375,8 +379,8 @@ function StockPreview() {
       {/* Stock list */}
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-          <h4 className="font-semibold text-gray-700">Inventaire</h4>
-          <button className="text-sm text-primary font-medium">+ Nouvelle pièce</button>
+          <h4 className="font-semibold text-gray-700">{t("inventory")}</h4>
+          <button className="text-sm text-primary font-medium">{t("newPart")}</button>
         </div>
         <StockRow name="Pneu VTT 27.5&quot;" category="Pneus" stock={12} minStock={5} price="24.90€" />
         <StockRow name="Chambre à air 700c" category="Pneus" stock={3} minStock={10} price="8.50€" lowStock />
@@ -388,14 +392,14 @@ function StockPreview() {
   );
 }
 
-function RdvPreview() {
+function RdvPreview({ t }: { t: TranslationFn }) {
   return (
     <div className="space-y-4">
       {/* Week navigation */}
       <div className="bg-white rounded-xl p-3 shadow-sm flex items-center justify-between">
-        <button className="text-gray-400 hover:text-gray-600">← Semaine préc.</button>
+        <button className="text-gray-400 hover:text-gray-600">{t("prevWeek")}</button>
         <span className="font-semibold text-gray-700">27 Jan - 2 Fév 2024</span>
-        <button className="text-gray-400 hover:text-gray-600">Semaine suiv. →</button>
+        <button className="text-gray-400 hover:text-gray-600">{t("nextWeek")}</button>
       </div>
 
       {/* Calendar view */}
@@ -439,32 +443,32 @@ function RdvPreview() {
       {/* Add RDV button */}
       <button className="w-full bg-accent hover:bg-accent-light text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors">
         <Plus className="w-5 h-5" />
-        Planifier un nouveau RDV
+        {t("planNewRdv")}
       </button>
     </div>
   );
 }
 
-function DevisPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
+function DevisPreview({ isVeloDoctor, t }: { isVeloDoctor: boolean; t: TranslationFn }) {
   return (
     <div className="space-y-4">
       {/* Stats */}
       <div className="grid grid-cols-4 gap-3">
-        <StatusBadge label="Tous" count={isVeloDoctor ? 18 : 31} active />
-        <StatusBadge label="Brouillon" count={isVeloDoctor ? 2 : 4} />
-        <StatusBadge label="Envoyé" count={isVeloDoctor ? 5 : 12} />
-        <StatusBadge label="Accepté" count={isVeloDoctor ? 11 : 15} />
+        <StatusBadge label={t("kpiLabels.all")} count={isVeloDoctor ? 18 : 31} active />
+        <StatusBadge label={t("statusLabels.draft")} count={isVeloDoctor ? 2 : 4} />
+        <StatusBadge label={t("statusLabels.sent")} count={isVeloDoctor ? 5 : 12} />
+        <StatusBadge label={t("statusLabels.accepted")} count={isVeloDoctor ? 11 : 15} />
       </div>
 
       {/* Create quote CTA */}
       <div className="bg-gradient-to-r from-accent to-accent-light rounded-xl p-4 shadow-sm flex items-center justify-between">
         <div>
-          <h4 className="text-white font-semibold">Créer un devis en 2 clics</h4>
-          <p className="text-white/80 text-sm">Sélectionnez un client, ajoutez les lignes, envoyez !</p>
+          <h4 className="text-white font-semibold">{t("createIn2Clicks")}</h4>
+          <p className="text-white/80 text-sm">{t("createDesc")}</p>
         </div>
         <button className="bg-white text-accent px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 hover:shadow-lg transition-shadow">
           <Plus className="w-4 h-4" />
-          Nouveau devis
+          {t("newQuote")}
         </button>
       </div>
 
@@ -472,17 +476,17 @@ function DevisPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         {isVeloDoctor ? (
           <>
-            <QuoteRow number="VD-2024-056" client="Thomas B." amount="185€" status="accepted" />
-            <QuoteRow number="VD-2024-055" client="Marie L." amount="420€" status="sent" />
-            <QuoteRow number="VD-2024-054" client="Paul D." amount="95€" status="accepted" />
-            <QuoteRow number="VD-2024-053" client="Emma M." amount="310€" status="draft" />
+            <QuoteRow number="VD-2024-056" client="Thomas B." amount="185€" status="accepted" statusLabel={t("statusLabels.accepted")} />
+            <QuoteRow number="VD-2024-055" client="Marie L." amount="420€" status="sent" statusLabel={t("statusLabels.sent")} />
+            <QuoteRow number="VD-2024-054" client="Paul D." amount="95€" status="accepted" statusLabel={t("statusLabels.accepted")} />
+            <QuoteRow number="VD-2024-053" client="Emma M." amount="310€" status="draft" statusLabel={t("statusLabels.draft")} />
           </>
         ) : (
           <>
-            <QuoteRow number="AC-2024-089" client="Hôtel Bellevue" amount="4,200€" status="accepted" />
-            <QuoteRow number="AC-2024-088" client="Restaurant Le Soleil" amount="2,850€" status="sent" />
-            <QuoteRow number="AC-2024-087" client="Cabinet Dr. Martin" amount="1,650€" status="sent" />
-            <QuoteRow number="AC-2024-086" client="Pharmacie Centrale" amount="3,100€" status="draft" />
+            <QuoteRow number="AC-2024-089" client="Hôtel Bellevue" amount="4,200€" status="accepted" statusLabel={t("statusLabels.accepted")} />
+            <QuoteRow number="AC-2024-088" client="Restaurant Le Soleil" amount="2,850€" status="sent" statusLabel={t("statusLabels.sent")} />
+            <QuoteRow number="AC-2024-087" client="Cabinet Dr. Martin" amount="1,650€" status="sent" statusLabel={t("statusLabels.sent")} />
+            <QuoteRow number="AC-2024-086" client="Pharmacie Centrale" amount="3,100€" status="draft" statusLabel={t("statusLabels.draft")} />
           </>
         )}
       </div>
@@ -491,22 +495,24 @@ function DevisPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
       <div className="flex items-center gap-4 text-xs text-gray-500">
         <div className="flex items-center gap-1">
           <Mail className="w-3 h-3" />
-          <span>Email auto à l'envoi</span>
+          <span>{t("autoEmailSend")}</span>
         </div>
         <div className="flex items-center gap-1">
           <Clock className="w-3 h-3" />
-          <span>Relance auto après 3 jours</span>
+          <span>{t("autoReminder3d")}</span>
         </div>
         <div className="flex items-center gap-1">
           <CheckCircle className="w-3 h-3" />
-          <span>Signature électronique</span>
+          <span>{t("eSignature")}</span>
         </div>
       </div>
     </div>
   );
 }
 
-function FinancesPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
+function FinancesPreview({ isVeloDoctor, t }: { isVeloDoctor: boolean; t: TranslationFn }) {
+  const months = t.raw("months") as string[];
+
   return (
     <div className="space-y-4">
       {/* Month selector */}
@@ -520,24 +526,24 @@ function FinancesPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {isVeloDoctor ? (
           <>
-            <FinanceCard label="CA Accepté" value="3,840€" trend="+12%" positive />
-            <FinanceCard label="Taux conversion" value="68%" trend="+3%" positive />
-            <FinanceCard label="Devis créés" value="16" trend="+2" positive />
-            <FinanceCard label="Panier moyen" value="142€" trend="+8%" positive />
+            <FinanceCard label={t("kpiLabels.acceptedRevenue")} value="3,840€" trend="+12%" positive />
+            <FinanceCard label={t("kpiLabels.conversionRate")} value="68%" trend="+3%" positive />
+            <FinanceCard label={t("kpiLabels.quotesCreated")} value="16" trend="+2" positive />
+            <FinanceCard label={t("kpiLabels.avgBasket")} value="142€" trend="+8%" positive />
           </>
         ) : (
           <>
-            <FinanceCard label="CA Accepté" value="18,650€" trend="+22%" positive />
-            <FinanceCard label="Taux conversion" value="74%" trend="+6%" positive />
-            <FinanceCard label="Devis créés" value="24" trend="+5" positive />
-            <FinanceCard label="Panier moyen" value="2,180€" trend="-3%" positive={false} />
+            <FinanceCard label={t("kpiLabels.acceptedRevenue")} value="18,650€" trend="+22%" positive />
+            <FinanceCard label={t("kpiLabels.conversionRate")} value="74%" trend="+6%" positive />
+            <FinanceCard label={t("kpiLabels.quotesCreated")} value="24" trend="+5" positive />
+            <FinanceCard label={t("kpiLabels.avgBasket")} value="2,180€" trend="-3%" positive={false} />
           </>
         )}
       </div>
 
       {/* Chart placeholder */}
       <div className="bg-white rounded-xl p-4 shadow-sm">
-        <h4 className="text-sm font-semibold text-gray-700 mb-4">Évolution du CA</h4>
+        <h4 className="text-sm font-semibold text-gray-700 mb-4">{t("revenueEvolution")}</h4>
         <div className="h-32 flex items-end gap-2">
           {(isVeloDoctor
             ? [30, 45, 35, 60, 40, 70, 55, 75, 50, 65, 55, 80]
@@ -551,25 +557,16 @@ function FinancesPreview({ isVeloDoctor }: { isVeloDoctor: boolean }) {
           ))}
         </div>
         <div className="flex justify-between mt-2 text-xs text-gray-400">
-          <span>Jan</span>
-          <span>Fév</span>
-          <span>Mar</span>
-          <span>Avr</span>
-          <span>Mai</span>
-          <span>Jun</span>
-          <span>Jul</span>
-          <span>Aoû</span>
-          <span>Sep</span>
-          <span>Oct</span>
-          <span>Nov</span>
-          <span>Déc</span>
+          {months.map((month, i) => (
+            <span key={i}>{month}</span>
+          ))}
         </div>
       </div>
 
       {/* Export */}
       <div className="text-center">
         <button className="text-sm text-primary hover:underline">
-          Exporter en CSV →
+          {t("exportCsv")}
         </button>
       </div>
     </div>
@@ -675,16 +672,11 @@ function StatusBadge({ label, count, active }: { label: string; count: number; a
   );
 }
 
-function QuoteRow({ number, client, amount, status }: { number: string; client: string; amount: string; status: string }) {
+function QuoteRow({ number, client, amount, status, statusLabel }: { number: string; client: string; amount: string; status: string; statusLabel: string }) {
   const statusStyles = {
     draft: "bg-gray-100 text-gray-600",
     sent: "bg-blue-100 text-blue-600",
     accepted: "bg-green-100 text-green-600",
-  };
-  const statusLabels = {
-    draft: "Brouillon",
-    sent: "Envoyé",
-    accepted: "Accepté",
   };
   return (
     <div className="flex items-center justify-between p-4 border-b border-gray-100 last:border-0 hover:bg-gray-50">
@@ -695,7 +687,7 @@ function QuoteRow({ number, client, amount, status }: { number: string; client: 
       <div className="text-right">
         <p className="text-sm font-bold text-gray-900">{amount}</p>
         <span className={`text-xs px-2 py-0.5 rounded-full ${statusStyles[status as keyof typeof statusStyles]}`}>
-          {statusLabels[status as keyof typeof statusLabels]}
+          {statusLabel}
         </span>
       </div>
     </div>
@@ -714,12 +706,12 @@ function FinanceCard({ label, value, trend, positive }: { label: string; value: 
   );
 }
 
-function AtelierRow({ client, bike, status, task }: { client: string; bike: string; status: string; task: string }) {
+function AtelierRow({ client, bike, status, task, statusLabel }: { client: string; bike: string; status: string; task: string; statusLabel: string }) {
   const statusStyles = {
-    repair: { bg: "bg-blue-100", text: "text-blue-700", label: "En cours" },
-    waiting: { bg: "bg-orange-100", text: "text-orange-700", label: "En attente" },
-    ready: { bg: "bg-green-100", text: "text-green-700", label: "Prêt" },
-    urgent: { bg: "bg-red-100", text: "text-red-700", label: "Urgent" },
+    repair: { bg: "bg-blue-100", text: "text-blue-700" },
+    waiting: { bg: "bg-orange-100", text: "text-orange-700" },
+    ready: { bg: "bg-green-100", text: "text-green-700" },
+    urgent: { bg: "bg-red-100", text: "text-red-700" },
   };
   const style = statusStyles[status as keyof typeof statusStyles];
   return (
@@ -731,7 +723,7 @@ function AtelierRow({ client, bike, status, task }: { client: string; bike: stri
       <div className="text-right">
         <p className="text-xs text-gray-600 mb-1">{task}</p>
         <span className={`text-xs px-2 py-0.5 rounded-full ${style.bg} ${style.text}`}>
-          {style.label}
+          {statusLabel}
         </span>
       </div>
     </div>

@@ -1,32 +1,32 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown } from "lucide-react";
-
-const navLinks = [
-  { href: "/#problemes", label: "Le problème" },
-  { href: "/#fonctionnalites", label: "La solution" },
-  { href: "/#realisations", label: "Réalisations" },
-  { href: "/about", label: "Qui sommes-nous" },
-  { href: "/tarifs", label: "Formules" },
-  { href: "/blog", label: "Blog" },
-  { href: "/contact", label: "Contact" },
-];
-
-const caseStudies = [
-  { href: "/presentations/velodoctor-case-study.html", label: "VeloDoctor", sub: "Réparation vélos" },
-  { href: "/presentations/aircooling-case-study.html", label: "AirCooling", sub: "HVAC & Climatisation" },
-  { href: "/presentations/closing-call.html", label: "Présentation commerciale", sub: "Secrétaire digitale" },
-];
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Header() {
+  const t = useTranslations("Header");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCaseStudyOpen, setIsCaseStudyOpen] = useState(false);
   const [isMobileCaseStudyOpen, setIsMobileCaseStudyOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const navLinks = [
+    { href: "/about", label: t("nav.about") },
+    { href: "/tarifs", label: t("nav.pricing") },
+    { href: "/blog", label: t("nav.blog") },
+    { href: "/contact", label: t("nav.contact") },
+  ];
+
+  const caseStudies = [
+    { href: "/presentations/velodoctor-case-study.html", label: "VeloDoctor", sub: t("caseStudies.velodoctor.sub") },
+    { href: "/presentations/aircooling-case-study.html", label: "AirCooling", sub: t("caseStudies.aircooling.sub") },
+    { href: "/presentations/closing-call.html", label: t("caseStudies.closing.label"), sub: t("caseStudies.closing.sub") },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,7 +56,7 @@ export function Header() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo - Grille 9 dots style Rubik's cube */}
+          {/* Logo */}
           <Link href="/" className="flex items-center group">
             <div className="grid grid-cols-3 gap-1.5">
               <div className="w-3 h-3 rounded-sm bg-primary group-hover:bg-primary/80 transition-colors" />
@@ -76,20 +76,20 @@ export function Header() {
             {navLinks.map((link) => (
               <Link
                 key={link.href}
-                href={link.href}
+                href={link.href as any}
                 className="text-text-muted hover:text-primary transition-colors text-sm font-medium"
               >
                 {link.label}
               </Link>
             ))}
 
-            {/* Études de cas dropdown */}
+            {/* Case studies dropdown */}
             <div ref={dropdownRef} className="relative">
               <button
                 onClick={() => setIsCaseStudyOpen(!isCaseStudyOpen)}
                 className="flex items-center gap-1 text-text-muted hover:text-primary transition-colors text-sm font-medium"
               >
-                Études de cas
+                {t("caseStudies.title")}
                 <ChevronDown
                   size={14}
                   className={`transition-transform duration-200 ${isCaseStudyOpen ? "rotate-180" : ""}`}
@@ -122,11 +122,13 @@ export function Header() {
               </AnimatePresence>
             </div>
 
+            <LanguageSwitcher />
+
             <Link
               href="/diagnostic"
               className="bg-accent hover:bg-accent-light text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:shadow-lg hover:shadow-accent/20"
             >
-              Diagnostic gratuit
+              {t("cta")}
             </Link>
           </nav>
 
@@ -151,10 +153,14 @@ export function Header() {
             className="md:hidden bg-surface border-t border-gray-100"
           >
             <nav className="flex flex-col p-4 gap-2">
+              <div className="flex justify-center pb-2">
+                <LanguageSwitcher />
+              </div>
+
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
-                  href={link.href}
+                  href={link.href as any}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="text-text-muted hover:text-primary transition-colors py-3 px-4 rounded-lg hover:bg-background text-sm font-medium"
                 >
@@ -162,12 +168,12 @@ export function Header() {
                 </Link>
               ))}
 
-              {/* Études de cas - mobile */}
+              {/* Case studies - mobile */}
               <button
                 onClick={() => setIsMobileCaseStudyOpen(!isMobileCaseStudyOpen)}
                 className="flex items-center justify-between text-text-muted hover:text-primary transition-colors py-3 px-4 rounded-lg hover:bg-background text-sm font-medium"
               >
-                Études de cas
+                {t("caseStudies.title")}
                 <ChevronDown
                   size={14}
                   className={`transition-transform duration-200 ${isMobileCaseStudyOpen ? "rotate-180" : ""}`}
@@ -203,7 +209,7 @@ export function Header() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="bg-accent hover:bg-accent-light text-white px-5 py-3 rounded-lg text-sm font-semibold text-center mt-2 transition-all"
               >
-                Diagnostic gratuit
+                {t("cta")}
               </Link>
             </nav>
           </motion.div>

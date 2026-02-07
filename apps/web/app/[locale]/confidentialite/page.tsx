@@ -1,9 +1,14 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer, viewportOnce } from "@/lib/animations";
 
 export default function ConfidentialitePage() {
+  const t = useTranslations("Confidentialite");
+  const s3Items = t.raw("s3Items") as string[];
+  const s8Items = t.raw("s8Items") as string[];
+
   return (
     <main className="pt-20 md:pt-24">
       <section className="py-16 md:py-24 bg-gradient-to-br from-primary via-secondary to-primary">
@@ -18,13 +23,13 @@ export default function ConfidentialitePage() {
               variants={fadeInUp}
               className="text-3xl md:text-5xl font-bold text-white mb-6"
             >
-              Politique de confidentialité
+              {t("title")}
             </motion.h1>
             <motion.p
               variants={fadeInUp}
               className="text-white/80 text-lg max-w-2xl mx-auto"
             >
-              Comment nous protégeons vos données personnelles
+              {t("subtitle")}
             </motion.p>
           </motion.div>
         </div>
@@ -39,12 +44,13 @@ export default function ConfidentialitePage() {
             viewport={viewportOnce}
             className="space-y-12"
           >
+            {/* 1. Responsable du traitement */}
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                1. Responsable du traitement
+                {t("s1Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-2">
-                <p>Le responsable du traitement des données personnelles est :</p>
+                <p>{t("s1Intro")}</p>
                 <ul className="list-none space-y-1 mt-4">
                   <li><strong className="text-primary">AJ SRL</strong></li>
                   <li>Rue des Colonies 11, 1000 Bruxelles, Belgique</li>
@@ -62,210 +68,183 @@ export default function ConfidentialitePage() {
               </div>
             </motion.div>
 
+            {/* 2. Données collectées */}
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                2. Données collectées
+                {t("s2Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-4">
-                <p>
-                  Nous collectons uniquement les données nécessaires au bon
-                  fonctionnement de nos services :
-                </p>
+                <p>{t("s2Intro")}</p>
                 <ul className="list-disc pl-6 space-y-2 mt-4">
                   <li>
-                    <strong className="text-primary">Formulaire de contact :</strong>{" "}
-                    nom, prénom, adresse email, numéro de téléphone, message
+                    <strong className="text-primary">{t("s2Contact").split(":")[0]} :</strong>{" "}
+                    {t("s2Contact").split(":").slice(1).join(":").trim()}
                   </li>
                   <li>
-                    <strong className="text-primary">Demande de devis :</strong>{" "}
-                    nom, prénom, nom de l'entreprise, adresse email, numéro de
-                    téléphone, description du projet
+                    <strong className="text-primary">{t("s2Quote").split(":")[0]} :</strong>{" "}
+                    {t("s2Quote").split(":").slice(1).join(":").trim()}
                   </li>
                   <li>
-                    <strong className="text-primary">Navigation :</strong>{" "}
-                    données de navigation anonymisées (pages visitées, durée de
-                    visite) via des cookies analytiques
+                    <strong className="text-primary">{t("s2Navigation").split(":")[0]} :</strong>{" "}
+                    {t("s2Navigation").split(":").slice(1).join(":").trim()}
                   </li>
                 </ul>
               </div>
             </motion.div>
 
+            {/* 3. Finalité du traitement */}
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                3. Finalité du traitement
+                {t("s3Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-4">
-                <p>Vos données personnelles sont utilisées pour :</p>
+                <p>{t("s3Intro")}</p>
                 <ul className="list-disc pl-6 space-y-2 mt-4">
-                  <li>Répondre à vos demandes de contact et de devis</li>
-                  <li>Vous fournir les services demandés</li>
-                  <li>Améliorer notre site web et nos services</li>
-                  <li>Respecter nos obligations légales</li>
+                  {s3Items.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
-                <p>
-                  Nous ne vendons, ne louons ni ne partageons vos données
-                  personnelles avec des tiers à des fins commerciales.
-                </p>
+                <p>{t("s3NoShare")}</p>
               </div>
             </motion.div>
 
+            {/* 4. Base légale du traitement */}
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                4. Base légale du traitement
+                {t("s4Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-4">
-                <p>
-                  Le traitement de vos données repose sur les bases légales
-                  suivantes (conformément au RGPD) :
-                </p>
+                <p>{t("s4Intro")}</p>
                 <ul className="list-disc pl-6 space-y-2 mt-4">
                   <li>
-                    <strong className="text-primary">Consentement :</strong>{" "}
-                    lorsque vous remplissez un formulaire de contact
+                    <strong className="text-primary">{t("s4Consent").split(":")[0]} :</strong>{" "}
+                    {t("s4Consent").split(":").slice(1).join(":").trim()}
                   </li>
                   <li>
-                    <strong className="text-primary">Exécution d'un contrat :</strong>{" "}
-                    pour la fourniture de nos services
+                    <strong className="text-primary">{t("s4Contract").split(":")[0]} :</strong>{" "}
+                    {t("s4Contract").split(":").slice(1).join(":").trim()}
                   </li>
                   <li>
-                    <strong className="text-primary">Intérêt légitime :</strong>{" "}
-                    pour l'amélioration de notre site et de nos services
+                    <strong className="text-primary">{t("s4Legitimate").split(":")[0]} :</strong>{" "}
+                    {t("s4Legitimate").split(":").slice(1).join(":").trim()}
                   </li>
                 </ul>
               </div>
             </motion.div>
 
+            {/* 5. Durée de conservation */}
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                5. Durée de conservation
+                {t("s5Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-4">
-                <p>
-                  Vos données personnelles sont conservées pendant la durée
-                  nécessaire aux finalités pour lesquelles elles ont été
-                  collectées :
-                </p>
+                <p>{t("s5Intro")}</p>
                 <ul className="list-disc pl-6 space-y-2 mt-4">
                   <li>
-                    <strong className="text-primary">Données de contact :</strong>{" "}
-                    3 ans à compter du dernier contact
+                    <strong className="text-primary">{t("s5Contact").split(":")[0]} :</strong>{" "}
+                    {t("s5Contact").split(":").slice(1).join(":").trim()}
                   </li>
                   <li>
-                    <strong className="text-primary">Données contractuelles :</strong>{" "}
-                    10 ans (obligation légale belge)
+                    <strong className="text-primary">{t("s5Contract").split(":")[0]} :</strong>{" "}
+                    {t("s5Contract").split(":").slice(1).join(":").trim()}
                   </li>
                   <li>
-                    <strong className="text-primary">Cookies analytiques :</strong>{" "}
-                    13 mois maximum
+                    <strong className="text-primary">{t("s5Cookies").split(":")[0]} :</strong>{" "}
+                    {t("s5Cookies").split(":").slice(1).join(":").trim()}
                   </li>
                 </ul>
               </div>
             </motion.div>
 
+            {/* 6. Vos droits */}
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                6. Vos droits
+                {t("s6Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-4">
-                <p>
-                  Conformément au Règlement Général sur la Protection des
-                  Données (RGPD), vous disposez des droits suivants :
-                </p>
+                <p>{t("s6Intro")}</p>
                 <ul className="list-disc pl-6 space-y-2 mt-4">
                   <li>
-                    <strong className="text-primary">Droit d'accès :</strong>{" "}
-                    obtenir la confirmation que vos données sont traitées et en
-                    recevoir une copie
+                    <strong className="text-primary">{t("s6Access").split(":")[0]} :</strong>{" "}
+                    {t("s6Access").split(":").slice(1).join(":").trim()}
                   </li>
                   <li>
-                    <strong className="text-primary">Droit de rectification :</strong>{" "}
-                    corriger vos données inexactes ou incomplètes
+                    <strong className="text-primary">{t("s6Rectification").split(":")[0]} :</strong>{" "}
+                    {t("s6Rectification").split(":").slice(1).join(":").trim()}
                   </li>
                   <li>
-                    <strong className="text-primary">Droit à l'effacement :</strong>{" "}
-                    demander la suppression de vos données
+                    <strong className="text-primary">{t("s6Erasure").split(":")[0]} :</strong>{" "}
+                    {t("s6Erasure").split(":").slice(1).join(":").trim()}
                   </li>
                   <li>
-                    <strong className="text-primary">Droit à la limitation :</strong>{" "}
-                    restreindre le traitement de vos données
+                    <strong className="text-primary">{t("s6Restriction").split(":")[0]} :</strong>{" "}
+                    {t("s6Restriction").split(":").slice(1).join(":").trim()}
                   </li>
                   <li>
-                    <strong className="text-primary">Droit à la portabilité :</strong>{" "}
-                    recevoir vos données dans un format structuré
+                    <strong className="text-primary">{t("s6Portability").split(":")[0]} :</strong>{" "}
+                    {t("s6Portability").split(":").slice(1).join(":").trim()}
                   </li>
                   <li>
-                    <strong className="text-primary">Droit d'opposition :</strong>{" "}
-                    vous opposer au traitement de vos données
+                    <strong className="text-primary">{t("s6Objection").split(":")[0]} :</strong>{" "}
+                    {t("s6Objection").split(":").slice(1).join(":").trim()}
                   </li>
                 </ul>
                 <p>
-                  Pour exercer ces droits, contactez-nous à{" "}
+                  {t("s6Exercise")}{" "}
                   <a
                     href="mailto:contact@monapplication.be"
                     className="text-accent hover:underline"
                   >
                     contact@monapplication.be
                   </a>
-                  . Nous répondrons dans un délai de 30 jours.
+                  {t("s6Response")}
                 </p>
               </div>
             </motion.div>
 
+            {/* 7. Cookies */}
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                7. Cookies
+                {t("s7Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-4">
-                <p>
-                  Notre site utilise des cookies essentiels au fonctionnement du
-                  site et des cookies analytiques pour mesurer l'audience.
-                </p>
+                <p>{t("s7Intro")}</p>
                 <ul className="list-disc pl-6 space-y-2 mt-4">
                   <li>
-                    <strong className="text-primary">Cookies essentiels :</strong>{" "}
-                    nécessaires au fonctionnement du site (session, préférences)
+                    <strong className="text-primary">{t("s7Essential").split(":")[0]} :</strong>{" "}
+                    {t("s7Essential").split(":").slice(1).join(":").trim()}
                   </li>
                   <li>
-                    <strong className="text-primary">Cookies analytiques :</strong>{" "}
-                    mesure d'audience anonymisée pour améliorer nos services
+                    <strong className="text-primary">{t("s7Analytics").split(":")[0]} :</strong>{" "}
+                    {t("s7Analytics").split(":").slice(1).join(":").trim()}
                   </li>
                 </ul>
-                <p>
-                  Vous pouvez à tout moment modifier vos préférences de cookies
-                  via les paramètres de votre navigateur.
-                </p>
+                <p>{t("s7Manage")}</p>
               </div>
             </motion.div>
 
+            {/* 8. Sécurité */}
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                8. Sécurité
+                {t("s8Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-4">
-                <p>
-                  Nous mettons en œuvre des mesures techniques et
-                  organisationnelles appropriées pour protéger vos données
-                  personnelles contre tout accès non autorisé, toute
-                  modification, divulgation ou destruction :
-                </p>
+                <p>{t("s8Intro")}</p>
                 <ul className="list-disc pl-6 space-y-2 mt-4">
-                  <li>Chiffrement SSL/TLS pour toutes les communications</li>
-                  <li>Hébergement sécurisé avec sauvegardes automatiques</li>
-                  <li>Accès restreint aux données personnelles</li>
+                  {s8Items.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </div>
             </motion.div>
 
+            {/* 9. Autorité de contrôle */}
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                9. Autorité de contrôle
+                {t("s9Title")}
               </h2>
               <div className="text-text-muted leading-relaxed space-y-4">
-                <p>
-                  Si vous estimez que le traitement de vos données personnelles
-                  constitue une violation du RGPD, vous avez le droit
-                  d'introduire une réclamation auprès de :
-                </p>
+                <p>{t("s9Intro")}</p>
                 <ul className="list-none space-y-1 mt-4">
                   <li>
                     <strong className="text-primary">
@@ -288,19 +267,15 @@ export default function ConfidentialitePage() {
               </div>
             </motion.div>
 
+            {/* 10. Modification de la politique */}
             <motion.div variants={fadeInUp}>
               <h2 className="text-2xl font-bold text-primary mb-4">
-                10. Modification de la politique
+                {t("s10Title")}
               </h2>
               <div className="text-text-muted leading-relaxed">
-                <p>
-                  Nous nous réservons le droit de modifier cette politique de
-                  confidentialité à tout moment. Toute modification sera publiée
-                  sur cette page. Nous vous encourageons à la consulter
-                  régulièrement.
-                </p>
+                <p>{t("s10Text")}</p>
                 <p className="mt-4 text-sm">
-                  Dernière mise à jour : février 2026
+                  {t("s10LastUpdate")}
                 </p>
               </div>
             </motion.div>
